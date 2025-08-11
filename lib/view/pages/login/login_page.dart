@@ -4,6 +4,7 @@ import "package:mbelys/view/pages/forgot/forgot_page.dart";
 import "package:mbelys/view/pages/register/register_page.dart";
 import "package:mbelys/view/widgets/auth_background_page.dart";
 import "package:mbelys/view/widgets/auth_button.dart";
+import "package:mbelys/view/widgets/auth_divider.dart";
 import "package:mbelys/view/widgets/auth_text_input.dart";
 import "package:mbelys/view/widgets/facebook_button.dart";
 import "package:mbelys/view/widgets/google_button.dart";
@@ -26,7 +27,7 @@ class LoginPage extends StatelessWidget {
             AuthTextInput(
               hintText: "Masukkan password",
             ),
-            const SizedBox(height: 10,),
+            const SizedBox(height: 8,),
             SizedBox(
               width: 340,
               child: Align(
@@ -53,38 +54,11 @@ class LoginPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 30,),
-            AuthButton(),
-            const SizedBox(height: 30,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 35),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: AppColors.color3,
-                      thickness: 3,
-                    ),
-                  ),
-                  const SizedBox(width: 5,),
-                  Text(
-                    "Masuk dengan",
-                    style: TextStyle(
-                        fontSize: 12,
-                        fontFamily: "Montserrat",
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.color3
-                    ),
-                  ),
-                  const SizedBox(width: 5,),
-                  Expanded(
-                    child: Divider(
-                      color: AppColors.color3,
-                      thickness: 3,
-                    ),
-                  ),
-                ],
-              ),
+            AuthButton(
+              text: "Masuk",
             ),
+            const SizedBox(height: 30,),
+            AuthDivider(text: "Masuk dengan"),
             const SizedBox(height: 30,),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +73,7 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  "Belum memiliki akunn? ",
+                  "Belum memiliki akun? ",
                   style: TextStyle(
                       fontSize: 12,
                       fontFamily: "Montserrat",

@@ -19,8 +19,15 @@ class AuthBackgroundPage extends StatelessWidget {
       backgroundColor: AppColors.color2,
       body: Stack(
         children: [
-          Image.asset(
-            "assets/images/auth_background.png"
+          Container(
+            width: double.infinity,
+            height: screenHeight * 0.3,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("assets/images/auth_background.png"),
+                fit: BoxFit.cover
+              ),
+            ),
           ),
           Positioned(
             top: screenHeight * 0.1,

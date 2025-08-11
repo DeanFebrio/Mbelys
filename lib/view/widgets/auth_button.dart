@@ -1,8 +1,14 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
+import "package:mbelys/view/pages/home/home_page.dart";
 
 class AuthButton extends StatelessWidget {
-  const AuthButton({super.key});
+  final String text;
+
+  const AuthButton({
+    super.key,
+    required this.text
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,8 +17,14 @@ class AuthButton extends StatelessWidget {
       width: 340,
       child: OutlinedButton(
           onPressed: (){
+            print("Tertekan");
+            Navigator.pushReplacement(
+                context,
+              MaterialPageRoute(
+                  builder: (e) => const HomePage()
+              )
+            );
           },
-
           style: OutlinedButton.styleFrom(
             backgroundColor: AppColors.color8,
             side: BorderSide(
@@ -21,7 +33,7 @@ class AuthButton extends StatelessWidget {
             )
           ),
           child: Text(
-              "Daftar",
+              text,
             style: TextStyle(
               fontSize: 24,
               fontFamily: "Poppins",

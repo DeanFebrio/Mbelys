@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/view/pages/forgot/widgets/forgot_succes_dialog.dart";
+import "package:mbelys/view/pages/forgot/widgets/forgot_success_dialog.dart";
 
 class ForgotButton extends StatelessWidget {
   const ForgotButton({super.key});
@@ -12,7 +12,7 @@ class ForgotButton extends StatelessWidget {
       width: 340,
       child: FilledButton(
           onPressed: (){
-            showForgotSucessDialog(context);
+            showForgotSuccessDialog(context);
           },
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.color9

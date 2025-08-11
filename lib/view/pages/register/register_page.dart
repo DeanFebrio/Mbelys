@@ -3,6 +3,7 @@ import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/view/pages/login/login_page.dart";
 import "package:mbelys/view/widgets/auth_background_page.dart";
 import "package:mbelys/view/widgets/auth_button.dart";
+import "package:mbelys/view/widgets/auth_divider.dart";
 import "package:mbelys/view/widgets/auth_text_input.dart";
 import "package:mbelys/view/widgets/facebook_button.dart";
 import "package:mbelys/view/widgets/google_button.dart";
@@ -34,37 +35,12 @@ class RegisterPage extends StatelessWidget {
               hintText: "Masukkan nomor telepon",
             ),
             const SizedBox(height: 30,),
-            AuthButton(),
+            AuthButton(
+              text: "Daftar",
+            ),
             const SizedBox(height: 30,),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 35),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Divider(
-                      color: AppColors.color3,
-                      thickness: 3,
-                    ),
-                  ),
-                  const SizedBox(width: 5,),
-                  Text(
-                      "Daftar dengan",
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: "Montserrat",
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.color3
-                    ),
-                  ),
-                  const SizedBox(width: 5,),
-                  Expanded(
-                    child: Divider(
-                      color: AppColors.color3,
-                      thickness: 3,
-                    ),
-                  ),
-                ],
-              ),
+            AuthDivider(
+              text: "Daftar dengan",
             ),
             const SizedBox(height: 30,),
             Row(

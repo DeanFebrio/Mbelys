@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/view/pages/login/login_page.dart";
 
-void showForgotSucessDialog(BuildContext context){
+void showForgotSuccessDialog(BuildContext context){
   showDialog(
       context: context,
       builder: (BuildContext context) {

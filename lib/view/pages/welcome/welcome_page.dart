@@ -10,8 +10,6 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
       backgroundColor: AppColors.color2,
       body: Center(
@@ -26,26 +24,32 @@ class WelcomePage extends StatelessWidget {
                 width: 120,
               ),
               const SizedBox(height: 10,),
-              Text(
-                "Selamat Datang di Mbelys",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontFamily: "Poppins",
-                  fontWeight: FontWeight.w700,
-                  color: AppColors.color1
+              SizedBox(
+                width: 340,
+                child: Text(
+                  "Selamat Datang di Mbelys",
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontFamily: "Poppins",
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.color1
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 5,),
-              Text(
-                  "Aplikasi pemantauan tingkat stres dan aktivitas reproduksi kambing berbasis suara dan IoT",
-                style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: "Montserrat",
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.color1
+              SizedBox(
+                width: 340,
+                child: Text(
+                    "Aplikasi pemantauan tingkat stres dan aktivitas reproduksi kambing berbasis suara dan IoT",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.color1
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 30,),
               WelcomeButton(
