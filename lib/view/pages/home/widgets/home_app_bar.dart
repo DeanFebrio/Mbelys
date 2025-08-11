@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mbelys/core/constant/app_colors.dart';
+import 'package:mbelys/view/pages/account/account_page.dart';
 import 'package:mbelys/view/pages/home/widgets/home_avatar.dart';
 
 class HomeAppBar extends StatelessWidget {
@@ -43,7 +44,17 @@ class HomeAppBar extends StatelessWidget {
                 )
               ],
             ),
-            HomeAvatar()
+            GestureDetector(
+              onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (e) => const AccountPage()
+                    )
+                );
+              },
+                child: HomeAvatar()
+            )
           ],
         ),
       ),

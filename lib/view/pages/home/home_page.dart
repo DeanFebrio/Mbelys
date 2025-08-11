@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
           children: [
             RepaintBoundary(child: const HomeAppBar()),
             const SizedBox(height: 10,),
-            const Text(
+            Text(
                 "Daftar Kandang",
               style: TextStyle(
                 fontSize: 32,
