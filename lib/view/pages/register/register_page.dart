@@ -36,7 +36,7 @@ class RegisterPage extends StatelessWidget {
             ),
             const SizedBox(height: 30,),
             AuthButton(
-              text: "Daftar",
+              textButton: "Daftar",
             ),
             const SizedBox(height: 30,),
             AuthDivider(

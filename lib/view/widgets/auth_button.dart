@@ -3,11 +3,11 @@ import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/view/pages/home/home_page.dart";
 
 class AuthButton extends StatelessWidget {
-  final String text;
+  final String textButton;
 
   const AuthButton({
     super.key,
-    required this.text
+    required this.textButton
   });
 
   @override
@@ -17,7 +17,6 @@ class AuthButton extends StatelessWidget {
       width: 340,
       child: OutlinedButton(
           onPressed: (){
-            print("Tertekan");
             Navigator.pushReplacement(
                 context,
               MaterialPageRoute(
@@ -33,7 +32,7 @@ class AuthButton extends StatelessWidget {
             )
           ),
           child: Text(
-              text,
+              textButton,
             style: TextStyle(
               fontSize: 24,
               fontFamily: "Poppins",

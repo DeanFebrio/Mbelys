@@ -55,7 +55,7 @@ class LoginPage extends StatelessWidget {
             ),
             const SizedBox(height: 30,),
             AuthButton(
-              text: "Masuk",
+              textButton: "Masuk",
             ),
             const SizedBox(height: 30,),
             AuthDivider(text: "Masuk dengan"),
