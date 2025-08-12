@@ -15,7 +15,7 @@ class LabelCardKandang extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       height: 30,
       width: 75,
       decoration: BoxDecoration(

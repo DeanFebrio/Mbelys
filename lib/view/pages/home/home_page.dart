@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            RepaintBoundary(child: const HomeAppBar()),
+            const HomeAppBar(),
             const SizedBox(height: 10,),
             Text(
                 "Daftar Kandang",
@@ -25,11 +25,11 @@ class HomePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20,),
-            RepaintBoundary(child: const CardKandang()),
+            const CardKandang(),
             const SizedBox(height: 20,),
-            RepaintBoundary(child: const CardKandang()),
+            const CardKandang(),
             const SizedBox(height: 20,),
-            RepaintBoundary(child: const CardKandang()),
+            const CardKandang(),
             const SizedBox(height: 50,)
           ],
         ),

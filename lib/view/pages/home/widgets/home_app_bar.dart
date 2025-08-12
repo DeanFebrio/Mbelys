@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mbelys/core/constant/app_colors.dart';
-import 'package:mbelys/view/pages/account/account_page.dart';
-import 'package:mbelys/view/pages/home/widgets/home_avatar.dart';
+import 'package:mbelys/view/pages/profil/profil_page.dart';
+import 'package:mbelys/view/widgets/custom_avatar.dart';
 
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({super.key});
@@ -49,11 +49,11 @@ class HomeAppBar extends StatelessWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (e) => const AccountPage()
+                        builder: (e) => const ProfilPage()
                     )
                 );
               },
-                child: HomeAvatar()
+              child: CustomAvatar()
             )
           ],
         ),

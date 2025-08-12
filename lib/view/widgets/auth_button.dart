@@ -3,12 +3,12 @@ import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/view/pages/home/home_page.dart";
 
 class AuthButton extends StatelessWidget {
-  final String textButton;
-
   const AuthButton({
     super.key,
-    required this.textButton
+    this.textButton
   });
+
+  final String? textButton;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class AuthButton extends StatelessWidget {
             )
           ),
           child: Text(
-              textButton,
+            textButton!,
             style: TextStyle(
               fontSize: 24,
               fontFamily: "Poppins",

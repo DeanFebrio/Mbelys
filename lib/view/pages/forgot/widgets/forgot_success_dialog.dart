@@ -32,11 +32,12 @@ void showForgotSuccessDialog(BuildContext context){
           actions: [
             TextButton(
                 onPressed: (){
-                  Navigator.pushReplacement(
+                  Navigator.pushAndRemoveUntil(
                       context,
                       MaterialPageRoute(
-                          builder: (e) => LoginPage()
-                      )
+                          builder: (e) => const LoginPage()
+                      ),
+                      (Route<dynamic> route) => false,
                   );
                 },
                 style: TextButton.styleFrom(

@@ -61,7 +61,7 @@ SingleTickerProviderStateMixin {
                   ),
                   Icon(
                     isExpanded ?
-                        Icons.keyboard_arrow_down :
+                        Icons.keyboard_arrow_right :
                         Icons.keyboard_arrow_right,
                     color: AppColors.color9,
                   )
@@ -71,7 +71,7 @@ SingleTickerProviderStateMixin {
           ),
           AnimatedSize(
             duration: const Duration(milliseconds: 250),
-            curve: Curves.easeInOut,
+            curve: Curves.easeOutCirc,
             child: isExpanded
                 ? Padding(
               padding: const EdgeInsets.only(
