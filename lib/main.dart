@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mbelys/view/pages/welcome/welcome_page.dart';
+import 'package:mbelys/core/router/app_router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,10 +10,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Mbelys Application',
-      home: const WelcomePage(),
+      routerConfig: AppRouter.router,
     );
   }
 }
