@@ -44,7 +44,7 @@ class EditProfilBackgroundPage extends StatelessWidget {
             bottom: 0,
               child: Container(
                 width: screenWidth,
-                height: screenHeight * 0.78,
+                height: screenHeight * 0.75,
                 decoration: BoxDecoration(
                   color: AppColors.color2,
                   borderRadius: BorderRadius.only(

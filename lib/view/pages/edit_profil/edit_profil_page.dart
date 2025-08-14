@@ -1,9 +1,10 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
+import "package:mbelys/core/router/router.dart";
 import "package:mbelys/view/pages/edit_profil/widgets/password_button.dart";
 import "package:mbelys/view/pages/edit_profil/widgets/edit_profil_background_page.dart";
 import "package:mbelys/view/pages/edit_profil/widgets/edit_save_button.dart";
-import "package:mbelys/view/pages/profil/profil_page.dart";
 import "package:mbelys/view/widgets/custom_avatar.dart";
 import "package:mbelys/view/widgets/custom_change_button.dart";
 import "package:mbelys/view/widgets/custom_text_input.dart";
@@ -26,10 +27,14 @@ class EditProfilPage extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            SizedBox(height: 0.08 * screenHeight,),
+            SizedBox(height: 0.12 * screenHeight,),
             CustomAvatar(radius: 70,),
             const SizedBox(height: 6,),
-            CustomChangeButton(onTap: ProfilPage()),
+            CustomChangeButton(
+                onTap: () {
+                  context.go(RouterPath.profil);
+                }
+            ),
             const SizedBox(height: 15,),
             Form(
               child: Column(
