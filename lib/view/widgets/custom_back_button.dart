@@ -1,5 +1,6 @@
 import "package:flutter/material.dart";
 import "package:flutter_svg/flutter_svg.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
 class CustomBackButton extends StatelessWidget {
@@ -9,7 +10,7 @@ class CustomBackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: (){
-          Navigator.pop(context);
+          context.pop();
         },
         style: IconButton.styleFrom(
           backgroundColor: AppColors.color7,

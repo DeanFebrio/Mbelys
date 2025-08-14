@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
 class CustomChangeButton extends StatelessWidget {
-  final Widget onTap;
+  final VoidCallback onTap;
   
   const CustomChangeButton({
     super.key,
@@ -12,12 +12,7 @@ class CustomChangeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FilledButton(
-        onPressed: (){
-          Navigator.push(
-              context, 
-              MaterialPageRoute(builder: (e) => onTap)
-          );
-        },
+        onPressed: onTap,
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.color5,
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
