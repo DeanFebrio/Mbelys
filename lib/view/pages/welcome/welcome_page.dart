@@ -43,7 +43,7 @@ class WelcomePage extends StatelessWidget {
                 child: Text(
                     "Aplikasi pemantauan tingkat stres dan aktivitas reproduksi kambing berbasis suara dan IoT",
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     fontFamily: "Montserrat",
                     fontWeight: FontWeight.w500,
                     color: AppColors.color1
@@ -51,7 +51,7 @@ class WelcomePage extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              const SizedBox(height: 30,),
+              const SizedBox(height: 50,),
               CustomButton(
                   textButton: "Daftar",
                   backgroundColor: AppColors.color9,
