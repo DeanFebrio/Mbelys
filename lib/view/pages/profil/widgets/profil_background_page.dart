@@ -1,6 +1,5 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/view/widgets/custom_back_button.dart";
 
 class ProfilBackgroundPage extends StatelessWidget {
   final Widget child;
@@ -13,46 +12,37 @@ class ProfilBackgroundPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      backgroundColor: AppColors.color2,
-      body: Stack(
-        children: [
-          ClipPath(
-            clipper: CurvedClipper(),
-            child: Container(
-              height: 0.335 * screenHeight,
-              width: screenWidth,
-              color: AppColors.color9,
-            ),
+    return Stack(
+      children: [
+        ClipPath(
+          clipper: CurvedClipper(),
+          child: Container(
+            height: 300,
+            width: screenWidth,
+            color: AppColors.color9,
           ),
-          Positioned(
-            top: 50,
-              left: 20,
-              child: CustomBackButton()
-          ),
-          Positioned(
-            top: screenHeight * 0.12,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: Text(
-                "Profil",
-                style: TextStyle(
-                    fontSize: 32,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.color3
-                ),
+        ),
+        Positioned(
+          top: 90,
+          left: 0,
+          right: 0,
+          child: Center(
+            child: Text(
+              "Profil",
+              style: TextStyle(
+                  fontSize: 32,
+                  fontFamily: "Poppins",
+                  fontWeight: FontWeight.w700,
+                  color: AppColors.color3
               ),
             ),
           ),
-          SafeArea(
-              child: child
-          )
-        ],
-      )
+        ),
+        SafeArea(
+            child: child
+        )
+      ],
     );
   }
 }

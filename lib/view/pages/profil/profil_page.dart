@@ -9,14 +9,12 @@ class ProfilPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-
     return ProfilBackgroundPage(
       child: Center(
         child: Column(
           children: [
             SizedBox(
-              height: screenHeight * 0.15,
+              height: 100,
             ),
             CardProfil(),
             const SizedBox(height: 30,),
