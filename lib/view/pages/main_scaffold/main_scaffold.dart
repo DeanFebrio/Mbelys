@@ -41,7 +41,7 @@ class _MainScaffoldState extends State<MainScaffold> {
 
           },
           child: Icon(
-              Icons.add,
+              MingCute.add_line,
               size: 40,
               color: AppColors.color13
           ),
