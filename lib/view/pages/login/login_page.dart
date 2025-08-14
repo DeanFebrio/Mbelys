@@ -1,7 +1,8 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
+import "package:mbelys/core/router/router.dart";
 import "package:mbelys/view/pages/forgot/forgot_page.dart";
-import "package:mbelys/view/pages/register/register_page.dart";
 import "package:mbelys/view/widgets/auth_background_page.dart";
 import "package:mbelys/view/widgets/auth_button.dart";
 import "package:mbelys/view/widgets/auth_divider.dart";
@@ -83,12 +84,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: (){
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (e) => const RegisterPage()
-                        )
-                    );
+                    context.go(RouterPath.register);
                   },
                   child: Text(
                     "Daftar",

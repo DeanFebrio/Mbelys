@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/view/pages/login/login_page.dart";
-import "package:mbelys/view/pages/register/register_page.dart";
-import "package:mbelys/view/pages/welcome/widgets/welcome_button.dart";
+import "package:mbelys/core/router/router.dart";
+import "package:mbelys/view/widgets/custom_button.dart";
 
 class WelcomePage extends StatelessWidget {
 
@@ -52,18 +52,22 @@ class WelcomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30,),
-              WelcomeButton(
+              CustomButton(
                   textButton: "Daftar",
                   backgroundColor: AppColors.color9,
                   textColor: AppColors.color3,
-                onTap: RegisterPage(),
+                onTap: () {
+                    context.push(RouterPath.register);
+                },
               ),
               const SizedBox(height: 10,),
-              WelcomeButton(
+              CustomButton(
                   textButton: "Masuk",
                   backgroundColor: AppColors.color2,
                   textColor: AppColors.color9,
-                onTap: LoginPage(),
+                onTap: () {
+                    context.push(RouterPath.login);
+                },
               ),
             ],
           ),

@@ -2,15 +2,15 @@ import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/view/pages/home/widgets/home_app_bar.dart";
 import "package:mbelys/view/pages/home/widgets/card_kandang.dart";
+import "package:mbelys/view/pages/main_scaffold/main_scaffold.dart";
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.color2,
-      body: SingleChildScrollView(
+    return MainScaffold(
+      child: SingleChildScrollView(
         child: Column(
           children: [
             const HomeAppBar(),

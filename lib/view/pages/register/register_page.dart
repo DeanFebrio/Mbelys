@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/view/pages/login/login_page.dart";
+import "package:mbelys/core/router/router.dart";
 import "package:mbelys/view/widgets/auth_background_page.dart";
 import "package:mbelys/view/widgets/auth_button.dart";
 import "package:mbelys/view/widgets/auth_divider.dart";
@@ -66,12 +67,7 @@ class RegisterPage extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: (){
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                            builder: (e) => const LoginPage()
-                        )
-                    );
+                    context.go(RouterPath.login);
                   },
                   child: Text(
                     "Masuk",
