@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/view/pages/edit_profil/edit_profil_page.dart";
+import "package:mbelys/core/router/router.dart";
 import "package:mbelys/view/widgets/custom_avatar.dart";
 import "package:mbelys/view/widgets/custom_change_button.dart";
 
@@ -59,7 +60,11 @@ class CardProfil extends StatelessWidget {
                     style: informationStyle,
                   ),
                   const SizedBox(height: 10,),
-                  CustomChangeButton(onTap: EditProfilPage(),),
+                  CustomChangeButton(
+                    onTap: (){
+                      context.push(RouterPath.editProfil);
+                    }
+                  ),
                 ],
               ),
             )
