@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/view/pages/home/home_page.dart";
+import "package:mbelys/core/router/router.dart";
 
 class AuthButton extends StatelessWidget {
   const AuthButton({
@@ -17,12 +18,7 @@ class AuthButton extends StatelessWidget {
       width: 340,
       child: OutlinedButton(
           onPressed: (){
-            Navigator.pushReplacement(
-                context,
-              MaterialPageRoute(
-                  builder: (e) => const HomePage()
-              )
-            );
+            context.go(RouterPath.home);
           },
           style: OutlinedButton.styleFrom(
             backgroundColor: AppColors.color8,
