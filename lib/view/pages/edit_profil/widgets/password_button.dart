@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/view/pages/password/password_page.dart";
+import "package:mbelys/core/router/router.dart";
 
 class PasswordButton extends StatelessWidget {
   const PasswordButton({super.key});
@@ -12,10 +13,7 @@ class PasswordButton extends StatelessWidget {
       width: 340,
       child: OutlinedButton(
           onPressed: (){
-            Navigator.push(
-                context, 
-                MaterialPageRoute(builder: (e) => const PasswordPage())
-            );
+            context.push(RouterPath.password);
           },
           style: OutlinedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 30),
