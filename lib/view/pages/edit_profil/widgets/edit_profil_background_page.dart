@@ -12,7 +12,6 @@ class EditProfilBackgroundPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -25,7 +24,7 @@ class EditProfilBackgroundPage extends StatelessWidget {
               child: CustomBackButton()
           ),
           Positioned(
-            top: screenHeight * 0.08,
+            top: 90,
             left: 0,
             right: 0,
             child: Center(
@@ -44,7 +43,7 @@ class EditProfilBackgroundPage extends StatelessWidget {
             bottom: 0,
               child: Container(
                 width: screenWidth,
-                height: screenHeight * 0.75,
+                height: 700,
                 decoration: BoxDecoration(
                   color: AppColors.color2,
                   borderRadius: BorderRadius.only(

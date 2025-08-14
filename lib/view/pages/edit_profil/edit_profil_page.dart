@@ -14,7 +14,6 @@ class EditProfilPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
 
     final textStyle = TextStyle(
       fontSize: 20,
@@ -27,7 +26,7 @@ class EditProfilPage extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            SizedBox(height: 0.12 * screenHeight,),
+            const SizedBox(height: 100),
             CustomAvatar(radius: 70,),
             const SizedBox(height: 6,),
             CustomChangeButton(
