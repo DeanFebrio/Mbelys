@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
+import "package:mbelys/core/router/router.dart";
 import "package:mbelys/presentation/profile/widgets/custom_contact_button.dart";
 
 class ContactContainer extends StatelessWidget {
@@ -32,9 +34,13 @@ class ContactContainer extends StatelessWidget {
               children: [
                 CustomContactButton(
                   labelText: "Kritik dan Saran",
+                  onTap: (){
+                    context.push(RouterPath.feedback);
+                  },
                 ),
                 CustomContactButton(
                   labelText: "Whatsapp",
+                  onTap: (){},
                 )
               ],
             ),
