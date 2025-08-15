@@ -3,15 +3,18 @@ import "package:mbelys/core/constant/app_colors.dart";
 
 class CustomContactButton extends StatelessWidget {
   final String labelText;
+  final VoidCallback onTap;
 
   const CustomContactButton({
     super.key,
-    required this.labelText
+    required this.labelText,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: onTap,
       minTileHeight: 20,
       title: Text(
         labelText,
