@@ -11,7 +11,7 @@ import 'package:mbelys/presentation/kandang/view/detail_page.dart';
 import 'package:mbelys/presentation/profile/view/edit_profil_page.dart';
 import 'package:mbelys/presentation/profile/view/feedback_page.dart';
 import 'package:mbelys/presentation/profile/view/password_page.dart';
-import 'package:mbelys/presentation/profile/view/profil_page.dart';
+import 'package:mbelys/presentation/profile/view/profile_page.dart';
 import 'package:mbelys/presentation/welcome/welcome_page.dart';
 
 
