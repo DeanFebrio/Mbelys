@@ -15,7 +15,7 @@ void showForgotSuccessDialog(BuildContext context){
           title: Text(
               "Email Terkirim",
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 20,
               fontFamily: "Montserrat",
               fontWeight: FontWeight.w600,
               color: AppColors.color1
@@ -24,7 +24,7 @@ void showForgotSuccessDialog(BuildContext context){
           content: Text(
             "Silahkan cek email anda untuk mengatur ulang sandi",
             style: TextStyle(
-                fontSize: 16,
+                fontSize: 14,
                 fontFamily: "Mulish",
                 fontWeight: FontWeight.w600,
                 color: AppColors.color1

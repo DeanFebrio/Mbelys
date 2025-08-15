@@ -31,7 +31,7 @@ class DetailBackgroundPage extends StatelessWidget {
           ),
           Positioned(
             top: 50,
-              left: 16,
+              left: 20,
               child: CustomBackButton()
           ),
           DraggableScrollableSheet(
