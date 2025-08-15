@@ -13,9 +13,7 @@ class ProfilePage extends StatelessWidget {
       child: Center(
         child: Column(
           children: [
-            SizedBox(
-              height: 100,
-            ),
+            const SizedBox(height: 120,),
             CardProfile(),
             const SizedBox(height: 30,),
             ContactContainer(),
