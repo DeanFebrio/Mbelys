@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mbelys/core/router/router.dart';
-import 'package:mbelys/view/pages/detail/detail_page.dart';
-import 'package:mbelys/view/pages/edit_profil/edit_profil_page.dart';
-import 'package:mbelys/view/pages/error/error_page.dart';
-import 'package:mbelys/view/pages/forgot/forgot_page.dart';
-import 'package:mbelys/view/pages/home/home_page.dart';
-import 'package:mbelys/view/pages/login/login_page.dart';
-import 'package:mbelys/view/pages/main_scaffold/main_scaffold.dart';
-import 'package:mbelys/view/pages/password/password_page.dart';
-import 'package:mbelys/view/pages/profil/profil_page.dart';
-import 'package:mbelys/view/pages/register/register_page.dart';
-import 'package:mbelys/view/pages/welcome/welcome_page.dart';
+import 'package:mbelys/presentation/auth/view/forgot_page.dart';
+import 'package:mbelys/presentation/auth/view/login_page.dart';
+import 'package:mbelys/presentation/auth/view/register_page.dart';
+import 'package:mbelys/presentation/common/main_scaffold.dart';
+import 'package:mbelys/presentation/error/error_page.dart';
+import 'package:mbelys/presentation/home/home_page.dart';
+import 'package:mbelys/presentation/kandang/view/detail_page.dart';
+import 'package:mbelys/presentation/profile/view/edit_profil_page.dart';
+import 'package:mbelys/presentation/profile/view/feedback_page.dart';
+import 'package:mbelys/presentation/profile/view/password_page.dart';
+import 'package:mbelys/presentation/profile/view/profil_page.dart';
+import 'package:mbelys/presentation/welcome/welcome_page.dart';
 
 
 class AppRouter {
@@ -19,7 +20,7 @@ class AppRouter {
 
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final _shellNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'home');
-  static final _shellNavigatorProfil = GlobalKey<NavigatorState>(debugLabel: 'profil');
+  static final _shellNavigatorProfil = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
   static final GoRouter _router = GoRouter(
     initialLocation: RouterPath.welcome,
@@ -47,31 +48,26 @@ class AppRouter {
             name: RouterName.register,
             builder: (context, state) => const RegisterPage()
         ),
-        // GoRoute(
-        //     path: RouterPath.home,
-        //     name: RouterName.home,
-        //     builder: (context, state) => const HomePage()
-        // ),
         GoRoute(
             path: RouterPath.detail,
             name: RouterName.detail,
             parentNavigatorKey: _rootNavigatorKey,
             builder: (context, state) => const DetailPage()
         ),
-        // GoRoute(
-        //     path: RouterPath.profil,
-        //     name: RouterName.profil,
-        //     builder: (context, state) => const ProfilPage()
-        // ),
         GoRoute(
-            path: RouterPath.editProfil,
-            name: RouterName.editProfil,
-            builder: (context, state) => const EditProfilPage()
+            path: RouterPath.editProfile,
+            name: RouterName.editProfile,
+            builder: (context, state) => const EditProfilePage()
         ),
         GoRoute(
             path: RouterPath.password,
             name: RouterName.password,
             builder: (context, state) => const PasswordPage()
+        ),
+        GoRoute(
+            path: RouterPath.feedback,
+            name: RouterName.feedback,
+            builder: (context, state) => const FeedbackPage()
         ),
 
         StatefulShellRoute.indexedStack(
@@ -94,9 +90,9 @@ class AppRouter {
                   navigatorKey: _shellNavigatorProfil,
                   routes: [
                     GoRoute(
-                        path: RouterPath.profil,
-                        name: RouterName.profil,
-                        builder: (context, state) => const ProfilPage()
+                        path: RouterPath.profile,
+                        name: RouterName.profile,
+                        builder: (context, state) => const ProfilePage()
                     ),
                   ]
               )

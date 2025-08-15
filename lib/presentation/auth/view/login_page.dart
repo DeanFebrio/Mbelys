@@ -1,0 +1,102 @@
+import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
+import "package:mbelys/core/constant/app_colors.dart";
+import "package:mbelys/core/router/router.dart";
+import "package:mbelys/presentation/auth/widgets/auth_background_page.dart";
+import "package:mbelys/presentation/auth/widgets/auth_button.dart";
+import "package:mbelys/presentation/auth/widgets/auth_divider.dart";
+import "package:mbelys/presentation/auth/widgets/auth_text_input.dart";
+import "package:mbelys/presentation/auth/widgets/facebook_button.dart";
+import "package:mbelys/presentation/auth/widgets/google_button.dart";
+
+
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AuthBackgroundPage(
+        title: "Masuk",
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const SizedBox(height: 70,),
+              AuthTextInput(
+                hintText: "Masukkan email",
+              ),
+              const SizedBox(height: 10,),
+              AuthTextInput(
+                hintText: "Masukkan password",
+              ),
+              const SizedBox(height: 8,),
+              SizedBox(
+                width: 340,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: GestureDetector(
+                    onTap: (){
+                      context.go(RouterPath.forgot);
+                    },
+                    child: Text(
+                        "Lupa password?",
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: "Montserrat",
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.color3
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30,),
+              AuthButton(
+                textButton: "Masuk",
+              ),
+              const SizedBox(height: 30,),
+              AuthDivider(text: "Masuk dengan"),
+              const SizedBox(height: 30,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GoogleButton(),
+                  const SizedBox(width: 20,),
+                  FacebookButton()
+                ],
+              ),
+              const SizedBox(height: 30,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Belum memiliki akun? ",
+                    style: TextStyle(
+                        fontSize: 12,
+                        fontFamily: "Montserrat",
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.color3
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: (){
+                      context.go(RouterPath.register);
+                    },
+                    child: Text(
+                      "Daftar",
+                      style: TextStyle(
+                          fontSize: 12,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.color3
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        )
+    );
+  }
+}

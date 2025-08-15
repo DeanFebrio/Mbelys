@@ -4,10 +4,11 @@ class RouterPath {
   static const forgot = '/forgot';
   static const register = '/register';
   static const home = '/home';
-  static const detail = '/detail';
-  static const profil = '/profil';
-  static const editProfil = '/editProfil';
+  static const detail = '/kandang';
+  static const profile = '/profile';
+  static const editProfile = '/editProfil';
   static const password = '/password';
+  static const feedback = '/feedback';
 }
 
 class RouterName {
@@ -16,8 +17,9 @@ class RouterName {
   static const forgot = 'forgot';
   static const register = 'register';
   static const home = 'home';
-  static const detail = 'detail';
-  static const profil = 'profil';
-  static const editProfil = 'editProfil';
+  static const detail = 'kandang';
+  static const profile = 'profile';
+  static const editProfile = 'editProfil';
   static const password = 'password';
+  static const feedback = 'feedback';
 }
