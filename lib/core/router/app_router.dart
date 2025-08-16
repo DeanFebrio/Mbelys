@@ -7,6 +7,7 @@ import 'package:mbelys/presentation/auth/view/register_page.dart';
 import 'package:mbelys/presentation/common/main_scaffold.dart';
 import 'package:mbelys/presentation/error/error_page.dart';
 import 'package:mbelys/presentation/home/home_page.dart';
+import 'package:mbelys/presentation/kandang/view/add_page.dart';
 import 'package:mbelys/presentation/kandang/view/detail_page.dart';
 import 'package:mbelys/presentation/profile/view/edit_profil_page.dart';
 import 'package:mbelys/presentation/profile/view/feedback_page.dart';
@@ -68,6 +69,11 @@ class AppRouter {
             path: RouterPath.feedback,
             name: RouterName.feedback,
             builder: (context, state) => const FeedbackPage()
+        ),
+        GoRoute(
+            path: RouterPath.add,
+            name: RouterName.add,
+            builder: (context, state) => const AddPage()
         ),
 
         StatefulShellRoute.indexedStack(
