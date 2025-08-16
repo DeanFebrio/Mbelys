@@ -1,12 +1,12 @@
 import "package:flutter/material.dart";
 
-class CustomButton extends StatelessWidget {
+class CustomLongButton extends StatelessWidget {
   final VoidCallback onTap;
   final String textButton;
   final Color textColor;
   final Color backgroundColor;
 
-  const CustomButton({
+  const CustomLongButton({
     super.key,
     required this.onTap,
     required this.textButton,
@@ -20,19 +20,19 @@ class CustomButton extends StatelessWidget {
       height: 50,
       width: 340,
       child: FilledButton(
-          style: FilledButton.styleFrom(
-            backgroundColor: backgroundColor,
+        style: FilledButton.styleFrom(
+          backgroundColor: backgroundColor,
+        ),
+        onPressed: onTap,
+        child: Text(
+          textButton,
+          style: TextStyle(
+              fontSize: 24,
+              fontFamily: "Poppins",
+              fontWeight: FontWeight.w700,
+              color: textColor
           ),
-          onPressed: onTap,
-          child: Text(
-            textButton,
-            style: TextStyle(
-                fontSize: 24,
-                fontFamily: "Poppins",
-                fontWeight: FontWeight.w700,
-                color: textColor
-            ),
-          )
+        )
       ),
     );
   }

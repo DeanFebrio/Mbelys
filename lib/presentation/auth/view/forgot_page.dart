@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/presentation/auth/widgets/forgot_success_dialog.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
-import "package:mbelys/presentation/widgets/custom_button.dart";
+import "package:mbelys/presentation/widgets/custom_long_button.dart";
 import "package:mbelys/presentation/widgets/custom_text_input.dart";
 
 class ForgotPage extends StatelessWidget {
@@ -37,7 +37,7 @@ class ForgotPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30,),
-              CustomButton(
+              CustomLongButton(
                   onTap: () {
                     showForgotSuccessDialog(context);
                   },

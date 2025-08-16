@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
-import "package:mbelys/presentation/widgets/custom_button.dart";
+import "package:mbelys/presentation/widgets/custom_long_button.dart";
 
 class WelcomePage extends StatelessWidget {
 
@@ -52,7 +52,7 @@ class WelcomePage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 50,),
-              CustomButton(
+              CustomLongButton(
                   textButton: "Daftar",
                   backgroundColor: AppColors.color9,
                   textColor: AppColors.color3,
@@ -61,7 +61,7 @@ class WelcomePage extends StatelessWidget {
                 },
               ),
               const SizedBox(height: 10,),
-              CustomButton(
+              CustomLongButton(
                   textButton: "Masuk",
                   backgroundColor: AppColors.color2,
                   textColor: AppColors.color9,

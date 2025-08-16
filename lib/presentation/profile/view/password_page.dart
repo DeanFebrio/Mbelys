@@ -3,7 +3,7 @@ import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
-import "package:mbelys/presentation/widgets/custom_button.dart";
+import "package:mbelys/presentation/widgets/custom_long_button.dart";
 import "package:mbelys/presentation/widgets/custom_text_input.dart";
 
 class PasswordPage extends StatelessWidget {
@@ -52,7 +52,7 @@ class PasswordPage extends StatelessWidget {
                 ),
             ),
             const SizedBox(height: 30,),
-            CustomButton(
+            CustomLongButton(
                 onTap: () {
                   context.go(RouterPath.profile);
                 },
