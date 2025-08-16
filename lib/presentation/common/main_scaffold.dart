@@ -39,7 +39,7 @@ class _MainScaffoldState extends State<MainScaffold> {
           shape: const CircleBorder(),
           elevation: 0,
           onPressed: () {
-            context.go(RouterPath.home);
+            context.go(RouterPath.add);
           },
           child: Icon(
               MingCute.add_line,

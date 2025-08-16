@@ -2,10 +2,10 @@ import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/presentation/kandang/Widgets/custom_edit_button.dart";
 import "package:mbelys/presentation/kandang/Widgets/detail_background_page.dart";
-import "package:mbelys/presentation/kandang/Widgets/informasi_kandang.dart";
-import "package:mbelys/presentation/kandang/Widgets/keterangan_kambing.dart";
-import "package:mbelys/presentation/kandang/Widgets/saran_penanganan.dart";
-import "package:mbelys/presentation/kandang/Widgets/status_kambing.dart";
+import "package:mbelys/presentation/kandang/Widgets/detail_informasi_kandang.dart";
+import "package:mbelys/presentation/kandang/Widgets/detail_keterangan_kambing.dart";
+import "package:mbelys/presentation/kandang/Widgets/detail_saran_penanganan.dart";
+import "package:mbelys/presentation/kandang/Widgets/detail_status_kambing.dart";
 
 class DetailPage extends StatelessWidget {
   const DetailPage({super.key});
