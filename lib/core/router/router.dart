@@ -4,7 +4,8 @@ class RouterPath {
   static const forgot = '/forgot';
   static const register = '/register';
   static const home = '/home';
-  static const detail = '/kandang';
+  static const detail = '/detail';
+  static const add = '/add';
   static const profile = '/profile';
   static const editProfile = '/editProfil';
   static const password = '/password';
@@ -17,7 +18,8 @@ class RouterName {
   static const forgot = 'forgot';
   static const register = 'register';
   static const home = 'home';
-  static const detail = 'kandang';
+  static const detail = 'detail';
+  static const add = 'add';
   static const profile = 'profile';
   static const editProfile = 'editProfil';
   static const password = 'password';
