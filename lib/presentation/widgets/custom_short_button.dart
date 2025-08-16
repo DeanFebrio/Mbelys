@@ -1,28 +1,31 @@
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/core/router/router.dart";
 
-class EditSaveButton extends StatelessWidget {
-  const EditSaveButton({super.key});
+class CustomShortButton extends StatelessWidget {
+  final VoidCallback onTap;
+  final String buttonText;
+
+  const CustomShortButton({
+    super.key,
+    required this.onTap,
+    required this.buttonText
+  });
 
   @override
   Widget build(BuildContext context) {
     return FilledButton(
-        onPressed: (){
-          context.go(RouterPath.profile);
-        },
+        onPressed: onTap,
         style: FilledButton.styleFrom(
             backgroundColor: AppColors.color9,
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10)
             )
         ),
         child: Text(
-          "Simpan",
+          buttonText,
           style: TextStyle(
-              fontSize: 20,
+              fontSize: 16,
               fontFamily: "Poppins",
               fontWeight: FontWeight.w600,
               color: AppColors.color2
