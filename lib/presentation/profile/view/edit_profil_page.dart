@@ -4,9 +4,9 @@ import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
 import "package:mbelys/presentation/profile/widgets/custom_change_button.dart";
 import "package:mbelys/presentation/profile/widgets/edit_profil_background_page.dart";
-import "package:mbelys/presentation/profile/widgets/edit_save_button.dart";
 import "package:mbelys/presentation/profile/widgets/password_button.dart";
 import "package:mbelys/presentation/widgets/custom_avatar.dart";
+import "package:mbelys/presentation/widgets/custom_short_button.dart";
 import "package:mbelys/presentation/widgets/custom_text_input.dart";
 
 class EditProfilePage extends StatelessWidget {
@@ -63,10 +63,13 @@ class EditProfilePage extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 20,),
+            const SizedBox(height: 25,),
             const PasswordButton(),
             const SizedBox(height: 30,),
-            const EditSaveButton()
+            CustomShortButton(
+                onTap: () => context.go(RouterPath.profile),
+                buttonText: "Simpan"
+            )
           ],
         ),
       ),

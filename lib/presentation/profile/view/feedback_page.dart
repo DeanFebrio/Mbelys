@@ -1,8 +1,9 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/presentation/profile/widgets/feedback_send_button.dart";
+import "package:mbelys/presentation/profile/widgets/feedback_success_dialog.dart";
 import "package:mbelys/presentation/profile/widgets/feedback_text_input.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
+import "package:mbelys/presentation/widgets/custom_short_button.dart";
 
 class FeedbackPage extends StatelessWidget {
   const FeedbackPage({super.key});
@@ -30,7 +31,10 @@ class FeedbackPage extends StatelessWidget {
                 const SizedBox(height: 20,),
                 const FeedbackTextInput(),
                 const SizedBox(height: 20,),
-                const FeedbackSendButton()
+                CustomShortButton(
+                    onTap: () => showFeedbackSuccessDialog(context),
+                    buttonText: "Kirim"
+                ),
               ],
             ),
           ),
