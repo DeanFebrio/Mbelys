@@ -1,8 +1,9 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/presentation/auth/widgets/forgot_success_dialog.dart";
+import "package:mbelys/core/router/router.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
 import "package:mbelys/presentation/widgets/custom_long_button.dart";
+import "package:mbelys/presentation/widgets/custom_success_dialog.dart";
 import "package:mbelys/presentation/widgets/custom_text_input.dart";
 
 class ForgotPage extends StatelessWidget {
@@ -38,9 +39,13 @@ class ForgotPage extends StatelessWidget {
               ),
               const SizedBox(height: 30,),
               CustomLongButton(
-                  onTap: () {
-                    showForgotSuccessDialog(context);
-                  },
+                  onTap: () => customSuccessDialog(
+                      context,
+                      "Email Terkirim",
+                      "Silahkan cek email anda untuk mengatur ulang sandi",
+                      "Baik",
+                      RouterPath.login
+                  ),
                   textButton: "Lanjut",
                   textColor: AppColors.color3,
                   backgroundColor: AppColors.color9
