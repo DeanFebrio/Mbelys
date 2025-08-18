@@ -1,9 +1,14 @@
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/core/router/router.dart";
 
-void showFeedbackSuccessDialog(BuildContext context){
+void customSuccessDialog(
+    BuildContext context,
+    String titleText,
+    String contentText,
+    String buttonText,
+    String path
+    ){
   showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -13,7 +18,7 @@ void showFeedbackSuccessDialog(BuildContext context){
               borderRadius: BorderRadius.circular(20)
           ),
           title: Text(
-            "Kritik & Saran terkirim",
+            titleText,
             style: TextStyle(
                 fontSize: 20,
                 fontFamily: "Montserrat",
@@ -22,7 +27,7 @@ void showFeedbackSuccessDialog(BuildContext context){
             ),
           ),
           content: Text(
-            "Terima kasih atas kritik dan saran yang berguna untuk membangun aplikasi",
+            contentText,
             style: TextStyle(
                 fontSize: 14,
                 fontFamily: "Mulish",
@@ -33,13 +38,13 @@ void showFeedbackSuccessDialog(BuildContext context){
           actions: [
             TextButton(
                 onPressed: (){
-                  context.go(RouterPath.profile);
+                  context.go(path);
                 },
                 style: TextButton.styleFrom(
                     backgroundColor: AppColors.color9
                 ),
                 child: Text(
-                  "Baik",
+                  buttonText,
                   style: TextStyle(
                       fontSize: 16,
                       fontFamily: "Mulish",
