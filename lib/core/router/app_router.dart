@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mbelys/core/error/error_page.dart';
 import 'package:mbelys/core/router/router.dart';
 import 'package:mbelys/presentation/auth/view/forgot_page.dart';
 import 'package:mbelys/presentation/auth/view/login_page.dart';
 import 'package:mbelys/presentation/auth/view/register_page.dart';
 import 'package:mbelys/presentation/common/main_scaffold.dart';
-import 'package:mbelys/presentation/error/error_page.dart';
 import 'package:mbelys/presentation/home/home_page.dart';
 import 'package:mbelys/presentation/kandang/view/add_page.dart';
 import 'package:mbelys/presentation/kandang/view/detail_page.dart';
