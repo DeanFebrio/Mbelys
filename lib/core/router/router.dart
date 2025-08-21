@@ -10,6 +10,7 @@ class RouterPath {
   static const editProfile = '/editProfil';
   static const password = '/password';
   static const feedback = '/feedback';
+  static const error = '/error';
 }
 
 class RouterName {
@@ -24,4 +25,5 @@ class RouterName {
   static const editProfile = 'editProfil';
   static const password = 'password';
   static const feedback = 'feedback';
+  static const error = 'error';
 }
