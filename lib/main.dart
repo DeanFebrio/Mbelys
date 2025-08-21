@@ -3,6 +3,7 @@ import 'package:mbelys/core/constant/app_colors.dart';
 import 'package:mbelys/core/router/app_router.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:mbelys/core/services/service_locator.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -10,6 +11,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await setupLocator();
   runApp(const MyApp());
 }
 
