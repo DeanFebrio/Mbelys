@@ -4,7 +4,7 @@ import "package:mbelys/core/router/router.dart";
 import "package:mbelys/presentation/kandang/Widgets/add_image.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
-import "package:mbelys/presentation/widgets/custom_success_dialog.dart";
+import "package:mbelys/presentation/widgets/custom_dialog.dart";
 import "package:mbelys/presentation/widgets/custom_text_input.dart";
 
 class AddPage extends StatelessWidget {
