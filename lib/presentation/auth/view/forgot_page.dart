@@ -3,7 +3,7 @@ import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
 import "package:mbelys/presentation/widgets/custom_long_button.dart";
-import "package:mbelys/presentation/widgets/custom_success_dialog.dart";
+import "package:mbelys/presentation/widgets/custom_dialog.dart";
 import "package:mbelys/presentation/widgets/custom_text_input.dart";
 
 class ForgotPage extends StatelessWidget {

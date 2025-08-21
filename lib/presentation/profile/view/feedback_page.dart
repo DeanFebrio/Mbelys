@@ -4,7 +4,7 @@ import "package:mbelys/core/router/router.dart";
 import "package:mbelys/presentation/profile/widgets/feedback_text_input.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
-import "package:mbelys/presentation/widgets/custom_success_dialog.dart";
+import "package:mbelys/presentation/widgets/custom_dialog.dart";
 
 class FeedbackPage extends StatelessWidget {
   const FeedbackPage({super.key});
