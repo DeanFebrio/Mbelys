@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mbelys/core/error/error_page.dart';
 import 'package:mbelys/core/router/router.dart';
+import 'package:mbelys/core/services/service_locator.dart';
 import 'package:mbelys/presentation/auth/view/forgot_page.dart';
 import 'package:mbelys/presentation/auth/view/login_page.dart';
 import 'package:mbelys/presentation/auth/view/register_page.dart';
+import 'package:mbelys/presentation/auth/viewmodel/auth_viewmodel.dart';
 import 'package:mbelys/presentation/common/main_scaffold.dart';
 import 'package:mbelys/presentation/home/home_page.dart';
 import 'package:mbelys/presentation/kandang/view/add_page.dart';
@@ -26,6 +28,7 @@ class AppRouter {
   static final GoRouter _router = GoRouter(
     initialLocation: RouterPath.welcome,
       navigatorKey: _rootNavigatorKey,
+      refreshListenable: sl<AuthViewmodel>(),
       errorBuilder: (context, state) => const ErrorPage(),
       debugLogDiagnostics: true,
       routes: [
@@ -104,7 +107,29 @@ class AppRouter {
               )
             ]
         )
-      ]
+      ],
+    redirect: (BuildContext context, GoRouterState state) {
+      final authViewmodel = sl<AuthViewmodel>();
+      final status = authViewmodel.status;
+      final location = state.matchedLocation;
+
+      if (status == AuthStatus.unknown) {
+        return RouterPath.welcome;
+      }
+
+      final isLoggedIn = status == AuthStatus.authenticated;
+      final isAuthRouter = location == RouterPath.login || location == RouterPath.register;
+
+      if (isLoggedIn && isAuthRouter) {
+        return RouterPath.home;
+      }
+
+      if (!isLoggedIn && !isAuthRouter && location != RouterPath.welcome) {
+        return RouterPath.welcome;
+      }
+
+      return null;
+    }
   );
 
 }
