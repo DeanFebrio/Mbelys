@@ -1,10 +1,10 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
-class ProfilBackgroundPage extends StatelessWidget {
+class ProfileBackgroundPage extends StatelessWidget {
   final Widget child;
 
-  const ProfilBackgroundPage({
+  const ProfileBackgroundPage({
     super.key,
     required this.child
   });

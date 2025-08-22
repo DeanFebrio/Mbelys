@@ -5,7 +5,7 @@ import "package:mbelys/core/router/router.dart";
 import "package:mbelys/core/services/service_locator.dart";
 import "package:mbelys/presentation/profile/viewmodel/profile_viewmodel.dart";
 import "package:mbelys/presentation/profile/widgets/custom_change_button.dart";
-import "package:mbelys/presentation/profile/widgets/edit_profil_background_page.dart";
+import "package:mbelys/presentation/profile/widgets/edit_profile_background_page.dart";
 import "package:mbelys/presentation/profile/widgets/password_button.dart";
 import "package:mbelys/presentation/widgets/custom_avatar.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
@@ -38,7 +38,7 @@ class EditProfileView extends StatelessWidget {
         color: AppColors.color9
     );
 
-    final vm = context.read<ProfileViewModel>();
+    final vm = context.watch<ProfileViewModel>();
     final user = vm.user;
 
     return EditProfileBackgroundPage(
