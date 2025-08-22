@@ -1,10 +1,13 @@
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/core/router/router.dart";
 
 class LogoutButton extends StatelessWidget {
-  const LogoutButton({super.key});
+  const LogoutButton({
+    super.key,
+    required this.onPressed
+  });
+
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +15,7 @@ class LogoutButton extends StatelessWidget {
       height: 40,
       width: 250,
       child: FilledButton(
-          onPressed: (){
-            context.go(RouterPath.login);
-          },
+          onPressed: onPressed,
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.color5,
           ),
