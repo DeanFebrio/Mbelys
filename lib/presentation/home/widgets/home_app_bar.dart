@@ -5,7 +5,12 @@ import 'package:mbelys/core/router/router.dart';
 import 'package:mbelys/presentation/widgets/custom_avatar.dart';
 
 class HomeAppBar extends StatelessWidget {
-  const HomeAppBar({super.key});
+  const HomeAppBar({
+    super.key,
+    this.name
+  });
+
+  final String? name;
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +40,14 @@ class HomeAppBar extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "Peternak",
+                  name ?? "Peternak",
                   style: TextStyle(
-                    fontSize: 40,
+                    fontSize: 35,
                     fontFamily: "Poppins",
                     fontWeight: FontWeight.w700,
                     color: AppColors.color2
                   ),
+                  softWrap: true,
                 )
               ],
             ),

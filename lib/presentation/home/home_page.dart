@@ -1,25 +1,45 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
+import "package:mbelys/core/services/service_locator.dart";
+import "package:mbelys/presentation/home/viewmodel/home_viewmodel.dart";
 import "package:mbelys/presentation/home/widgets/card_kandang.dart";
 import "package:mbelys/presentation/home/widgets/home_app_bar.dart";
+import "package:provider/provider.dart";
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+        create: (_) => sl<HomeViewModel>(),
+      child: const HomeView(),
+    );
+  }
+}
+
+class HomeView extends StatelessWidget {
+  const HomeView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final vm = context.watch<HomeViewModel>();
+    final user = vm.user;
+
     return SingleChildScrollView(
       child: Column(
         children: [
-          const HomeAppBar(),
+          HomeAppBar(
+            name: user?.name,
+          ),
           const SizedBox(height: 10,),
           Text(
-              "Daftar Kandang",
+            "Daftar Kandang",
             style: TextStyle(
-              fontSize: 32,
-              fontFamily: "Poppins",
-              fontWeight: FontWeight.w700,
-              color: AppColors.color9
+                fontSize: 32,
+                fontFamily: "Poppins",
+                fontWeight: FontWeight.w700,
+                color: AppColors.color9
             ),
           ),
           const SizedBox(height: 20,),
@@ -34,3 +54,4 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
