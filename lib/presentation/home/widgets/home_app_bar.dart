@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mbelys/core/constant/app_colors.dart';
@@ -18,38 +19,44 @@ class HomeAppBar extends StatelessWidget {
     return ClipPath(
       clipper: CurvedClipper(),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+        padding: const EdgeInsets.only(right: 30, left: 30, bottom: 30, top: 15),
         height: 220,
         width: screenWidth,
         color: AppColors.color9,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
+          spacing: 15,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Selamat Datang",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.color11,
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Selamat Datang",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.color11,
+                    ),
                   ),
-                ),
-                Text(
-                  name ?? "Peternak",
-                  style: TextStyle(
-                    fontSize: 35,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.color2
-                  ),
-                  softWrap: true,
-                )
-              ],
+                  AutoSizeText(
+                    name ?? "Peternak",
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.color2
+                    ),
+                    maxLines: 2,
+                    softWrap: true,
+                    minFontSize: 26,
+                    overflow: TextOverflow.ellipsis,
+                  )
+                ],
+              ),
             ),
             GestureDetector(
               onTap: (){

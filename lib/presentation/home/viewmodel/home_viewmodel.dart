@@ -13,7 +13,7 @@ class HomeViewModel extends ChangeNotifier {
   }) :
       _authViewmodel = authViewmodel {
     _authViewmodel.addListener(_onAuthChanged);
-    _onAuthChanged;
+    _onAuthChanged();
   }
 
   void _onAuthChanged () {
