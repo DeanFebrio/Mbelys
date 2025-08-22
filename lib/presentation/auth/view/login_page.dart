@@ -159,7 +159,7 @@ class LoginButton extends StatelessWidget {
                     ),
                   ),
                 ),
-                backgroundColor: AppColors.color8,
+                backgroundColor: AppColors.color5,
               )
           );
         } else if (vm.state == LoginState.success) {
