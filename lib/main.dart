@@ -4,6 +4,8 @@ import 'package:mbelys/core/router/app_router.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mbelys/core/services/service_locator.dart';
+import 'package:mbelys/presentation/auth/viewmodel/auth_viewmodel.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -20,16 +22,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      theme: ThemeData(
-        textSelectionTheme: TextSelectionThemeData(
-          cursorColor: AppColors.color10,
-          selectionHandleColor: AppColors.color10
-        )
+    return ChangeNotifierProvider(
+      create: (context) => sl<AuthViewmodel>(),
+      child: MaterialApp.router(
+        theme: ThemeData(
+          textSelectionTheme: TextSelectionThemeData(
+            cursorColor: AppColors.color10,
+            selectionHandleColor: AppColors.color10
+          )
+        ),
+        debugShowCheckedModeBanner: false,
+        title: 'Mbelys Application',
+        routerConfig: AppRouter.router,
       ),
-      debugShowCheckedModeBanner: false,
-      title: 'Mbelys Application',
-      routerConfig: AppRouter.router,
     );
   }
 }
