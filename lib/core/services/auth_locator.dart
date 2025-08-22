@@ -49,7 +49,7 @@ Future<void> initAuth () async {
       loginUseCase: sl<LoginUseCase>()
   ));
 
-  sl.registerFactory<AuthViewmodel> (() => AuthViewmodel(
+  sl.registerLazySingleton<AuthViewmodel> (() => AuthViewmodel(
       getUserDataUseCase: sl<GetUserDataUseCase>(),
       logoutUseCase: sl<LogoutUseCase>(),
       getAuthStateUseCase: sl<GetAuthStateUseCase>()
