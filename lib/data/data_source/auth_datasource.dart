@@ -82,9 +82,9 @@ class AuthDataSource {
     }
   }
 
-  Future<Map<String, dynamic>?> getUserData (String uid) async {
+  Future<UserModel?> getUserData (String uid) async {
     final doc = await firestore.collection('users').doc(uid).get();
-    if (doc.exists) return doc.data();
+    if (doc.exists) return UserModel.fromFirebase(doc);
     return null;
   }
 

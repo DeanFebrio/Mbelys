@@ -50,4 +50,31 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, UserEntity>> getUserData (String uid) async{
+    try {
+      final userModel = await authDataSource.getUserData(uid);
+      if (userModel != null) {
+        return Right(userModel);
+      } else {
+        return Left(ServerFailure("Data user tidak ditemukan!"));
+      }
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
+
+  @override
+  Stream<User?> get authStateChanges => authDataSource.authStateChanges;
+
+  @override
+  Future<Either<Failure, void>> logout () async {
+    try {
+      await authDataSource.signOut();
+      return const Right(null);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }
