@@ -47,8 +47,6 @@ class LoginView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<LoginViewModel>();
-
     return AuthBackgroundPage(
         title: "Masuk",
         child: SingleChildScrollView(
@@ -56,7 +54,7 @@ class LoginView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 70,),
-              FormSection(vm: vm),
+              FormSection(),
               const SizedBox(height: 8,),
               SizedBox(
                 width: 340,
@@ -79,7 +77,7 @@ class LoginView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30,),
-              LoginButton(vm: vm,),
+              LoginButton(),
               const SizedBox(height: 30,),
               AuthDivider(text: "Masuk dengan"),
               const SizedBox(height: 30,),
@@ -130,14 +128,12 @@ class LoginView extends StatelessWidget {
 class LoginButton extends StatelessWidget {
   const LoginButton({
     super.key,
-    required this.vm
   });
-
-  final LoginViewModel vm;
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<LoginViewModel>().state;
+    final vm = context.watch<LoginViewModel>();
+    final state = vm.state;
 
     return AuthButton(
       textButton: "Masuk",
@@ -163,7 +159,7 @@ class LoginButton extends StatelessWidget {
               )
           );
         } else if (vm.state == LoginState.success) {
-          print("User nih: ${vm.user?.name}");
+          print("User ${vm.user?.name}");
           context.go(RouterPath.home);
         }
       },
@@ -174,13 +170,12 @@ class LoginButton extends StatelessWidget {
 class FormSection extends StatelessWidget {
   const FormSection({
     super.key,
-    required this.vm,
   });
-
-  final LoginViewModel vm;
 
   @override
   Widget build(BuildContext context) {
+    final vm = context.watch<LoginViewModel>();
+
     return Form(
       key: vm.formKey,
         child: Column(
