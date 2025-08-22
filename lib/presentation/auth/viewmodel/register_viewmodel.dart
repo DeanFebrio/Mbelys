@@ -76,12 +76,14 @@ class RegisterViewModel extends ChangeNotifier {
 
   String? validateName (String? value){
     if (value == null || value.isEmpty) return "Nama wajib diisi";
+    if (value.length > 15) return "Maksimal 15 karakter";
     return null;
   }
 
   String? validatePhone (String? value) {
     if (value == null || value.isEmpty) return "Nomor telepon wajib diisi";
     if (!RegExp(r'^[0-9]+$').hasMatch(value)) return "Nomor telepon harus angka";
+    if (value.length < 10 || value.length > 13) return "Nomor telepon harus 10-13 angka";
     return null;
   }
 }

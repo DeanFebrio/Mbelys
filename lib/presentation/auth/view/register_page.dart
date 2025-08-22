@@ -135,7 +135,6 @@ class RegisterButton extends StatelessWidget {
         await vm.register();
         if (!context.mounted) return;
         if (vm.state == RegisterState.error) {
-          print("User nih: ${vm.user}");
           ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Padding(
@@ -150,11 +149,10 @@ class RegisterButton extends StatelessWidget {
                     ),
                   ),
                 ),
-                backgroundColor: AppColors.color8,
+                backgroundColor: AppColors.color5,
               )
           );
         } else if (vm.state == RegisterState.success) {
-          print("User nih: ${vm.user?.name}");
           context.go(RouterPath.login);
         }
       },
