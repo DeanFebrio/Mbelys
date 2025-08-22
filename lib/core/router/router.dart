@@ -11,6 +11,7 @@ class RouterPath {
   static const password = '/password';
   static const feedback = '/feedback';
   static const error = '/error';
+  static const splash = '/splash';
 }
 
 class RouterName {
@@ -26,4 +27,5 @@ class RouterName {
   static const password = 'password';
   static const feedback = 'feedback';
   static const error = 'error';
+  static const splash = 'splash';
 }

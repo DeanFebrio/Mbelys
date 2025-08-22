@@ -8,6 +8,7 @@ import 'package:mbelys/presentation/auth/view/login_page.dart';
 import 'package:mbelys/presentation/auth/view/register_page.dart';
 import 'package:mbelys/presentation/auth/viewmodel/auth_viewmodel.dart';
 import 'package:mbelys/presentation/common/main_scaffold.dart';
+import 'package:mbelys/presentation/common/splash_page.dart';
 import 'package:mbelys/presentation/home/home_page.dart';
 import 'package:mbelys/presentation/kandang/view/add_page.dart';
 import 'package:mbelys/presentation/kandang/view/detail_page.dart';
@@ -23,7 +24,7 @@ class AppRouter {
 
   static final _rootNavigatorKey = GlobalKey<NavigatorState>();
   static final _shellNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'home');
-  static final _shellNavigatorProfil = GlobalKey<NavigatorState>(debugLabel: 'profile');
+  static final _shellNavigatorProfile = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
   static final GoRouter _router = GoRouter(
     initialLocation: RouterPath.welcome,
@@ -78,6 +79,11 @@ class AppRouter {
             name: RouterName.add,
             builder: (context, state) => const AddPage()
         ),
+        GoRoute(
+            path: RouterPath.splash,
+            name: RouterName.splash,
+            builder: (context, state) => const SplashPage()
+        ),
 
         StatefulShellRoute.indexedStack(
           parentNavigatorKey: _rootNavigatorKey,
@@ -96,7 +102,7 @@ class AppRouter {
                   ]
               ),
               StatefulShellBranch(
-                  navigatorKey: _shellNavigatorProfil,
+                  navigatorKey: _shellNavigatorProfile,
                   routes: [
                     GoRoute(
                         path: RouterPath.profile,
@@ -113,19 +119,27 @@ class AppRouter {
       final status = authViewmodel.status;
       final location = state.matchedLocation;
 
-      if (status == AuthStatus.unknown) {
-        return RouterPath.welcome;
-      }
+      final publicRoutes = [
+        RouterPath.welcome,
+        RouterPath.login,
+        RouterPath.forgot,
+        RouterPath.register,
+        RouterPath.splash
+      ];
 
+      final isGoingPublicRoute = publicRoutes.contains(location);
       final isLoggedIn = status == AuthStatus.authenticated;
-      final isAuthRouter = location == RouterPath.login || location == RouterPath.register;
 
-      if (isLoggedIn && isAuthRouter) {
-        return RouterPath.home;
+      if (status == AuthStatus.unknown) {
+        return state.matchedLocation == RouterPath.splash ? null : RouterPath.splash;
       }
 
-      if (!isLoggedIn && !isAuthRouter && location != RouterPath.welcome) {
+      if (!isLoggedIn && !isGoingPublicRoute) {
         return RouterPath.welcome;
+      }
+
+      if (isLoggedIn && isGoingPublicRoute) {
+        return RouterPath.home;
       }
 
       return null;
