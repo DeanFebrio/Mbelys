@@ -28,7 +28,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           textSelectionTheme: TextSelectionThemeData(
             cursorColor: AppColors.color10,
-            selectionHandleColor: AppColors.color10
+            selectionHandleColor: AppColors.color10,
+            selectionColor: AppColors.color12.withValues(alpha: 0.5)
           )
         ),
         debugShowCheckedModeBanner: false,
