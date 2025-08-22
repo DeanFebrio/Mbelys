@@ -6,7 +6,16 @@ import "package:mbelys/presentation/profile/widgets/custom_change_button.dart";
 import "package:mbelys/presentation/widgets/custom_avatar.dart";
 
 class CardProfile extends StatelessWidget {
-  const CardProfile({super.key});
+  const CardProfile({
+    super.key,
+    this.name,
+    this.email,
+    this.phone,
+  });
+
+  final String? name;
+  final String? email;
+  final String? phone;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +30,8 @@ class CardProfile extends StatelessWidget {
     final informationStyle = TextStyle(
       fontSize: 12,
       fontFamily: "Montserrat",
-      color: AppColors.color10
+      fontWeight: FontWeight.w500,
+      color: AppColors.color10,
     );
 
     return Card(
@@ -44,19 +54,19 @@ class CardProfile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Mbelys",
+                    name ?? "Mbelys",
                     style: nameStyle,
                     softWrap: true,
                   ),
                   const SizedBox(height: 5,),
                   Text(
-                    "mbelys123@gmail.com",
+                    email ?? "mbelys123@gmail.com",
                     style: informationStyle,
                     softWrap: true,
                   ),
                   const SizedBox(height: 3,),
                   Text(
-                    "08123456789",
+                    phone ?? "1234",
                     style: informationStyle,
                   ),
                   const SizedBox(height: 10,),

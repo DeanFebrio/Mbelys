@@ -2,7 +2,12 @@ import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
 class CustomTextInput extends StatelessWidget {
-  const CustomTextInput({super.key});
+  const CustomTextInput({
+    super.key,
+    this.hintText
+  });
+
+  final String? hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +31,7 @@ class CustomTextInput extends StatelessWidget {
             contentPadding: EdgeInsets.symmetric(horizontal: 20,),
             filled: true,
             fillColor: AppColors.color6,
-            hintText: "Ketik disini",
+            hintText: hintText ?? "Ketik disini",
             hintStyle: TextStyle(
                 fontFamily: "Mulish",
                 fontSize: 14,
