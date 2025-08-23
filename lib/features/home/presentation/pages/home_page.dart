@@ -1,9 +1,9 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/services/service_locator.dart";
-import "package:mbelys/presentation/home/viewmodel/home_viewmodel.dart";
-import "package:mbelys/presentation/home/widgets/card_kandang.dart";
-import "package:mbelys/presentation/home/widgets/home_app_bar.dart";
+import "package:mbelys/features/home/presentation/viewmodel/home_viewmodel.dart";
+import "package:mbelys/features/home/presentation/widgets/card_kandang.dart";
+import "package:mbelys/features/home/presentation/widgets/home_app_bar.dart";
 import "package:provider/provider.dart";
 
 class HomePage extends StatelessWidget {
