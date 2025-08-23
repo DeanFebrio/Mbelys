@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/presentation/home/widgets/label_card_kandang.dart";
+import "package:mbelys/features/home/presentation/widgets/label_card_kandang.dart";
 import "package:mbelys/presentation/widgets/custom_next_button.dart";
 
 class CardKandang extends StatelessWidget {
