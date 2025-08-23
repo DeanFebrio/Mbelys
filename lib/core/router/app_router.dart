@@ -3,21 +3,20 @@ import 'package:go_router/go_router.dart';
 import 'package:mbelys/core/error/error_page.dart';
 import 'package:mbelys/core/router/router.dart';
 import 'package:mbelys/core/services/service_locator.dart';
-import 'package:mbelys/presentation/auth/view/forgot_page.dart';
-import 'package:mbelys/presentation/auth/view/login_page.dart';
-import 'package:mbelys/presentation/auth/view/register_page.dart';
-import 'package:mbelys/presentation/auth/viewmodel/auth_viewmodel.dart';
+import 'package:mbelys/features/auth/presentation/pages/forgot_page.dart';
+import 'package:mbelys/features/auth/presentation/pages/login_page.dart';
+import 'package:mbelys/features/auth/presentation/pages/register_page.dart';
+import 'package:mbelys/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:mbelys/features/home/presentation/pages/home_page.dart';
+import 'package:mbelys/features/kandang/presentation/view/add_page.dart';
+import 'package:mbelys/features/kandang/presentation/view/detail_page.dart';
+import 'package:mbelys/features/user/presentation/pages/edit_profile_page.dart';
+import 'package:mbelys/features/user/presentation/pages/feedback_page.dart';
+import 'package:mbelys/features/user/presentation/pages/password_page.dart';
+import 'package:mbelys/features/user/presentation/pages/profile_page.dart';
+import 'package:mbelys/features/welcome/welcome_page.dart';
 import 'package:mbelys/presentation/common/main_scaffold.dart';
 import 'package:mbelys/presentation/common/splash_page.dart';
-import 'package:mbelys/presentation/home/home_page.dart';
-import 'package:mbelys/presentation/kandang/view/add_page.dart';
-import 'package:mbelys/presentation/kandang/view/detail_page.dart';
-import 'package:mbelys/presentation/profile/view/edit_profil_page.dart';
-import 'package:mbelys/presentation/profile/view/feedback_page.dart';
-import 'package:mbelys/presentation/profile/view/password_page.dart';
-import 'package:mbelys/presentation/profile/view/profile_page.dart';
-import 'package:mbelys/presentation/welcome/welcome_page.dart';
-
 
 class AppRouter {
   static GoRouter get router => _router;
@@ -26,10 +25,12 @@ class AppRouter {
   static final _shellNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'home');
   static final _shellNavigatorProfile = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
+  static final AuthViewModel authViewModel = sl<AuthViewModel>();
+
   static final GoRouter _router = GoRouter(
     initialLocation: RouterPath.welcome,
       navigatorKey: _rootNavigatorKey,
-      refreshListenable: sl<AuthViewmodel>(),
+      refreshListenable: authViewModel,
       errorBuilder: (context, state) => const ErrorPage(),
       debugLogDiagnostics: true,
       routes: [
@@ -115,8 +116,7 @@ class AppRouter {
         )
       ],
     redirect: (BuildContext context, GoRouterState state) {
-      final authViewmodel = sl<AuthViewmodel>();
-      final status = authViewmodel.status;
+      final status = authViewModel.status;
       final location = state.matchedLocation;
 
       final publicRoutes = [
@@ -127,23 +127,26 @@ class AppRouter {
         RouterPath.splash
       ];
 
-      final isGoingPublicRoute = publicRoutes.contains(location);
+      final isPublic = publicRoutes.contains(location);
       final isLoggedIn = status == AuthStatus.authenticated;
 
       if (status == AuthStatus.unknown) {
-        return state.matchedLocation == RouterPath.splash ? null : RouterPath.splash;
+        return location == RouterPath.splash ? null : RouterPath.splash;
       }
 
-      if (!isLoggedIn && !isGoingPublicRoute) {
+      if (status == AuthStatus.unauthenticated) {
+        return isPublic ? null : RouterPath.welcome;
+      }
+
+      if (!isLoggedIn && !isPublic) {
         return RouterPath.welcome;
       }
 
-      if (isLoggedIn && isGoingPublicRoute) {
+      if (isLoggedIn && isPublic) {
         return RouterPath.home;
       }
 
       return null;
     }
   );
-
 }
