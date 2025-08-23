@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
-import "package:mbelys/presentation/profile/widgets/custom_change_button.dart";
+import "package:mbelys/features/user/presentation/widgets/custom_change_button.dart";
 import "package:mbelys/presentation/widgets/custom_avatar.dart";
 
 class CardProfile extends StatelessWidget {

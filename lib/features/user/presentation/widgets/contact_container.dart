@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
-import "package:mbelys/presentation/profile/widgets/custom_contact_button.dart";
+import "package:mbelys/features/user/presentation/widgets/custom_contact_button.dart";
 
 class ContactContainer extends StatelessWidget {
   const ContactContainer({super.key});
