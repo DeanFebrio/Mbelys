@@ -1,5 +1,5 @@
   import 'package:cloud_firestore/cloud_firestore.dart';
-  import 'package:mbelys/domain/entities/user_entity.dart';
+import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
   class UserModel extends UserEntity {
     UserModel ({
