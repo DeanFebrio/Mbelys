@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
-import "package:mbelys/presentation/kandang/Widgets/add_image.dart";
+import "package:mbelys/features/kandang/presentation/Widgets/add_image.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
 import "package:mbelys/presentation/widgets/custom_dialog.dart";

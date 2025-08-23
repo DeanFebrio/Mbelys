@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:mbelys/core/utils/result.dart';
-import 'package:mbelys/domain/repositories/auth_repository.dart';
+import 'package:mbelys/features/auth/domain/repositories/auth_repository.dart';
 
 class LogoutUseCase {
   final AuthRepository authRepository;
