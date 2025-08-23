@@ -4,7 +4,7 @@ import 'package:mbelys/core/router/app_router.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mbelys/core/services/service_locator.dart';
-import 'package:mbelys/presentation/auth/viewmodel/auth_viewmodel.dart';
+import 'package:mbelys/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -22,8 +22,10 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => sl<AuthViewmodel>(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthViewModel>.value(value: sl<AuthViewModel>()),
+      ],
       child: MaterialApp.router(
         theme: ThemeData(
           textSelectionTheme: TextSelectionThemeData(
