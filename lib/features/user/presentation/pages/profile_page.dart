@@ -1,11 +1,11 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/services/service_locator.dart";
-import "package:mbelys/presentation/profile/viewmodel/profile_viewmodel.dart";
-import "package:mbelys/presentation/profile/widgets/card_profile.dart";
-import "package:mbelys/presentation/profile/widgets/card_profile_skeleton.dart";
-import "package:mbelys/presentation/profile/widgets/contact_container.dart";
-import "package:mbelys/presentation/profile/widgets/logout_button.dart";
-import "package:mbelys/presentation/profile/widgets/profile_background_page.dart";
+import "package:mbelys/features/user/presentation/viewmodel/profile_viewmodel.dart";
+import "package:mbelys/features/user/presentation/widgets/card_profile.dart";
+import "package:mbelys/features/user/presentation/widgets/card_profile_skeleton.dart";
+import "package:mbelys/features/user/presentation/widgets/contact_container.dart";
+import "package:mbelys/features/user/presentation/widgets/logout_button.dart";
+import "package:mbelys/features/user/presentation/widgets/profile_background_page.dart";
 import "package:provider/provider.dart";
 
 class ProfilePage extends StatelessWidget {

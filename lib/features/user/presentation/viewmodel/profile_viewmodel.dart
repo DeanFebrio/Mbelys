@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mbelys/domain/entities/user_entity.dart';
-import 'package:mbelys/presentation/auth/viewmodel/auth_viewmodel.dart';
+import 'package:mbelys/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
 class ProfileViewModel extends ChangeNotifier {
-  final AuthViewmodel _authViewmodel;
+  final AuthViewModel _authViewmodel;
 
   UserEntity? _user;
   UserEntity? get user => _user;
 
   ProfileViewModel({
-    required AuthViewmodel authViewmodel
+    required AuthViewModel authViewmodel
   }) :
       _authViewmodel = authViewmodel {
     _authViewmodel.addListener(_onAuthChanged);
