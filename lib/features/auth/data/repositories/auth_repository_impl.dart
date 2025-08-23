@@ -1,14 +1,19 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mbelys/core/utils/result.dart';
-import 'package:mbelys/data/data_source/auth_datasource.dart';
-import 'package:mbelys/domain/entities/user_entity.dart';
-import 'package:mbelys/domain/repositories/auth_repository.dart';
+import 'package:mbelys/features/auth/data/datasources/auth_datasource.dart';
+import 'package:mbelys/features/auth/domain/repositories/auth_repository.dart';
+import 'package:mbelys/features/user/data/datasources/user_datasource.dart';
+import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource authDataSource;
+  final UserDataSource userDataSource;
 
-  AuthRepositoryImpl({required this.authDataSource});
+  const AuthRepositoryImpl({
+    required this.authDataSource,
+    required this.userDataSource,
+  });
 
   String mapAuthError (FirebaseAuthException e) {
     switch (e.code) {
@@ -30,8 +35,13 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, UserEntity>> login (String email, String password) async {
     try {
-      final userModel = await authDataSource.signIn(email: email, password: password);
-      return Right(userModel);
+      final user = await authDataSource.signIn(email: email, password: password);
+      final model = await userDataSource.getUserData(user.uid);
+      if (model != null) {
+        return Right(model);
+      } else {
+        return Left(ServerFailure('User tidak ditemukan di database'));
+      }
     } on FirebaseAuthException catch (e) {
       return Left (ServerFailure(mapAuthError(e)));
     } catch (e) {
@@ -40,26 +50,27 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> register(String email, String password, String name, String phone) async {
+  Future<Either<Failure, UserEntity>> register(
+      String email,
+      String password,
+      String name,
+      String phone
+    ) async {
     try {
-      final userModel = await authDataSource.signUp(email: email, password: password, name: name, phone: phone);
-      return Right(userModel);
+      final user = await authDataSource.signUp(
+          email: email,
+          password: password,
+          name: name
+      );
+      final model = await userDataSource.syncOnRegister(
+          uid: user.uid,
+          email: email,
+          name: name,
+          phone: phone
+      );
+      return Right(model);
     } on FirebaseAuthException catch (e) {
       return Left(ServerFailure(mapAuthError(e)));
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, UserEntity>> getUserData (String uid) async{
-    try {
-      final userModel = await authDataSource.getUserData(uid);
-      if (userModel != null) {
-        return Right(userModel);
-      } else {
-        return Left(ServerFailure("Data user tidak ditemukan!"));
-      }
     } catch (e) {
       return Left(ServerFailure(e.toString()));
     }

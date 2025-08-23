@@ -1,13 +1,13 @@
 import 'dart:async';
 import 'package:flutter/cupertino.dart';
-import 'package:mbelys/domain/entities/user_entity.dart';
-import 'package:mbelys/domain/usecases/get_auth_state_usecase.dart';
-import 'package:mbelys/domain/usecases/get_user_data_usecase.dart';
-import 'package:mbelys/domain/usecases/logout_usecase.dart';
+import 'package:mbelys/features/auth/domain/usecases/get_auth_state_usecase.dart';
+import 'package:mbelys/features/auth/domain/usecases/logout_usecase.dart';
+import 'package:mbelys/features/user/domain/entities/user_entity.dart';
+import 'package:mbelys/features/user/domain/usecases/get_user_data_usecase.dart';
 
 enum AuthStatus { unknown, authenticated, unauthenticated }
 
-class AuthViewmodel extends ChangeNotifier {
+class AuthViewModel extends ChangeNotifier {
   final GetUserDataUseCase _getUserDataUseCase;
   final LogoutUseCase _logoutUseCase;
   final GetAuthStateUseCase _getAuthStateUseCase;
@@ -20,7 +20,7 @@ class AuthViewmodel extends ChangeNotifier {
   UserEntity? _user;
   UserEntity? get user => _user;
 
-  AuthViewmodel ({
+  AuthViewModel ({
     required GetUserDataUseCase getUserDataUseCase,
     required LogoutUseCase logoutUseCase,
     required GetAuthStateUseCase getAuthStateUseCase
@@ -33,24 +33,40 @@ class AuthViewmodel extends ChangeNotifier {
   }
 
   void _listenToAuthChanges () {
+    _authStreamSubscription?.cancel();
     _authStreamSubscription = _getAuthStateUseCase.call().listen((firebaseUser) async {
-      if (firebaseUser != null) {
+
+      if (firebaseUser == null) {
+        _user = null;
+        _status = AuthStatus.unauthenticated;
+        notifyListeners();
+        return;
+      }
+
+      if (_status != AuthStatus.authenticated) {
+       _status = AuthStatus.authenticated;
+       notifyListeners();
+      }
+
+      try {
         final result = await _getUserDataUseCase.call(firebaseUser.uid);
         result.fold(
             (failure) {
-              _user = null;
               _status = AuthStatus.unauthenticated;
+              _user = null;
             },
             (userEntity) {
               _user = userEntity;
+              print("user: ${_user?.name}");
               _status = AuthStatus.authenticated;
+              print("status: ${_status}");
             }
         );
-      } else {
+        notifyListeners();
+      } catch (_) {
         _user = null;
-        _status = AuthStatus.unauthenticated;
+        notifyListeners();
       }
-      notifyListeners();
     });
   }
 

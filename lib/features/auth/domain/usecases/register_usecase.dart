@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:mbelys/core/utils/result.dart';
-import 'package:mbelys/domain/entities/user_entity.dart';
-import 'package:mbelys/domain/repositories/auth_repository.dart';
+import 'package:mbelys/features/auth/domain/repositories/auth_repository.dart';
+import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
 class RegisterUseCase {
   final AuthRepository repository;

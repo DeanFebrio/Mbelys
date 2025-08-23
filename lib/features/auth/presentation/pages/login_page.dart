@@ -3,13 +3,13 @@ import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
 import "package:mbelys/core/services/service_locator.dart";
-import "package:mbelys/presentation/auth/viewmodel/login_viewmodel.dart";
-import "package:mbelys/presentation/auth/widgets/auth_background_page.dart";
-import "package:mbelys/presentation/auth/widgets/auth_button.dart";
-import "package:mbelys/presentation/auth/widgets/auth_divider.dart";
-import "package:mbelys/presentation/auth/widgets/auth_text_input.dart";
-import "package:mbelys/presentation/auth/widgets/facebook_button.dart";
-import "package:mbelys/presentation/auth/widgets/google_button.dart";
+import "package:mbelys/features/auth/presentation/viewmodels/login_viewmodel.dart";
+import "package:mbelys/features/auth/presentation/widgets/auth_background_page.dart";
+import "package:mbelys/features/auth/presentation/widgets/auth_button.dart";
+import "package:mbelys/features/auth/presentation/widgets/auth_divider.dart";
+import "package:mbelys/features/auth/presentation/widgets/auth_text_input.dart";
+import "package:mbelys/features/auth/presentation/widgets/facebook_button.dart";
+import "package:mbelys/features/auth/presentation/widgets/google_button.dart";
 import "package:provider/provider.dart";
 
 
@@ -159,7 +159,6 @@ class LoginButton extends StatelessWidget {
               )
           );
         } else if (vm.state == LoginState.success) {
-          print("User ${vm.user?.name}");
           context.go(RouterPath.home);
         }
       },

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mbelys/domain/entities/user_entity.dart';
-import 'package:mbelys/domain/usecases/login_usecase.dart';
+import 'package:mbelys/features/auth/domain/usecases/login_usecase.dart';
+import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
 enum LoginState { initial, loading, success, error }
 

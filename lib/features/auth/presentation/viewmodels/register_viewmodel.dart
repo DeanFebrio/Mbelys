@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:mbelys/domain/entities/user_entity.dart';
-import 'package:mbelys/domain/usecases/register_usecase.dart';
+import 'package:mbelys/features/auth/domain/usecases/register_usecase.dart';
+import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
 enum RegisterState { initial, loading, success, error }
 
