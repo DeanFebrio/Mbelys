@@ -1,72 +1,96 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mbelys/core/services/service_locator.dart';
 
-class AuthDataSource {
-  final FirebaseAuth firebaseAuth;
+abstract class AuthDataSource {
+  Stream<User?> get authStateChanges;
+  User? get currentUser;
 
-  const AuthDataSource({required this.firebaseAuth});
+  Future<User> signIn (String email, String password);
+  Future<User> signUp (String email, String password, String name);
+  Future<void> signOut ();
 
-  User? get currentUser => firebaseAuth.currentUser;
+  Future<void> forgotPassword (String email);
+  Future<void> changePassword (String oldPassword, String newPassword);
+  Future<void> changeEmail (String email);
 
+  Future<void> reloadUser();
+}
+
+class FirebaseAuthDataSource implements AuthDataSource {
+  final FirebaseAuth firebaseAuth = sl<FirebaseAuth>();
+
+  @override
   Stream<User?> get authStateChanges => firebaseAuth.authStateChanges();
 
-  Future<User> signIn({
-    required String email,
-    required String password
-  }) async {
-    try {
-      final UserCredential userCredential = await firebaseAuth.signInWithEmailAndPassword(
-          email: email,
-          password: password
-      );
-      final user = userCredential.user;
+  @override
+  User? get currentUser => firebaseAuth.currentUser;
 
-      if (user == null) {
-        throw FirebaseAuthException(
-            code: 'user-not-found', message: 'User tidak ditemukan!'
-        );
-      }
-      return user;
-    } on FirebaseAuthException {
-      rethrow;
-    } catch (e) {
-      throw Exception("Terjadi kesalahan tidak terduga saat login: $e");
+  @override
+  Future<User> signIn(String email, String password) async {
+    final cred = await firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password
+    );
+    if (cred.user == null) {
+      throw FirebaseAuthException(code: 'user-not-found', message: 'Pengguna tidak ditemukan!');
     }
+    return cred.user!;
   }
 
-  Future<User> signUp ({
-    required String email,
-    required String password,
-    required String name,
-  }) async {
-    try {
-      UserCredential userCredential = await firebaseAuth.createUserWithEmailAndPassword(
-          email: email,
-          password: password
-      );
-      final user = userCredential.user;
+  @override
+  Future<void> signOut() {
+    return firebaseAuth.signOut();
+  }
 
-      if (user == null){
-        throw FirebaseAuthException(
-            code: 'user-creation-failed',
-            message: 'Gagal membuat akun!'
-        );
-      }
-      await userCredential.user!.updateDisplayName(name);
-      return user;
-    } on FirebaseAuthException {
-      rethrow;
-    } catch (e) {
-      throw Exception('Terjadi kesalahan saat register: $e');
+  @override
+  Future<User> signUp(String email, String password, String name) async {
+    final account = await firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password
+    );
+    final user = account.user;
+    if (user == null) {
+      throw FirebaseAuthException(code: 'user-not-found', message: 'Gagal membuat akun!');
     }
+    await user.updateDisplayName(name);
+    return user;
   }
 
-  Future<void> signOut() async {
-    await firebaseAuth.signOut();
+  @override
+  Future<void> changeEmail(String email) async {
+    final user = currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+    }
+    await user.verifyBeforeUpdateEmail(email);
   }
 
-  Future<void> resetPassword ({
-    required String email
-  }) async {
-    await firebaseAuth.sendPasswordResetEmail(email: email);
+  @override
+  Future<void> changePassword(String oldPassword, String newPassword) async {
+    final user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(code: 'no-user', message: 'Pengugna belum masuk');
+    }
+    final email = user.email;
+    if (email == null) {
+      throw FirebaseAuthException(code: 'no-email', message: 'Akun tidak memiliki email');
+    }
+    final cred = EmailAuthProvider.credential(email: email, password: oldPassword);
+    await user.reauthenticateWithCredential(cred);
+    await user.updatePassword(newPassword);
+  }
+
+  @override
+  Future<void> forgotPassword(String email) async {
+    return await firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  @override
+  Future<void> reloadUser() async {
+    final user = currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+    }
+    await user.reload();
   }
 }

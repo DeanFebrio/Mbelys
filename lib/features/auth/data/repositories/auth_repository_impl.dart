@@ -1,91 +1,130 @@
-import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mbelys/core/error/auth_error_mapper.dart';
 import 'package:mbelys/core/utils/result.dart';
 import 'package:mbelys/features/auth/data/datasources/auth_datasource.dart';
+import 'package:mbelys/features/auth/domain/entities/auth_entity.dart';
 import 'package:mbelys/features/auth/domain/repositories/auth_repository.dart';
-import 'package:mbelys/features/user/data/datasources/user_datasource.dart';
 import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource authDataSource;
-  final UserDataSource userDataSource;
 
-  const AuthRepositoryImpl({
-    required this.authDataSource,
-    required this.userDataSource,
-  });
+  const AuthRepositoryImpl({required this.authDataSource});
 
-  String mapAuthError (FirebaseAuthException e) {
-    switch (e.code) {
-      case 'invalid-credential':
-        return 'Email atau password salah';
-      case 'wrong-password':
-        return 'Password salah';
-      case 'user-not-found':
-        return 'Akun tidak ditemukan';
-      case 'email-already-in-use':
-        return "Email telah terdaftar";
-      case 'invalid-email':
-        return 'Format email tidak valid';
-      default:
-        return 'Terjadi kesalahan: ${e.message ?? 'Tidak diketahui'}';
-    }
+  AuthEntity _mapUserToEntity(User user) {
+    return AuthEntity(
+        uid: user.uid,
+        email: user.email ?? ""
+    );
   }
 
   @override
-  Future<Either<Failure, UserEntity>> login (String email, String password) async {
+  Stream<AuthEntity?> get authStatusChanges {
+    return authDataSource.authStateChanges.map((user) {
+      return user != null ? _mapUserToEntity(user) : null;
+    });
+  }
+
+  @override
+  AsyncVoidResult changeEmail({required String newEmail}) async {
     try {
-      final user = await authDataSource.signIn(email: email, password: password);
-      final model = await userDataSource.getUserData(user.uid);
-      if (model != null) {
-        return Right(model);
-      } else {
-        return Left(ServerFailure('User tidak ditemukan di database'));
-      }
+      await authDataSource.changeEmail(newEmail);
+      return okUnit();
     } on FirebaseAuthException catch (e) {
-      return Left (ServerFailure(mapAuthError(e)));
+      return err(mapFirebaseAuthError(e));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      rethrow;
     }
   }
 
   @override
-  Future<Either<Failure, UserEntity>> register(
-      String email,
-      String password,
-      String name,
-      String phone
-    ) async {
+  AsyncVoidResult changePassword({required String oldPassword, required String newPassword}) async {
     try {
-      final user = await authDataSource.signUp(
-          email: email,
-          password: password,
-          name: name
-      );
-      final model = await userDataSource.syncOnRegister(
-          uid: user.uid,
-          email: email,
-          name: name,
-          phone: phone
-      );
-      return Right(model);
+      await authDataSource.changePassword(oldPassword, newPassword);
+      return okUnit();
     } on FirebaseAuthException catch (e) {
-      return Left(ServerFailure(mapAuthError(e)));
+      return err(mapFirebaseAuthError(e));
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      rethrow;
     }
   }
 
   @override
-  Stream<User?> get authStateChanges => authDataSource.authStateChanges;
+  AuthEntity? get currentUser {
+    final user = authDataSource.currentUser;
+    return user != null ? _mapUserToEntity(user) : null;
+  }
 
   @override
-  Future<Either<Failure, void>> logout () async {
+  AsyncVoidResult reloadUser() async {
+    try {
+      await authDataSource.reloadUser();
+      return okUnit();
+    } on FirebaseAuthException catch (e) {
+      return err(mapFirebaseAuthError(e));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  AsyncVoidResult forgotPassword({required String email}) async {
+    try {
+      await authDataSource.forgotPassword(email);
+      return okUnit();
+    } on FirebaseAuthException catch (e) {
+      return err(mapFirebaseAuthError(e));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  AsyncResult<AuthEntity> login({required String email, required String password}) async {
+    try {
+      final user = await authDataSource.signIn(email, password);
+      return ok(_mapUserToEntity(user));
+    } on FirebaseAuthException catch (e) {
+      return err(mapFirebaseAuthError(e));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  AsyncVoidResult logout() async {
     try {
       await authDataSource.signOut();
-      return const Right(null);
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      return okUnit();
+    } on FirebaseAuthException catch (e) {
+      return err(mapFirebaseAuthError(e));
+    }  catch (e) {
+      rethrow;
     }
   }
+
+  @override
+  AsyncResult<AuthEntity> register({required String email, required String password, required String name}) async {
+    try {
+      final user = await authDataSource.signUp(email, password, name);
+      return ok(_mapUserToEntity(user));
+    } on FirebaseAuthException catch (e) {
+      return err(mapFirebaseAuthError(e));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  AsyncResult<UserEntity> signInWithFacebook() {
+    // TODO: implement signInWithFacebook
+    throw UnimplementedError();
+  }
+
+  @override
+  AsyncResult<UserEntity> signInWithGoogle() {
+    // TODO: implement signInWithGoogle
+    throw UnimplementedError();
+  }
+
 }
