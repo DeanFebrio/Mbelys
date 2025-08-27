@@ -24,12 +24,4 @@ class ProfileViewModel extends ChangeNotifier {
   Future<void> logout() async {
     return await _authViewmodel.logout();
   }
-
-  @override
-  void dispose() {
-    _authViewmodel.removeListener(_onAuthChanged);
-    super.dispose();
-  }
-
-
 }
