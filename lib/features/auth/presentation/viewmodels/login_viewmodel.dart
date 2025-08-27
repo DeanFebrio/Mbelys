@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:mbelys/core/error/failure.dart';
+import 'package:mbelys/core/utils/result.dart';
+import 'package:mbelys/features/auth/domain/entities/auth_entity.dart';
 import 'package:mbelys/features/auth/domain/usecases/login_usecase.dart';
-import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
 enum LoginState { initial, loading, success, error }
 
 class LoginViewModel extends ChangeNotifier{
-  final LoginUseCase loginUseCase;
-  LoginViewModel({required this.loginUseCase});
+  final LoginUseCase _loginUseCase;
 
-  UserEntity? _user;
-  UserEntity? get user => _user;
+  String? _error;
+  String? get error => _error;
+
+  LoginViewModel({required LoginUseCase loginUseCase}) : _loginUseCase = loginUseCase;
 
   LoginState _state = LoginState.initial;
   LoginState get state => _state;
-
-  String? _errorMessage;
-  String? get errorMessage => _errorMessage;
 
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
@@ -28,29 +28,29 @@ class LoginViewModel extends ChangeNotifier{
     super.dispose();
   }
 
-  Future<void> login () async {
-    if (!formKey.currentState!.validate()) return;
+  AsyncResult<AuthEntity> login () async {
+    if (!formKey.currentState!.validate()) return err(AuthFailure("Masuk gagal!"));
 
     _state = LoginState.loading;
-    _errorMessage = null;
+    _error = null;
     notifyListeners();
 
-    final result = await loginUseCase.call(
+    final result = await _loginUseCase.call(
         emailController.text,
         passwordController.text
     );
 
     result.fold(
         (failure) {
-          _errorMessage = failure.message;
+          _error = failure.message;
           _state = LoginState.error;
         },
-        (userEntity) {
-          _user = userEntity;
+        (authEntity) {
           _state = LoginState.success;
         }
     );
     notifyListeners();
+    return result;
   }
 
   String? validateEmail (String? value){

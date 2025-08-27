@@ -146,7 +146,7 @@ class LoginButton extends StatelessWidget {
                 content: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    vm.errorMessage ?? "Gagal mendaftar!",
+                    vm.error ?? "Gagal mendaftar!",
                     style: TextStyle(
                         color: AppColors.color2,
                         fontSize: 16,
