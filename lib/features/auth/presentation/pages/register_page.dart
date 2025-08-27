@@ -152,6 +152,8 @@ class RegisterButton extends StatelessWidget {
                 backgroundColor: AppColors.color5,
               )
           );
+        } else if (vm.state == RegisterState.success) {
+          context.go(RouterPath.login);
         }
       },
     );

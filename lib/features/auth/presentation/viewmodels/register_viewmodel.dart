@@ -1,21 +1,21 @@
 import 'package:flutter/cupertino.dart';
+import 'package:mbelys/core/error/failure.dart';
+import 'package:mbelys/core/utils/result.dart';
 import 'package:mbelys/features/auth/domain/usecases/register_usecase.dart';
 import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
 enum RegisterState { initial, loading, success, error }
 
 class RegisterViewModel extends ChangeNotifier {
-  final RegisterUseCase registerUseCase;
-  RegisterViewModel({required this.registerUseCase});
-
-  UserEntity? _user;
-  UserEntity? get user => _user;
+  final RegisterUseCase _registerUseCase;
 
   RegisterState _state = RegisterState.initial;
   RegisterState get state => _state;
 
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
+
+  RegisterViewModel ({ required RegisterUseCase registerUseCase}) : _registerUseCase = registerUseCase;
 
   final formKey = GlobalKey<FormState>();
 
@@ -24,8 +24,11 @@ class RegisterViewModel extends ChangeNotifier {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
 
+  bool isDisposed = false;
+
   @override
   void dispose() {
+    isDisposed = true;
     emailController.dispose();
     passwordController.dispose();
     nameController.dispose();
@@ -33,30 +36,31 @@ class RegisterViewModel extends ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> register () async {
-    if (!formKey.currentState!.validate()) return;
+  AsyncResult<UserEntity> register () async {
+    if (!formKey.currentState!.validate()) return err(AuthFailure("Pendaftaran gagal!"));
 
     _state = RegisterState.loading;
     _errorMessage = null;
     notifyListeners();
 
-    final result = await registerUseCase.call(
+    final result = await _registerUseCase.call(
         emailController.text.trim(),
         passwordController.text.trim(),
         nameController.text.trim(),
         phoneController.text.trim()
     );
+    if (isDisposed) return result;
     result.fold(
         (failure) {
           _errorMessage = failure.message;
           _state = RegisterState.error;
         },
         (userEntity) {
-          _user = userEntity;
           _state = RegisterState.success;
         }
     );
     notifyListeners();
+    return result;
   }
 
   String? validateEmail (String? value){
