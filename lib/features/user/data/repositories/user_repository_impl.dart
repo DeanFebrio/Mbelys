@@ -1,94 +1,39 @@
-import 'package:dartz/dartz.dart';
 import 'package:mbelys/core/utils/result.dart';
 import 'package:mbelys/features/user/data/datasources/user_datasource.dart';
+import 'package:mbelys/features/user/data/models/user_model.dart';
 import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 import 'package:mbelys/features/user/domain/repositories/user_repository.dart';
 
 class UserRepositoryImpl implements UserRepository {
+  const UserRepositoryImpl({required this.userDataSource});
   final UserDataSource userDataSource;
 
-  const UserRepositoryImpl({required this.userDataSource});
-
   @override
-  Future<Either<Failure, void>> deleteAccount(String email, String password) async {
+  AsyncResult<void> createUser({required UserEntity user}) async {
     try {
-      await userDataSource.deleteAccount(
-          email: email,
-          password: password
+      final userModel = UserModel(
+        uid: user.uid,
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       );
-      return const Right(null);
-    } on Failure catch (e) {
-      return Left(e);
-    }
-  }
-
-  @override
-  Future<Either<Failure, bool>> finalizeEmailChange() async {
-    try {
-      final result = await userDataSource.finalizeEmailChange();
-      return Right(result);
+      final result = await userDataSource.createUser(user: userModel);
+      return ok(result);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      throw Exception("Gagal membuat akun di Firestore");
     }
   }
 
   @override
-  Future<Either<Failure, UserEntity>> getUserData(String uid) async {
+  AsyncResult<UserEntity> getUserProfile({required String uid}) async {
     try {
-      final result = await userDataSource.getUserData(uid);
-      if (result == null) return Left(ServerFailure('User tidak ditemukan'));
-      return Right(result);
+      final result = await userDataSource.getUserProfile(uid: uid);
+      return ok(result);
     } catch (e) {
-      return Left(ServerFailure(e.toString()));
+      throw Exception("Gagal mengambil data pengguna dari Firestore");
     }
   }
-
-  @override
-  Future<Either<Failure, void>> requestUpdateEmail(String email) async {
-    try {
-      final result = await userDataSource.requestUpdateEmail(email);
-      return Right(result);
-    } catch (e){
-      return Left(ServerFailure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> updateName(String name) async {
-    try {
-      final result = await userDataSource.updateName(name);
-      return Right(result);
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> updatePassword({
-      required String email,
-      required String oldPassword,
-      required String newPassword
-    }) async {
-    try {
-      final result = await userDataSource.updatePassword(
-          email: email,
-          oldPassword: oldPassword,
-          newPassword: newPassword
-      );
-      return Right(result);
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, void>> updatePhone(String phone) async {
-    try {
-      final result = await userDataSource.updatePhone(phone);
-      return Right(result);
-    } catch (e) {
-      return Left(ServerFailure(e.toString()));
-    }
-  }
-
+  
 }

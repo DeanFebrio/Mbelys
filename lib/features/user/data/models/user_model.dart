@@ -8,16 +8,30 @@ class UserModel extends UserEntity {
     required super.email,
     required super.name,
     required super.phone,
+    super.createdAt,
+    super.updatedAt,
   });
 
-  factory UserModel.fromFirebase(DocumentSnapshot snap){
+  factory UserModel.fromFirebase(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
-
     return UserModel(
       uid: snap.id,
-      email: data['email'] ?? "",
-      name: data['name'] ?? "",
-      phone: data['phone'] ?? "",
+      email: data['email'],
+      name: data['name'],
+      phone: data['phone'],
+      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      updatedAt: (data['updatedAt'] as Timestamp).toDate(),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'uid': uid,
+      'email': email,
+      'name': name,
+      'phone': phone,
+      'createdAt': Timestamp.fromDate(createdAt!.toUtc()),
+      'updatedAt': Timestamp.fromDate(updatedAt!.toUtc()),
+    };
   }
 }
