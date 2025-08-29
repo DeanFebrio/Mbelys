@@ -21,7 +21,7 @@ class CardProfile extends StatelessWidget {
   Widget build(BuildContext context) {
 
     final nameStyle = TextStyle(
-      fontSize: 20,
+      fontSize: 24,
       fontFamily: "Poppins",
       fontWeight: FontWeight.w600,
       color: AppColors.color9
