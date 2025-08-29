@@ -3,7 +3,7 @@ import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
 import "package:mbelys/core/services/service_locator.dart";
-import "package:mbelys/features/user/presentation/viewmodel/profile_viewmodel.dart";
+import "package:mbelys/features/user/presentation/viewmodel/edit_profile_viewmodel.dart";
 import "package:mbelys/features/user/presentation/widgets/custom_change_button.dart";
 import "package:mbelys/features/user/presentation/widgets/edit_profile_background_page.dart";
 import "package:mbelys/features/user/presentation/widgets/password_button.dart";
@@ -18,7 +18,7 @@ class EditProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => sl<ProfileViewModel>(),
+      create: (_) => sl<EditProfileViewModel>(),
       child: const EditProfileView(),
     );
   }
@@ -38,63 +38,84 @@ class EditProfileView extends StatelessWidget {
         color: AppColors.color9
     );
 
-    final vm = context.watch<ProfileViewModel>();
+    final vm = context.watch<EditProfileViewModel>();
     final user = vm.user;
+    final state = vm.state;
 
     return EditProfileBackgroundPage(
-      child: Center(
-        child: Column(
-          children: [
-            SizedBox(height: screenHeight * 0.01),
-            CustomAvatar(radius: 70,),
-            const SizedBox(height: 6,),
-            CustomChangeButton(
-                onTap: () {
-                  context.go(RouterPath.profile);
-                }
-            ),
-            const SizedBox(height: 15,),
-            Form(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Nama",
-                    style: textStyle,
-                  ),
-                  const SizedBox(height: 5,),
-                  CustomTextInput(
-                    hintText: user?.name,
-                  ),
-                  const SizedBox(height: 10,),
-                  Text(
-                    "Email",
-                    style: textStyle,
-                  ),
-                  const SizedBox(height: 5,),
-                  CustomTextInput(
-                    hintText: user?.email,
-                  ),
-                  const SizedBox(height: 10,),
-                  Text(
-                    "Nomor Telepon",
-                    style: textStyle,
-                  ),
-                  const SizedBox(height: 5,),
-                  CustomTextInput(
-                    hintText: user?.phone,
-                  ),
-                ],
+      child: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            children: [
+              SizedBox(height: screenHeight * 0.01),
+              CustomAvatar(radius: 70,),
+              const SizedBox(height: 6,),
+              CustomChangeButton(
+                  onTap: () {
+                    context.go(RouterPath.profile);
+                  }
               ),
-            ),
-            const SizedBox(height: 25,),
-            const PasswordButton(),
-            const SizedBox(height: 30,),
-            CustomShortButton(
-                onTap: () => context.go(RouterPath.profile),
-                buttonText: "Simpan"
-            )
-          ],
+              const SizedBox(height: 15,),
+              Form(
+                key: vm.formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Nama",
+                      style: textStyle,
+                    ),
+                    const SizedBox(height: 5,),
+                    CustomTextInput(
+                      hintText: user?.name,
+                    ),
+                    const SizedBox(height: 10,),
+                    Text(
+                      "Nomor Telepon",
+                      style: textStyle,
+                    ),
+                    const SizedBox(height: 5,),
+                    CustomTextInput(
+                      hintText: user?.phone,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 25,),
+              const PasswordButton(textButton: "Email",),
+              const SizedBox(height: 25,),
+              const PasswordButton(),
+              const SizedBox(height: 30,),
+              CustomShortButton(
+                  onTap: state == EditState.loading ? null : () async {
+                    await vm.saveChanges();
+                    if (!context.mounted) return;
+                    if (vm.state == EditState.error) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 20),
+                              child: Text(
+                                vm.error ?? "Gagal mengubah profil!",
+                                style: TextStyle(
+                                    color: AppColors.color2,
+                                    fontSize: 16,
+                                    fontFamily: "Mulish",
+                                    fontWeight: FontWeight.w700
+                                ),
+                              ),
+                            ),
+                            backgroundColor: AppColors.color5,
+                          )
+                      );
+                    } else if (vm.state == EditState.success) {
+                      context.go(RouterPath.profile);
+                    }
+                  },
+                  buttonText: "Simpan"
+              )
+            ],
+          ),
         ),
       ),
     );
