@@ -7,8 +7,20 @@ class HomeViewModel extends ChangeNotifier {
 
   HomeViewModel ({
     required ProfileViewModel profileViewModel
-  }) : _profileViewModel = profileViewModel;
+  }) : _profileViewModel = profileViewModel{
+    _profileViewModel.addListener(_onProfileChanged);
+  }
+
+  void _onProfileChanged() {
+    notifyListeners();
+  }
 
   UserEntity? get user => _profileViewModel.user;
   String? get name => user?.name;
+
+  @override
+  void dispose() {
+    _profileViewModel.removeListener(_onProfileChanged);
+    super.dispose();
+  }
 }
