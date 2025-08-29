@@ -5,6 +5,7 @@ import 'package:mbelys/core/router/app_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mbelys/core/services/service_locator.dart';
 import 'package:mbelys/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:mbelys/features/user/presentation/viewmodel/profile_viewmodel.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 
@@ -25,6 +26,13 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<AuthViewModel>.value(value: sl<AuthViewModel>()),
+
+        ChangeNotifierProxyProvider<AuthViewModel, ProfileViewModel>(
+            create: (_) => sl<ProfileViewModel>(),
+            update: (_, authViewModel, previousProfileViewModel) {
+              return previousProfileViewModel!;
+            }
+        ),
       ],
       child: MaterialApp.router(
         theme: ThemeData(
