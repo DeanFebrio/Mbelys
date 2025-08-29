@@ -4,7 +4,7 @@ import 'package:mbelys/core/error/failure.dart';
 Failure mapFirebaseAuthError (FirebaseAuthException e) {
   switch (e.code) {
     case 'invalid-credential':
-      return const AuthFailure("Email atau Password salah", code:'wrong-password');
+      return const AuthFailure("Email belum terdaftar", code:'wrong-password');
     case 'wrong-password':
       return const AuthFailure("Email atau Password salah", code:'wrong-password');
     case 'user-not-found':
