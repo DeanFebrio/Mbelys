@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mbelys/core/services/service_locator.dart';
 
 abstract class AuthDataSource {
   Stream<User?> get authStateChanges;
@@ -17,7 +16,8 @@ abstract class AuthDataSource {
 }
 
 class FirebaseAuthDataSource implements AuthDataSource {
-  final FirebaseAuth firebaseAuth = sl<FirebaseAuth>();
+  final FirebaseAuth firebaseAuth;
+  FirebaseAuthDataSource({required this.firebaseAuth});
 
   @override
   Stream<User?> get authStateChanges => firebaseAuth.authStateChanges();
@@ -69,7 +69,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
   Future<void> changePassword(String oldPassword, String newPassword) async {
     final user = firebaseAuth.currentUser;
     if (user == null) {
-      throw FirebaseAuthException(code: 'no-user', message: 'Pengugna belum masuk');
+      throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
     }
     final email = user.email;
     if (email == null) {
