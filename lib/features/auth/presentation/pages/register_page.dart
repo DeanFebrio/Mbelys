@@ -46,7 +46,6 @@ class RegisterView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<RegisterViewModel>();
 
     return AuthBackgroundPage(
       title: "Daftar",
@@ -55,9 +54,9 @@ class RegisterView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 70,),
-            FormSection(vm: vm),
+            FormSection(),
             const SizedBox(height: 30,),
-            RegisterButton(vm: vm),
+            RegisterButton(),
             const SizedBox(height: 30,),
             AuthDivider(
               text: "Daftar dengan",
@@ -121,13 +120,12 @@ class LoginRedirect extends StatelessWidget {
 class RegisterButton extends StatelessWidget {
   const RegisterButton({
     super.key,
-    required this.vm,
   });
-  final RegisterViewModel vm;
 
   @override
   Widget build(BuildContext context) {
-    final state = context.watch<RegisterViewModel>().state;
+    final vm = context.watch<RegisterViewModel>();
+    final state = vm.state;
 
     return AuthButton(
       textButton: "Daftar",
@@ -163,13 +161,12 @@ class RegisterButton extends StatelessWidget {
 class FormSection extends StatelessWidget {
   const FormSection({
     super.key,
-    required this.vm,
   });
-
-  final RegisterViewModel vm;
 
   @override
   Widget build(BuildContext context) {
+    final vm = context.watch<RegisterViewModel>();
+
     return Form (
       key: vm.formKey,
       child: Column (
