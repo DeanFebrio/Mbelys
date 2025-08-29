@@ -37,12 +37,13 @@ class ProfileViewModel extends ChangeNotifier {
       _userSub = _watchUserDataUseCase.call(uid: auth.uid).listen((result) {
         _user = result;
         _isLoading = false;
+        notifyListeners();
       });
     } else {
       _user = null;
       _isLoading = false;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> logout() async {
