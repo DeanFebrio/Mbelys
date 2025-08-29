@@ -80,7 +80,7 @@ class RegisterViewModel extends ChangeNotifier {
 
   String? validateName (String? value){
     if (value == null || value.isEmpty) return "Nama wajib diisi";
-    if (value.length > 15) return "Maksimal 15 karakter";
+    if (value.length < 3 || value.length > 15) return "Panjang nama 3-15 karakter";
     return null;
   }
 
