@@ -19,7 +19,7 @@ class HomeAppBar extends StatelessWidget {
     return ClipPath(
       clipper: CurvedClipper(),
       child: Container(
-        padding: const EdgeInsets.only(right: 30, left: 30, bottom: 30, top: 15),
+        padding: const EdgeInsets.only(right: 30, left: 30, bottom: 20, top: 15),
         height: 220,
         width: screenWidth,
         color: AppColors.color9,
@@ -36,7 +36,7 @@ class HomeAppBar extends StatelessWidget {
                   Text(
                     "Selamat Datang",
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       fontFamily: "Poppins",
                       fontWeight: FontWeight.w600,
                       color: AppColors.color11,
@@ -45,7 +45,7 @@ class HomeAppBar extends StatelessWidget {
                   AutoSizeText(
                     name ?? "Peternak",
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 32,
                       fontFamily: "Poppins",
                       fontWeight: FontWeight.w700,
                       color: AppColors.color2
