@@ -9,7 +9,7 @@ import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 class AuthRepositoryImpl implements AuthRepository {
   final AuthDataSource authDataSource;
 
-  const AuthRepositoryImpl({required this.authDataSource});
+  const AuthRepositoryImpl ({ required this.authDataSource });
 
   AuthEntity _mapUserToEntity(User user) {
     return AuthEntity(
