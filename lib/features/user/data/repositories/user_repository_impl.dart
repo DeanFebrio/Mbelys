@@ -1,3 +1,4 @@
+import 'package:mbelys/core/error/failure.dart';
 import 'package:mbelys/core/utils/result.dart';
 import 'package:mbelys/features/user/data/datasources/user_datasource.dart';
 import 'package:mbelys/features/user/data/models/user_model.dart';
@@ -22,18 +23,48 @@ class UserRepositoryImpl implements UserRepository {
       final result = await userDataSource.createUser(user: userModel);
       return ok(result);
     } catch (e) {
-      throw Exception("Gagal membuat akun di Firestore");
+      return err(AuthFailure("Gagal membuat akun di Firestore"));
     }
   }
 
   @override
-  AsyncResult<UserEntity> getUserProfile({required String uid}) async {
+  AsyncResult<UserEntity> getUserData ({required String uid}) async {
     try {
-      final result = await userDataSource.getUserProfile(uid: uid);
+      final result = await userDataSource.getUserData(uid: uid);
       return ok(result);
     } catch (e) {
-      throw Exception("Gagal mengambil data pengguna dari Firestore");
+      return err(AuthFailure("Gagal mengambil data pengguna dari Firestore"));
     }
   }
-  
+
+  @override
+  Stream<UserEntity> watchUserData ({required String uid}) {
+    try {
+      final result = userDataSource.watchUserData(uid: uid);
+      return result;
+    } catch (e) {
+      return Stream.error(AuthFailure("Gagal mengambil data pengguna dari Firestore"));
+    }
+  }
+
+  @override
+  AsyncVoidResult changeName ({required String name, required String uid}) async {
+    try {
+      await userDataSource.changeName(name: name, uid: uid);
+      return okUnit();
+    } catch (e) {
+      return err(AuthFailure("Gagal melakukan perubahan nama"));
+    }
+  }
+
+  @override
+  AsyncVoidResult changePhone ({required String phone, required String uid}) async {
+    try {
+      await userDataSource.changePhone(phone: phone, uid: uid);
+      return okUnit();
+    } catch (e) {
+      return err(AuthFailure("Gagal melakukan perubahan nomor telepon"));
+    }
+  }
+
 }

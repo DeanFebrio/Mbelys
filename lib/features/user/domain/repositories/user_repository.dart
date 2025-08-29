@@ -3,5 +3,8 @@ import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
 abstract class UserRepository {
   AsyncResult<void> createUser({required UserEntity user});
-  AsyncResult<UserEntity> getUserProfile({required String uid});
+  AsyncResult<UserEntity> getUserData ({ required String uid });
+  Stream<UserEntity> watchUserData ({required String uid});
+  AsyncVoidResult changeName ({required String name, required String uid});
+  AsyncVoidResult changePhone ({required String phone, required String uid});
 }
