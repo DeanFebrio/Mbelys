@@ -2,12 +2,12 @@ import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
 class CustomShortButton extends StatelessWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String buttonText;
 
   const CustomShortButton({
     super.key,
-    required this.onTap,
+    this.onTap,
     required this.buttonText
   });
 
