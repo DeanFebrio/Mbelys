@@ -68,6 +68,8 @@ class EditProfileView extends StatelessWidget {
                     const SizedBox(height: 5,),
                     CustomTextInput(
                       hintText: user?.name,
+                      textEditingController: vm.nameController,
+                      validator: vm.validateName,
                     ),
                     const SizedBox(height: 10,),
                     Text(
@@ -77,6 +79,8 @@ class EditProfileView extends StatelessWidget {
                     const SizedBox(height: 5,),
                     CustomTextInput(
                       hintText: user?.phone,
+                      textEditingController: vm.phoneController,
+                      validator: vm.validatePhone,
                     ),
                   ],
                 ),
