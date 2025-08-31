@@ -29,8 +29,9 @@ class MyApp extends StatelessWidget {
 
         ChangeNotifierProxyProvider<AuthViewModel, ProfileViewModel>(
             create: (_) => sl<ProfileViewModel>(),
-            update: (_, authViewModel, previousProfileViewModel) {
-              return previousProfileViewModel!;
+            update: (context, authViewModel, previousProfileViewModel) {
+              previousProfileViewModel?.dispose();
+              return sl<ProfileViewModel>();
             }
         ),
       ],
