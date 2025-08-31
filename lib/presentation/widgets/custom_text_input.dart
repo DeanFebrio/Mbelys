@@ -1,13 +1,31 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
-class CustomTextInput extends StatelessWidget {
+class CustomTextInput extends StatefulWidget {
   const CustomTextInput({
     super.key,
-    this.hintText
+    this.hintText = "Ketik disini",
+    this.textEditingController,
+    this.validator,
+    this.isPassword = false,
   });
 
   final String? hintText;
+  final TextEditingController? textEditingController;
+  final String? Function(String?)? validator;
+  final bool isPassword;
+
+  @override
+  State<CustomTextInput> createState() => _CustomTextInputState();
+}
+
+class _CustomTextInputState extends State<CustomTextInput> {
+  bool obscureText = true;
+
+  @override void initState() {
+    obscureText = widget.isPassword;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,8 +36,10 @@ class CustomTextInput extends StatelessWidget {
 
     return SizedBox(
         width: 340,
-        height: 50,
         child: TextFormField(
+          controller: widget.textEditingController,
+          validator: widget.validator,
+          obscureText: widget.isPassword ? obscureText : false,
           style: TextStyle(
               fontFamily: "Montserrat",
               fontSize: 14,
@@ -31,7 +51,7 @@ class CustomTextInput extends StatelessWidget {
             contentPadding: EdgeInsets.symmetric(horizontal: 20,),
             filled: true,
             fillColor: AppColors.color6,
-            hintText: hintText ?? "Ketik disini",
+            hintText: widget.hintText,
             hintStyle: TextStyle(
                 fontFamily: "Mulish",
                 fontSize: 14,
@@ -40,7 +60,19 @@ class CustomTextInput extends StatelessWidget {
             ),
             border: borderStyle,
             enabledBorder: borderStyle,
-            focusedBorder: borderStyle
+            focusedBorder: borderStyle,
+            suffixIcon: widget.isPassword ?
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    obscureText = !obscureText;
+                  });
+                },
+                icon: Icon(
+                  obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: AppColors.color1,
+                )
+            ) : null,
           ),
         )
     );
