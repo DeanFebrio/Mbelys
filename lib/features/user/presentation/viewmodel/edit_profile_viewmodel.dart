@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mbelys/core/error/failure.dart';
 import 'package:mbelys/core/utils/result.dart';
+import 'package:mbelys/features/auth/domain/usecases/update_name_usecase.dart';
 import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 import 'package:mbelys/features/user/domain/usecases/change_name_usecase.dart';
 import 'package:mbelys/features/user/domain/usecases/change_phone_usecase.dart';
@@ -10,6 +11,7 @@ enum EditState {initial, loading, success, error}
 
 class EditProfileViewModel extends ChangeNotifier {
   final ChangeNameUseCase changeNameUseCase;
+  final UpdateNameUseCase updateNameUseCase;
   final ChangePhoneUseCase changePhoneUseCase;
   final ProfileViewModel _profileViewModel;
 
@@ -25,6 +27,7 @@ class EditProfileViewModel extends ChangeNotifier {
   EditProfileViewModel({
     required this.changeNameUseCase,
     required this.changePhoneUseCase,
+    required this.updateNameUseCase,
     required ProfileViewModel profileViewModel
   }) : _profileViewModel = profileViewModel {
     _profileViewModel.addListener(_onProfileChanged);
@@ -81,6 +84,7 @@ class EditProfileViewModel extends ChangeNotifier {
       final futures = <Future<void>>[];
 
       if (name.isNotEmpty && name != oldName) {
+        futures.add(updateNameUseCase.call(name: name));
         futures.add(changeNameUseCase.call(name: name, uid: currentUser!.uid));
       }
 
