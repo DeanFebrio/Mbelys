@@ -7,7 +7,7 @@ import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 enum RegisterState { initial, loading, success, error }
 
 class RegisterViewModel extends ChangeNotifier {
-  final RegisterUseCase _registerUseCase;
+  final RegisterUseCase registerUseCase;
 
   RegisterState _state = RegisterState.initial;
   RegisterState get state => _state;
@@ -15,7 +15,7 @@ class RegisterViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  RegisterViewModel ({ required RegisterUseCase registerUseCase}) : _registerUseCase = registerUseCase;
+  RegisterViewModel ({ required this.registerUseCase});
 
   final formKey = GlobalKey<FormState>();
 
@@ -43,7 +43,7 @@ class RegisterViewModel extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-    final result = await _registerUseCase.call(
+    final result = await registerUseCase.call(
         emailController.text.trim(),
         passwordController.text.trim(),
         nameController.text.trim(),
