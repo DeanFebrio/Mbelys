@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
-void customSuccessDialog(
+void customDialog(
     BuildContext context,
     String titleText,
     String contentText,

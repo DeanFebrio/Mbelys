@@ -62,7 +62,7 @@ class AddPage extends StatelessWidget {
               ),
               const SizedBox(height: 25,),
               CustomShortButton(
-                  onTap: () => customSuccessDialog(
+                  onTap: () => customDialog(
                       context,
                       "Berhasil ditambahkan",
                       "Kandang baru Anda kini terintegrasi dengan perangkat IoT. "
