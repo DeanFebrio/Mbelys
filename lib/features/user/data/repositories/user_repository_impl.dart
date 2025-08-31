@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mbelys/core/error/failure.dart';
+import 'package:mbelys/core/error/firestore_error_mapper.dart';
 import 'package:mbelys/core/utils/result.dart';
 import 'package:mbelys/features/user/data/datasources/user_datasource.dart';
 import 'package:mbelys/features/user/data/models/user_model.dart';
@@ -22,6 +24,8 @@ class UserRepositoryImpl implements UserRepository {
       );
       final result = await userDataSource.createUser(user: userModel);
       return ok(result);
+    } on FirebaseException catch (e) {
+      return err(mapFirestoreError(e));
     } catch (e) {
       return err(AuthFailure("Gagal membuat akun di Firestore"));
     }
@@ -32,6 +36,8 @@ class UserRepositoryImpl implements UserRepository {
     try {
       final result = await userDataSource.getUserData(uid: uid);
       return ok(result);
+    } on FirebaseException catch (e) {
+      return err(mapFirestoreError(e));
     } catch (e) {
       return err(AuthFailure("Gagal mengambil data pengguna dari Firestore"));
     }
@@ -42,6 +48,8 @@ class UserRepositoryImpl implements UserRepository {
     try {
       final result = userDataSource.watchUserData(uid: uid);
       return result;
+    } on FirebaseException catch (e) {
+      return Stream.error(mapFirestoreError(e));
     } catch (e) {
       return Stream.error(AuthFailure("Gagal mengambil data pengguna dari Firestore"));
     }
@@ -52,6 +60,8 @@ class UserRepositoryImpl implements UserRepository {
     try {
       await userDataSource.changeName(name: name, uid: uid);
       return okUnit();
+    } on FirebaseException catch (e) {
+      return err(mapFirestoreError(e));
     } catch (e) {
       return err(AuthFailure("Gagal melakukan perubahan nama"));
     }
@@ -62,9 +72,46 @@ class UserRepositoryImpl implements UserRepository {
     try {
       await userDataSource.changePhone(phone: phone, uid: uid);
       return okUnit();
+    } on FirebaseException catch (e) {
+      return err(mapFirestoreError(e));
     } catch (e) {
       return err(AuthFailure("Gagal melakukan perubahan nomor telepon"));
     }
   }
 
+  @override
+  AsyncVoidResult markEmailChangePending ({ required String pendingEmail, required String uid }) async {
+    try {
+      await userDataSource.markEmailChangePending(uid: uid, pendingEmail: pendingEmail);
+      return okUnit();
+    } on FirebaseException catch (e) {
+      return err(mapFirestoreError(e));
+    } catch (e) {
+      return err(AuthFailure("Gagal menandai perubahan email"));
+    }
+  }
+
+  @override
+  AsyncVoidResult commitEmailChange ({ required String authEmail, required String uid }) async {
+    try {
+      await userDataSource.commitEmailChange(uid: uid, authEmail: authEmail);
+      return okUnit();
+    } on FirebaseException catch (e) {
+      return err(mapFirestoreError(e));
+    } catch (e) {
+      return err(AuthFailure("Gagal mengganti status email"));
+    }
+  }
+
+  @override
+  AsyncVoidResult clearEmailChangePending ({ required String uid }) async {
+    try {
+      await userDataSource.clearEmailChangePending(uid: uid);
+      return okUnit();
+    } on FirebaseException catch (e) {
+      return err(mapFirestoreError(e));
+    }   catch (e) {
+      return err(AuthFailure("Gagal menghapus perubahan email"));
+    }
+  }
 }
