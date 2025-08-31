@@ -10,7 +10,11 @@ abstract class AuthDataSource {
 
   Future<void> forgotPassword (String email);
   Future<void> changePassword (String oldPassword, String newPassword);
-  Future<void> changeEmail (String email);
+
+  Future<void> beginEmailChange ({ required String newEmail });
+  Future<String?> finalizeEmailChange();
+
+  Future<void> updateName ({ required String name });
 
   Future<void> reloadUser();
 }
@@ -38,11 +42,6 @@ class FirebaseAuthDataSource implements AuthDataSource {
   }
 
   @override
-  Future<void> signOut() {
-    return firebaseAuth.signOut();
-  }
-
-  @override
   Future<User> signUp(String email, String password, String name) async {
     final account = await firebaseAuth.createUserWithEmailAndPassword(
         email: email,
@@ -57,12 +56,8 @@ class FirebaseAuthDataSource implements AuthDataSource {
   }
 
   @override
-  Future<void> changeEmail(String email) async {
-    final user = currentUser;
-    if (user == null) {
-      throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
-    }
-    await user.verifyBeforeUpdateEmail(email);
+  Future<void> signOut() {
+    return firebaseAuth.signOut();
   }
 
   @override
@@ -78,11 +73,65 @@ class FirebaseAuthDataSource implements AuthDataSource {
     final cred = EmailAuthProvider.credential(email: email, password: oldPassword);
     await user.reauthenticateWithCredential(cred);
     await user.updatePassword(newPassword);
+    return;
   }
 
   @override
   Future<void> forgotPassword(String email) async {
     return await firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
+  @override
+  Future<void> beginEmailChange ({ required String newEmail }) async {
+    final user = currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+    }
+
+    Future<void> _send() => user.verifyBeforeUpdateEmail(newEmail);
+
+    try {
+      await _send();
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'requires-recent-login') {
+        final providers = user.providerData.map((p) => p.providerId).toList();
+
+        if (providers.contains('google.com')) {
+          await user.reauthenticateWithProvider(GoogleAuthProvider());
+          await _send();
+          return;
+        }
+
+        if (providers.contains('facebook.com')) {
+          await user.reauthenticateWithProvider(FacebookAuthProvider());
+          await _send();
+          return;
+        }
+        rethrow;
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  @override
+  Future<String?> finalizeEmailChange () async {
+    final user = firebaseAuth.currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+    }
+    await user.reload();
+    return user.email;
+  }
+
+  @override
+  Future<void> updateName ({ required String name }) async {
+    final user = currentUser;
+    if (user == null) {
+      throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+    }
+    await user.updateDisplayName(name);
+    return;
   }
 
   @override
@@ -92,5 +141,6 @@ class FirebaseAuthDataSource implements AuthDataSource {
       throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
     }
     await user.reload();
+    return;
   }
 }

@@ -26,7 +26,11 @@ abstract class AuthRepository {
 
   AsyncVoidResult forgotPassword({required String email});
 
-  AsyncVoidResult changeEmail({required String newEmail});
+  AsyncVoidResult beginChangeEmail ({ required String newEmail });
+  AsyncResult<String?> finalizeChangeEmail ();
+
+  AsyncVoidResult updateName ({ required String name });
+
   AsyncVoidResult reloadUser();
 
   AsyncResult<UserEntity> signInWithGoogle();

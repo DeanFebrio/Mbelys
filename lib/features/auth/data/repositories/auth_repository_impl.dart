@@ -26,13 +26,43 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  AsyncVoidResult changeEmail({required String newEmail}) async {
+  AuthEntity? get currentUser {
+    final user = authDataSource.currentUser;
+    return user != null ? _mapUserToEntity(user) : null;
+  }
+
+  @override
+  AsyncResult<AuthEntity> register ({required String email, required String password, required String name}) async {
     try {
-      await authDataSource.changeEmail(newEmail);
-      return okUnit();
+      final user = await authDataSource.signUp(email, password, name);
+      return ok(_mapUserToEntity(user));
     } on FirebaseAuthException catch (e) {
       return err(mapFirebaseAuthError(e));
     } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  AsyncResult<AuthEntity> login ({required String email, required String password}) async {
+    try {
+      final user = await authDataSource.signIn(email, password);
+      return ok(_mapUserToEntity(user));
+    } on FirebaseAuthException catch (e) {
+      return err(mapFirebaseAuthError(e));
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  AsyncVoidResult logout () async {
+    try {
+      await authDataSource.signOut();
+      return okUnit();
+    } on FirebaseAuthException catch (e) {
+      return err(mapFirebaseAuthError(e));
+    }  catch (e) {
       rethrow;
     }
   }
@@ -41,24 +71,6 @@ class AuthRepositoryImpl implements AuthRepository {
   AsyncVoidResult changePassword({required String oldPassword, required String newPassword}) async {
     try {
       await authDataSource.changePassword(oldPassword, newPassword);
-      return okUnit();
-    } on FirebaseAuthException catch (e) {
-      return err(mapFirebaseAuthError(e));
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  AuthEntity? get currentUser {
-    final user = authDataSource.currentUser;
-    return user != null ? _mapUserToEntity(user) : null;
-  }
-
-  @override
-  AsyncVoidResult reloadUser() async {
-    try {
-      await authDataSource.reloadUser();
       return okUnit();
     } on FirebaseAuthException catch (e) {
       return err(mapFirebaseAuthError(e));
@@ -80,34 +92,40 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  AsyncResult<AuthEntity> login({required String email, required String password}) async {
+  AsyncVoidResult beginChangeEmail ({ required String newEmail }) async {
     try {
-      final user = await authDataSource.signIn(email, password);
-      return ok(_mapUserToEntity(user));
-    } on FirebaseAuthException catch (e) {
-      return err(mapFirebaseAuthError(e));
-    } catch (e) {
-      rethrow;
-    }
-  }
-
-  @override
-  AsyncVoidResult logout() async {
-    try {
-      await authDataSource.signOut();
+      await authDataSource.beginEmailChange(newEmail: newEmail);
       return okUnit();
     } on FirebaseAuthException catch (e) {
       return err(mapFirebaseAuthError(e));
-    }  catch (e) {
-      rethrow;
     }
   }
 
   @override
-  AsyncResult<AuthEntity> register({required String email, required String password, required String name}) async {
+  AsyncResult<String?> finalizeChangeEmail () async {
     try {
-      final user = await authDataSource.signUp(email, password, name);
-      return ok(_mapUserToEntity(user));
+      final email = await authDataSource.finalizeEmailChange();
+      return ok(email);
+    } on FirebaseAuthException catch (e) {
+      return err(mapFirebaseAuthError(e));
+    }
+  }
+
+  @override
+  AsyncVoidResult updateName ({ required String name }) async {
+    try {
+      await authDataSource.updateName(name: name);
+      return okUnit();
+    } on FirebaseAuthException catch (e) {
+      return err(mapFirebaseAuthError(e));
+    }
+  }
+
+  @override
+  AsyncVoidResult reloadUser() async {
+    try {
+      await authDataSource.reloadUser();
+      return okUnit();
     } on FirebaseAuthException catch (e) {
       return err(mapFirebaseAuthError(e));
     } catch (e) {
