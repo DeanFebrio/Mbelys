@@ -6,7 +6,7 @@ import "package:mbelys/core/services/service_locator.dart";
 import "package:mbelys/features/user/presentation/viewmodel/edit_profile_viewmodel.dart";
 import "package:mbelys/features/user/presentation/widgets/custom_change_button.dart";
 import "package:mbelys/features/user/presentation/widgets/edit_profile_background_page.dart";
-import "package:mbelys/features/user/presentation/widgets/password_button.dart";
+import "package:mbelys/features/user/presentation/widgets/edit_custom_button.dart";
 import "package:mbelys/presentation/widgets/custom_avatar.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
 import "package:mbelys/presentation/widgets/custom_text_input.dart";
@@ -86,9 +86,15 @@ class EditProfileView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 25,),
-              const PasswordButton(textButton: "Email",),
+              EditCustomButton(
+                textButton: "Email",
+                onPressed: () => context.push(RouterPath.email),
+              ),
               const SizedBox(height: 25,),
-              const PasswordButton(),
+              EditCustomButton(
+                textButton: "Password",
+                onPressed: () => context.push(RouterPath.password),
+              ),
               const SizedBox(height: 30,),
               CustomShortButton(
                   onTap: state == EditState.loading ? null : () async {
@@ -116,7 +122,8 @@ class EditProfileView extends StatelessWidget {
                       context.go(RouterPath.profile);
                     }
                   },
-                  buttonText: "Simpan"
+                  buttonText: "Simpan",
+                isLoading: state == EditState.loading,
               )
             ],
           ),
