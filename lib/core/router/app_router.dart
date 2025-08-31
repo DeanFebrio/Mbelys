@@ -11,10 +11,11 @@ import 'package:mbelys/features/home/presentation/pages/home_page.dart';
 import 'package:mbelys/features/kandang/presentation/view/add_page.dart';
 import 'package:mbelys/features/kandang/presentation/view/detail_page.dart';
 import 'package:mbelys/features/user/presentation/pages/edit_profile_page.dart';
+import 'package:mbelys/features/user/presentation/pages/email_page.dart';
 import 'package:mbelys/features/user/presentation/pages/feedback_page.dart';
 import 'package:mbelys/features/user/presentation/pages/password_page.dart';
 import 'package:mbelys/features/user/presentation/pages/profile_page.dart';
-import 'package:mbelys/features/welcome/welcome_page.dart';
+import 'package:mbelys/features/auth/presentation/pages/welcome_page.dart';
 import 'package:mbelys/presentation/common/main_scaffold.dart';
 import 'package:mbelys/presentation/common/splash_page.dart';
 
@@ -34,6 +35,7 @@ class AppRouter {
       errorBuilder: (context, state) => const ErrorPage(),
       debugLogDiagnostics: true,
       routes: [
+        // auth feature
         GoRoute(
             path: RouterPath.welcome,
           name: RouterName.welcome,
@@ -54,12 +56,21 @@ class AppRouter {
             name: RouterName.register,
             builder: (context, state) => const RegisterPage()
         ),
+
+        // kandang feature
         GoRoute(
             path: RouterPath.detail,
             name: RouterName.detail,
             parentNavigatorKey: _rootNavigatorKey,
             builder: (context, state) => const DetailPage()
         ),
+        GoRoute(
+            path: RouterPath.add,
+            name: RouterName.add,
+            builder: (context, state) => const AddPage()
+        ),
+
+        // user feature
         GoRoute(
             path: RouterPath.editProfile,
             name: RouterName.editProfile,
@@ -71,15 +82,18 @@ class AppRouter {
             builder: (context, state) => const PasswordPage()
         ),
         GoRoute(
+            path: RouterPath.email,
+            name: RouterName.email,
+            builder: (context, state) => const EmailPage()
+        ),
+        GoRoute(
             path: RouterPath.feedback,
             name: RouterName.feedback,
             builder: (context, state) => const FeedbackPage()
         ),
-        GoRoute(
-            path: RouterPath.add,
-            name: RouterName.add,
-            builder: (context, state) => const AddPage()
-        ),
+
+
+        // common
         GoRoute(
             path: RouterPath.splash,
             name: RouterName.splash,
