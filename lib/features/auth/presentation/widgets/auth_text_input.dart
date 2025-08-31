@@ -10,7 +10,7 @@ class AuthTextInput extends StatefulWidget {
   const AuthTextInput({
     super.key,
     required this.hintText,
-    required this.isPassword,
+    this.isPassword = false,
     required this.controller,
     required this.validator
   });
