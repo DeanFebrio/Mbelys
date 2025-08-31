@@ -10,6 +10,7 @@ import "package:mbelys/features/auth/presentation/widgets/auth_divider.dart";
 import "package:mbelys/features/auth/presentation/widgets/auth_text_input.dart";
 import "package:mbelys/features/auth/presentation/widgets/facebook_button.dart";
 import "package:mbelys/features/auth/presentation/widgets/google_button.dart";
+import "package:mbelys/presentation/widgets/custom_snackbar.dart";
 import "package:provider/provider.dart";
 
 
@@ -62,7 +63,7 @@ class LoginView extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: GestureDetector(
                     onTap: (){
-                      context.go(RouterPath.forgot);
+                      context.push(RouterPath.forgot);
                     },
                     child: Text(
                       "Lupa password?",
@@ -141,23 +142,7 @@ class LoginButton extends StatelessWidget {
         await vm.login();
         if (!context.mounted) return;
         if (vm.state == LoginState.error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    vm.error ?? "Gagal mendaftar!",
-                    style: TextStyle(
-                        color: AppColors.color2,
-                        fontSize: 16,
-                        fontFamily: "Mulish",
-                        fontWeight: FontWeight.w700
-                    ),
-                  ),
-                ),
-                backgroundColor: AppColors.color5,
-              )
-          );
+          showErrorSnackBar(context, vm.error);
         } else if (vm.state == LoginState.success) {
           context.go(RouterPath.home);
         }
@@ -183,7 +168,6 @@ class FormSection extends StatelessWidget {
               hintText: "Masukkan email",
               controller: vm.emailController,
               validator: vm.validateEmail,
-              isPassword: false,
             ),
             const SizedBox(height: 10,),
             AuthTextInput(
