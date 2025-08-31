@@ -33,7 +33,7 @@ class FeedbackPage extends StatelessWidget {
                 const FeedbackTextInput(),
                 const SizedBox(height: 20,),
                 CustomShortButton(
-                    onTap: () => customSuccessDialog(
+                    onTap: () => customDialog(
                         context,
                         "Kritik & Saran terkirim",
                         "Terima kasih atas kritik dan saran yang "
