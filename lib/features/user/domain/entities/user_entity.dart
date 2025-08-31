@@ -3,6 +3,8 @@ class UserEntity {
   final String email;
   final String name;
   final String phone;
+  final String? pendingEmail;
+  final String? emailChangeStatus;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -11,6 +13,8 @@ class UserEntity {
     required this.email,
     required this.name,
     required this.phone,
+    this.pendingEmail,
+    this.emailChangeStatus,
     this.createdAt,
     this.updatedAt,
   });

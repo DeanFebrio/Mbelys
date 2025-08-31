@@ -8,6 +8,8 @@ class UserModel extends UserEntity {
     required super.email,
     required super.name,
     required super.phone,
+    super.pendingEmail,
+    super.emailChangeStatus,
     super.createdAt,
     super.updatedAt,
   });
@@ -19,6 +21,8 @@ class UserModel extends UserEntity {
       email: data['email'],
       name: data['name'],
       phone: data['phone'],
+      pendingEmail: data['pendingEmail'],
+      emailChangeStatus: data['emailChangeStatus'],
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       updatedAt: (data['updatedAt'] as Timestamp).toDate(),
     );
@@ -30,6 +34,8 @@ class UserModel extends UserEntity {
       'email': email,
       'name': name,
       'phone': phone,
+      'pendingEmail': pendingEmail,
+      'emailChangeStatus': emailChangeStatus,
       'createdAt': Timestamp.fromDate(createdAt!.toUtc()),
       'updatedAt': Timestamp.fromDate(updatedAt!.toUtc()),
     };
