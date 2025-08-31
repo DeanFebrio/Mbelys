@@ -1,10 +1,15 @@
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/core/router/router.dart";
 
-class PasswordButton extends StatelessWidget {
-  const PasswordButton({super.key});
+class EditCustomButton extends StatelessWidget {
+  const EditCustomButton({
+    super.key,
+    this.textButton,
+    this.onPressed
+  });
+
+  final String? textButton;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -12,9 +17,7 @@ class PasswordButton extends StatelessWidget {
       height: 40,
       width: 340,
       child: OutlinedButton(
-          onPressed: (){
-            context.push(RouterPath.password);
-          },
+          onPressed: onPressed,
           style: OutlinedButton.styleFrom(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             shape: RoundedRectangleBorder(
@@ -30,7 +33,7 @@ class PasswordButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Password",
+                textButton ?? "Button",
                 style: TextStyle(
                   fontSize: 16,
                   fontFamily: "Poppins",
