@@ -1,14 +1,14 @@
 import "package:flutter/material.dart";
 
 class CustomLongButton extends StatelessWidget {
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
   final String textButton;
   final Color textColor;
   final Color backgroundColor;
 
   const CustomLongButton({
     super.key,
-    required this.onTap,
+    this.onTap,
     required this.textButton,
     required this.textColor,
     required this.backgroundColor
