@@ -42,7 +42,9 @@ class ProfileView extends StatelessWidget {
                 phone: user.phone,
               ),
             const SizedBox(height: 30,),
-            ContactContainer(),
+            ContactContainer(
+              onWhatsappTap: vm.openWhatsapp,
+            ),
             const SizedBox(height: 80,),
             LogoutButton(
               onPressed: () async => await vm.logout(),

@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:mbelys/core/utils/result.dart';
+import 'package:mbelys/features/user/domain/usecases/open_whatsapp_usecase.dart';
 import 'package:mbelys/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 import 'package:mbelys/features/user/domain/usecases/watch_user_data_usecase.dart';
@@ -7,6 +9,7 @@ import 'package:mbelys/features/user/domain/usecases/watch_user_data_usecase.dar
 class ProfileViewModel extends ChangeNotifier {
   final AuthViewModel _authViewmodel;
   final WatchUserDataUseCase _watchUserDataUseCase;
+  final OpenWhatsappUseCase openWhatsappUseCase;
   StreamSubscription? _userSub;
 
   UserEntity? _user;
@@ -17,7 +20,8 @@ class ProfileViewModel extends ChangeNotifier {
 
   ProfileViewModel({
     required AuthViewModel authViewmodel,
-    required WatchUserDataUseCase watchUserDataUseCase
+    required WatchUserDataUseCase watchUserDataUseCase,
+    required this.openWhatsappUseCase
   }) :
       _authViewmodel = authViewmodel,
       _watchUserDataUseCase = watchUserDataUseCase
@@ -44,6 +48,10 @@ class ProfileViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  AsyncVoidResult openWhatsapp() async {
+    return await openWhatsappUseCase.call(name: user!.name);
   }
 
   Future<void> logout() async {

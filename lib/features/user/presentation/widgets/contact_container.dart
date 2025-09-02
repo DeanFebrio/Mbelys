@@ -5,7 +5,11 @@ import "package:mbelys/core/router/router.dart";
 import "package:mbelys/features/user/presentation/widgets/custom_contact_button.dart";
 
 class ContactContainer extends StatelessWidget {
-  const ContactContainer({super.key});
+  final VoidCallback onWhatsappTap;
+  const ContactContainer({
+    super.key,
+    required this.onWhatsappTap
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +44,7 @@ class ContactContainer extends StatelessWidget {
                 ),
                 CustomContactButton(
                   labelText: "Whatsapp",
-                  onTap: (){},
+                  onTap: onWhatsappTap,
                 )
               ],
             ),
