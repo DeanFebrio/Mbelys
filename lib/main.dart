@@ -2,18 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:mbelys/core/constant/app_colors.dart';
 import 'package:mbelys/core/router/app_router.dart';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:mbelys/core/services/service_locator.dart';
 import 'package:mbelys/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:mbelys/features/user/presentation/viewmodel/profile_viewmodel.dart';
 import 'package:provider/provider.dart';
-import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
   await setupLocator();
   runApp(const MyApp());
 }

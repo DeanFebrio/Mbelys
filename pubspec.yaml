@@ -47,6 +47,7 @@ dependencies:
   auto_size_text: ^3.0.0
   equatable: ^2.0.7
   url_launcher: ^6.3.2
+  firebase_remote_config: ^6.0.1
 
 
 dev_dependencies:

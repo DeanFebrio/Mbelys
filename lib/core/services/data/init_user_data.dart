@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:mbelys/core/services/service_locator.dart';
 import 'package:mbelys/features/user/data/datasources/launcher_datasource.dart';
 import 'package:mbelys/features/user/data/datasources/user_datasource.dart';
@@ -12,7 +13,9 @@ Future<void> initUserData () async {
       firestore: sl<FirebaseFirestore>()
   ));
 
-  sl.registerLazySingleton<LauncherDataSource>(() => LauncherDataSource());
+  sl.registerLazySingleton<LauncherDataSource>(() => LauncherDataSource(
+    remoteConfig: sl<FirebaseRemoteConfig>()
+  ));
 
   sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(
       userDataSource: sl<UserDataSource>()
