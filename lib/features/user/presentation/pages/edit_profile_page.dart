@@ -87,11 +87,6 @@ class EditProfileView extends StatelessWidget {
               ),
               const SizedBox(height: 25,),
               EditCustomButton(
-                textButton: "Email",
-                onPressed: () => context.push(RouterPath.email),
-              ),
-              const SizedBox(height: 25,),
-              EditCustomButton(
                 textButton: "Password",
                 onPressed: () => context.push(RouterPath.password),
               ),
