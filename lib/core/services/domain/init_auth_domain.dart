@@ -1,8 +1,6 @@
 import 'package:mbelys/core/services/service_locator.dart';
 import 'package:mbelys/features/auth/domain/repositories/auth_repository.dart';
-import 'package:mbelys/features/auth/domain/usecases/begin_change_email_usecase.dart';
 import 'package:mbelys/features/auth/domain/usecases/change_password_usecase.dart';
-import 'package:mbelys/features/auth/domain/usecases/finalize_change_email_usecase.dart';
 import 'package:mbelys/features/auth/domain/usecases/forgot_usecase.dart';
 import 'package:mbelys/features/auth/domain/usecases/get_auth_state_usecase.dart';
 import 'package:mbelys/features/auth/domain/usecases/login_usecase.dart';
@@ -32,20 +30,6 @@ Future<void> initAuthDomain () async {
   sl.registerFactory<LogoutUseCase>(() =>
       LogoutUseCase(
         authRepository: sl<AuthRepository>(),
-      )
-  );
-
-  sl.registerFactory<BeginChangeEmailUseCase>(() =>
-      BeginChangeEmailUseCase(
-          authRepository: sl<AuthRepository>(),
-          userRepository: sl<UserRepository>()
-      )
-  );
-
-  sl.registerFactory<FinalizeChangeEmailUseCase>(() =>
-      FinalizeChangeEmailUseCase(
-          authRepository: sl<AuthRepository>(),
-          userRepository: sl<UserRepository>()
       )
   );
 

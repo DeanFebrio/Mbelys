@@ -26,9 +26,6 @@ abstract class AuthRepository {
 
   AsyncVoidResult forgotPassword({required String email});
 
-  AsyncVoidResult beginChangeEmail ({ required String newEmail });
-  AsyncResult<String?> finalizeChangeEmail ();
-
   AsyncVoidResult updateName ({ required String name });
 
   AsyncVoidResult reloadUser();

@@ -92,26 +92,6 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  AsyncVoidResult beginChangeEmail ({ required String newEmail }) async {
-    try {
-      await authDataSource.beginEmailChange(newEmail: newEmail);
-      return okUnit();
-    } on FirebaseAuthException catch (e) {
-      return err(mapFirebaseAuthError(e));
-    }
-  }
-
-  @override
-  AsyncResult<String?> finalizeChangeEmail () async {
-    try {
-      final email = await authDataSource.finalizeEmailChange();
-      return ok(email);
-    } on FirebaseAuthException catch (e) {
-      return err(mapFirebaseAuthError(e));
-    }
-  }
-
-  @override
   AsyncVoidResult updateName ({ required String name }) async {
     try {
       await authDataSource.updateName(name: name);
