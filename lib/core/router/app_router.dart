@@ -11,7 +11,6 @@ import 'package:mbelys/features/home/presentation/pages/home_page.dart';
 import 'package:mbelys/features/kandang/presentation/view/add_page.dart';
 import 'package:mbelys/features/kandang/presentation/view/detail_page.dart';
 import 'package:mbelys/features/user/presentation/pages/edit_profile_page.dart';
-import 'package:mbelys/features/user/presentation/pages/email_page.dart';
 import 'package:mbelys/features/user/presentation/pages/feedback_page.dart';
 import 'package:mbelys/features/user/presentation/pages/password_page.dart';
 import 'package:mbelys/features/user/presentation/pages/profile_page.dart';
@@ -61,7 +60,6 @@ class AppRouter {
         GoRoute(
             path: RouterPath.detail,
             name: RouterName.detail,
-            parentNavigatorKey: _rootNavigatorKey,
             builder: (context, state) => const DetailPage()
         ),
         GoRoute(
@@ -69,29 +67,6 @@ class AppRouter {
             name: RouterName.add,
             builder: (context, state) => const AddPage()
         ),
-
-        // user feature
-        GoRoute(
-            path: RouterPath.editProfile,
-            name: RouterName.editProfile,
-            builder: (context, state) => const EditProfilePage()
-        ),
-        GoRoute(
-            path: RouterPath.password,
-            name: RouterName.password,
-            builder: (context, state) => const PasswordPage()
-        ),
-        GoRoute(
-            path: RouterPath.email,
-            name: RouterName.email,
-            builder: (context, state) => const EmailPage()
-        ),
-        GoRoute(
-            path: RouterPath.feedback,
-            name: RouterName.feedback,
-            builder: (context, state) => const FeedbackPage()
-        ),
-
 
         // common
         GoRoute(
@@ -122,7 +97,29 @@ class AppRouter {
                     GoRoute(
                         path: RouterPath.profile,
                         name: RouterName.profile,
-                        builder: (context, state) => const ProfilePage()
+                        builder: (context, state) => const ProfilePage(),
+                      routes: [
+                        GoRoute(
+                            path: "editProfile",
+                            name: RouterName.editProfile,
+                            parentNavigatorKey: _rootNavigatorKey,
+                            builder: (context, state) => const EditProfilePage(),
+                            routes: [
+                              GoRoute(
+                                  path: "password",
+                                  name: RouterName.password,
+                                  parentNavigatorKey: _rootNavigatorKey,
+                                  builder: (context, state) => const PasswordPage()
+                              ),
+                            ]
+                        ),
+                        GoRoute(
+                            path: "feedback",
+                            name: RouterName.feedback,
+                            parentNavigatorKey: _rootNavigatorKey,
+                            builder: (context, state) => const FeedbackPage()
+                        ),
+                      ]
                     ),
                   ]
               )
@@ -136,7 +133,6 @@ class AppRouter {
       final publicRoutes = [
         RouterPath.welcome,
         RouterPath.login,
-        RouterPath.forgot,
         RouterPath.register,
         RouterPath.splash
       ];

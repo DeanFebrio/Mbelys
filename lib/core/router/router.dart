@@ -14,10 +14,9 @@ class RouterPath {
 
   // user feature
   static const profile = '/profile';
-  static const editProfile = '/editProfil';
-  static const password = '/password';
-  static const email = '/email';
-  static const feedback = '/feedback';
+  static const feedback = '/profile/feedback';
+  static const editProfile = '/profile/editProfile';
+  static const password = '/profile/editProfile/password';
 
   // common
   static const error = '/error';
@@ -40,10 +39,9 @@ class RouterName {
 
   // user feature
   static const profile = 'profile';
-  static const editProfile = 'editProfil';
-  static const password = 'password';
-  static const email = 'email';
   static const feedback = 'feedback';
+  static const editProfile = 'editProfile';
+  static const password = 'password';
 
   // common
   static const error = 'error';
