@@ -9,8 +9,4 @@ abstract class UserRepository {
 
   AsyncVoidResult changeName ({required String name, required String uid});
   AsyncVoidResult changePhone ({required String phone, required String uid});
-
-  AsyncVoidResult markEmailChangePending ({ required String pendingEmail, required String uid });
-  AsyncVoidResult commitEmailChange ({ required String authEmail, required String uid });
-  AsyncVoidResult clearEmailChangePending ({ required String uid });
 }

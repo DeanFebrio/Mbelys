@@ -78,40 +78,4 @@ class UserRepositoryImpl implements UserRepository {
       return err(AuthFailure("Gagal melakukan perubahan nomor telepon"));
     }
   }
-
-  @override
-  AsyncVoidResult markEmailChangePending ({ required String pendingEmail, required String uid }) async {
-    try {
-      await userDataSource.markEmailChangePending(uid: uid, pendingEmail: pendingEmail);
-      return okUnit();
-    } on FirebaseException catch (e) {
-      return err(mapFirestoreError(e));
-    } catch (e) {
-      return err(AuthFailure("Gagal menandai perubahan email"));
-    }
-  }
-
-  @override
-  AsyncVoidResult commitEmailChange ({ required String authEmail, required String uid }) async {
-    try {
-      await userDataSource.commitEmailChange(uid: uid, authEmail: authEmail);
-      return okUnit();
-    } on FirebaseException catch (e) {
-      return err(mapFirestoreError(e));
-    } catch (e) {
-      return err(AuthFailure("Gagal mengganti status email"));
-    }
-  }
-
-  @override
-  AsyncVoidResult clearEmailChangePending ({ required String uid }) async {
-    try {
-      await userDataSource.clearEmailChangePending(uid: uid);
-      return okUnit();
-    } on FirebaseException catch (e) {
-      return err(mapFirestoreError(e));
-    }   catch (e) {
-      return err(AuthFailure("Gagal menghapus perubahan email"));
-    }
-  }
 }
