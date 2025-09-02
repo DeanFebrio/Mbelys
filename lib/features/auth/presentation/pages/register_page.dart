@@ -10,6 +10,7 @@ import "package:mbelys/features/auth/presentation/widgets/auth_divider.dart";
 import "package:mbelys/features/auth/presentation/widgets/auth_text_input.dart";
 import "package:mbelys/features/auth/presentation/widgets/facebook_button.dart";
 import "package:mbelys/features/auth/presentation/widgets/google_button.dart";
+import "package:mbelys/presentation/widgets/custom_snackbar.dart";
 import "package:provider/provider.dart";
 
 class RegisterPage extends StatelessWidget {
@@ -133,23 +134,7 @@ class RegisterButton extends StatelessWidget {
         await vm.register();
         if (!context.mounted) return;
         if (vm.state == RegisterState.error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    vm.errorMessage ?? "Gagal mendaftar!",
-                    style: TextStyle(
-                      color: AppColors.color2,
-                      fontSize: 16,
-                      fontFamily: "Mulish",
-                      fontWeight: FontWeight.w700
-                    ),
-                  ),
-                ),
-                backgroundColor: AppColors.color5,
-              )
-          );
+          showErrorSnackBar(context, vm.errorMessage);
         } else if (vm.state == RegisterState.success) {
           context.go(RouterPath.login);
         }
@@ -175,7 +160,6 @@ class FormSection extends StatelessWidget {
             hintText: "Masukkan email",
             controller: vm.emailController,
             validator: vm.validateEmail,
-            isPassword: false,
           ),
           const SizedBox(height: 10,),
           AuthTextInput(
@@ -189,14 +173,12 @@ class FormSection extends StatelessWidget {
             hintText: "Masukkan nama",
             controller: vm.nameController,
             validator: vm.validateName,
-            isPassword: false,
           ),
           const SizedBox(height: 10,),
           AuthTextInput(
             hintText: "Masukkan nomor telepon",
             controller: vm.phoneController,
             validator: vm.validatePhone,
-            isPassword: false,
           ),
         ],
       ),
