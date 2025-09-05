@@ -2,7 +2,12 @@ import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
 class FeedbackTextInput extends StatelessWidget {
-  const FeedbackTextInput({super.key});
+  const FeedbackTextInput({
+    super.key,
+    required this.textEditingController,
+  });
+
+  final TextEditingController textEditingController;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +36,7 @@ class FeedbackTextInput extends StatelessWidget {
         maxLines: null,
         keyboardType: TextInputType.multiline,
         style: inputStyle,
+        controller: textEditingController,
         decoration: InputDecoration(
           hintText: "Ketik disini",
           hintStyle: hintStyle,
