@@ -48,6 +48,8 @@ dependencies:
   equatable: ^2.0.7
   url_launcher: ^6.3.2
   firebase_remote_config: ^6.0.1
+  http: ^1.5.0
+  emailjs: ^4.0.0
 
 
 dev_dependencies:
