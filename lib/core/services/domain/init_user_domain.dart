@@ -1,10 +1,10 @@
 import 'package:mbelys/core/services/service_locator.dart';
-import 'package:mbelys/features/user/domain/repositories/launcher_repostitory.dart';
+import 'package:mbelys/shared/launcher/domain/repositories/launcher_repostitory.dart';
 import 'package:mbelys/features/user/domain/repositories/user_repository.dart';
 import 'package:mbelys/features/user/domain/usecases/change_name_usecase.dart';
 import 'package:mbelys/features/user/domain/usecases/change_phone_usecase.dart';
 import 'package:mbelys/features/user/domain/usecases/get_user_data_usecase.dart';
-import 'package:mbelys/features/user/domain/usecases/open_whatsapp_usecase.dart';
+import 'package:mbelys/shared/launcher/domain/usecases/open_whatsapp_usecase.dart';
 import 'package:mbelys/features/user/domain/usecases/watch_user_data_usecase.dart';
 
 Future<void> initUserDomain () async {

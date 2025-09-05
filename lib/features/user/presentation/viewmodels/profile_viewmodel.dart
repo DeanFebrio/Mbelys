@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mbelys/core/utils/result.dart';
-import 'package:mbelys/features/user/domain/usecases/open_whatsapp_usecase.dart';
+import 'package:mbelys/shared/launcher/domain/usecases/open_whatsapp_usecase.dart';
 import 'package:mbelys/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 import 'package:mbelys/features/user/domain/usecases/watch_user_data_usecase.dart';
