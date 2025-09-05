@@ -5,7 +5,7 @@ import 'package:mbelys/features/auth/domain/usecases/update_name_usecase.dart';
 import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 import 'package:mbelys/features/user/domain/usecases/change_name_usecase.dart';
 import 'package:mbelys/features/user/domain/usecases/change_phone_usecase.dart';
-import 'package:mbelys/features/user/presentation/viewmodel/profile_viewmodel.dart';
+import 'package:mbelys/features/user/presentation/viewmodels/profile_viewmodel.dart';
 
 enum EditState {initial, loading, success, error}
 

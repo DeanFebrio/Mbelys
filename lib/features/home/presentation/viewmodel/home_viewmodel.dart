@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:mbelys/features/user/domain/entities/user_entity.dart';
-import 'package:mbelys/features/user/presentation/viewmodel/profile_viewmodel.dart';
+import 'package:mbelys/features/user/presentation/viewmodels/profile_viewmodel.dart';
 
 class HomeViewModel extends ChangeNotifier {
   final ProfileViewModel _profileViewModel;

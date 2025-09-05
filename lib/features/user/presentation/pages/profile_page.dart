@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/services/service_locator.dart";
-import "package:mbelys/features/user/presentation/viewmodel/profile_viewmodel.dart";
+import "package:mbelys/features/user/presentation/viewmodels/profile_viewmodel.dart";
 import "package:mbelys/features/user/presentation/widgets/profile_card.dart";
 import "package:mbelys/features/user/presentation/widgets/card_profile_skeleton.dart";
 import "package:mbelys/features/user/presentation/widgets/contact_container.dart";

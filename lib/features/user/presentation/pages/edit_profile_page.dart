@@ -3,7 +3,7 @@ import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
 import "package:mbelys/core/services/service_locator.dart";
-import "package:mbelys/features/user/presentation/viewmodel/edit_profile_viewmodel.dart";
+import "package:mbelys/features/user/presentation/viewmodels/edit_profile_viewmodel.dart";
 import "package:mbelys/features/user/presentation/widgets/custom_change_button.dart";
 import "package:mbelys/features/user/presentation/widgets/edit_profile_background_page.dart";
 import "package:mbelys/features/user/presentation/widgets/edit_custom_button.dart";

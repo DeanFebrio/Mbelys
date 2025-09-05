@@ -4,7 +4,7 @@ import 'package:mbelys/core/router/app_router.dart';
 
 import 'package:mbelys/core/services/service_locator.dart';
 import 'package:mbelys/features/auth/presentation/viewmodels/auth_viewmodel.dart';
-import 'package:mbelys/features/user/presentation/viewmodel/profile_viewmodel.dart';
+import 'package:mbelys/features/user/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 void main() async {

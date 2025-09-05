@@ -6,9 +6,9 @@ import 'package:mbelys/features/user/domain/usecases/change_name_usecase.dart';
 import 'package:mbelys/features/user/domain/usecases/change_phone_usecase.dart';
 import 'package:mbelys/features/user/domain/usecases/open_whatsapp_usecase.dart';
 import 'package:mbelys/features/user/domain/usecases/watch_user_data_usecase.dart';
-import 'package:mbelys/features/user/presentation/viewmodel/edit_profile_viewmodel.dart';
-import 'package:mbelys/features/user/presentation/viewmodel/password_viewmodel.dart';
-import 'package:mbelys/features/user/presentation/viewmodel/profile_viewmodel.dart';
+import 'package:mbelys/features/user/presentation/viewmodels/edit_profile_viewmodel.dart';
+import 'package:mbelys/features/user/presentation/viewmodels/password_viewmodel.dart';
+import 'package:mbelys/features/user/presentation/viewmodels/profile_viewmodel.dart';
 
 Future<void> initUserPresentation () async {
   sl.registerFactory<ProfileViewModel>(() => ProfileViewModel(
