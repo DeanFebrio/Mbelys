@@ -9,6 +9,7 @@ import "package:mbelys/features/user/presentation/widgets/edit_profile_backgroun
 import "package:mbelys/features/user/presentation/widgets/edit_custom_button.dart";
 import "package:mbelys/presentation/widgets/custom_avatar.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
+import "package:mbelys/presentation/widgets/custom_snackbar.dart";
 import "package:mbelys/presentation/widgets/custom_text_input.dart";
 import "package:provider/provider.dart";
 
@@ -96,23 +97,7 @@ class EditProfileView extends StatelessWidget {
                     await vm.saveChanges();
                     if (!context.mounted) return;
                     if (vm.state == EditState.error) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 20),
-                              child: Text(
-                                vm.error ?? "Gagal mengubah profil!",
-                                style: TextStyle(
-                                    color: AppColors.color2,
-                                    fontSize: 16,
-                                    fontFamily: "Mulish",
-                                    fontWeight: FontWeight.w700
-                                ),
-                              ),
-                            ),
-                            backgroundColor: AppColors.color5,
-                          )
-                      );
+                      showErrorSnackBar(context, vm.error);
                     } else if (vm.state == EditState.success) {
                       context.go(RouterPath.profile);
                     }
