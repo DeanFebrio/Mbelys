@@ -4,11 +4,14 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mbelys/core/services/data/init_auth_data.dart';
+import 'package:mbelys/core/services/data/init_feedback_data.dart';
 import 'package:mbelys/core/services/data/init_user_data.dart';
 import 'package:mbelys/core/services/domain/init_auth_domain.dart';
+import 'package:mbelys/core/services/domain/init_feedback_domain.dart';
 import 'package:mbelys/core/services/domain/init_user_domain.dart';
 import 'package:mbelys/core/services/home_locator.dart';
 import 'package:mbelys/core/services/presentation/init_auth_presentation.dart';
+import 'package:mbelys/core/services/presentation/init_feedback_presentation.dart';
 import 'package:mbelys/core/services/presentation/init_user_presentation.dart';
 import 'package:mbelys/firebase_options.dart';
 
@@ -33,14 +36,17 @@ Future<void> setupLocator () async {
   // data layer
   await initAuthData();
   await initUserData();
+  await initFeedbackData();
 
   // domain layer
   await initAuthDomain();
   await initUserDomain();
+  await initFeedbackDomain();
 
   // presentation layer
   initAuthPresentation();
   initUserPresentation();
+  initFeedbackPresentation();
 
   await initHome();
 }
