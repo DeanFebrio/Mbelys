@@ -8,7 +8,7 @@ class RouterPath {
   // home feature
   static const home = '/home';
 
-  // kandang feature
+  // goat_shed feature
   static const detail = '/home/detail';
   static const add = '/add';
 
@@ -33,7 +33,7 @@ class RouterName {
   // home feature
   static const home = 'home';
 
-  // kandang feature
+  // goat_shed feature
   static const detail = 'detail';
   static const add = 'add';
 
