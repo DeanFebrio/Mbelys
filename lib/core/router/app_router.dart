@@ -58,11 +58,6 @@ class AppRouter {
 
         // kandang feature
         GoRoute(
-            path: RouterPath.detail,
-            name: RouterName.detail,
-            builder: (context, state) => const DetailPage()
-        ),
-        GoRoute(
             path: RouterPath.add,
             name: RouterName.add,
             builder: (context, state) => const AddPage()
@@ -88,6 +83,13 @@ class AppRouter {
                         path: RouterPath.home,
                         name: RouterName.home,
                         builder: (context, state) => const HomePage(),
+                        routes: [
+                          GoRoute(
+                              path: 'detail',
+                              name: RouterName.detail,
+                              builder: (context, state) => const DetailPage()
+                          ),
+                        ]
                     ),
                   ]
               ),
