@@ -9,7 +9,7 @@ class RouterPath {
   static const home = '/home';
 
   // kandang feature
-  static const detail = 'home/detail';
+  static const detail = '/home/detail';
   static const add = '/add';
 
   // user feature
