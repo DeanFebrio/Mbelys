@@ -20,7 +20,7 @@ class CardKandang extends StatelessWidget {
         child: Column(
          children: [
            Image.asset(
-               "assets/images/kandang.png",
+               "assets/images/goat_shed.png",
              height: 150,
              width: 320,
              cacheWidth: 320,
