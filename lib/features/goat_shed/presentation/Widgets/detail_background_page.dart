@@ -23,7 +23,7 @@ class DetailBackgroundPage extends StatelessWidget {
             decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
-                    "assets/images/kandang.png",
+                    "assets/images/goat_shed.png",
                   ),
                 fit: BoxFit.cover
               )

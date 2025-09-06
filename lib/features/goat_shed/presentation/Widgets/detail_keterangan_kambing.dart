@@ -20,11 +20,11 @@ class KeteranganKambing extends StatelessWidget {
         ),
         const SizedBox(height: 5,),
         Text(
-          "Berdasarkan analisis suara terbaru, kambing di kandang ini "
+          "Berdasarkan analisis suara terbaru, kambing di goat_shed ini "
               "menunjukkan tanda-tanda stres, namun tidak sedang dalam "
               "kondisi birahi. Deteksi stres dapat disebabkan oleh "
-              "beberapa faktor lingkungan seperti suhu kandang yang terlalu "
-              "panas, suara bising dari luar, atau kondisi kandang yang "
+              "beberapa faktor lingkungan seperti suhu goat_shed yang terlalu "
+              "panas, suara bising dari luar, atau kondisi goat_shed yang "
               "terlalu padat. Kambing yang stres cenderung mengeluarkan "
               "vokalisasi bernada tinggi atau bersifat berulang. "
               "Sementara itu, tidak terdeteksinya birahi menunjukkan "

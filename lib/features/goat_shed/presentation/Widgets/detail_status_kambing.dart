@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/features/kandang/presentation/Widgets/custom_label_status.dart";
+import "package:mbelys/features/goat_shed/presentation/Widgets/custom_label_status.dart";
 
 class StatusKambing extends StatelessWidget {
   const StatusKambing({super.key});
