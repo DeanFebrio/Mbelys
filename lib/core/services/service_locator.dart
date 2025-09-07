@@ -11,10 +11,10 @@ import 'package:mbelys/core/services/domain/init_auth_domain.dart';
 import 'package:mbelys/core/services/domain/init_feedback_domain.dart';
 import 'package:mbelys/core/services/domain/init_goat_shed_domain.dart';
 import 'package:mbelys/core/services/domain/init_user_domain.dart';
-import 'package:mbelys/core/services/home_locator.dart';
 import 'package:mbelys/core/services/presentation/init_auth_presentation.dart';
 import 'package:mbelys/core/services/presentation/init_feedback_presentation.dart';
 import 'package:mbelys/core/services/presentation/init_goat_shed_presentation.dart';
+import 'package:mbelys/core/services/presentation/init_home_presentation.dart';
 import 'package:mbelys/core/services/presentation/init_user_presentation.dart';
 import 'package:mbelys/firebase_options.dart';
 
@@ -53,6 +53,5 @@ Future<void> setupLocator () async {
   await initUserPresentation();
   await initFeedbackPresentation();
   await initGoatShedPresentation();
-
-  await initHome();
+  await initHomePresentation();
 }
