@@ -14,11 +14,13 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
   AsyncResult<void> createGoatShed ({required GoatShedEntity goatShed}) async {
     try {
       final goatShedModel = GoatShedModel(
-          id: "",
-          name: goatShed.name,
-          location: goatShed.location,
-          total: goatShed.total,
-          ownerId: goatShed.ownerId
+        id: "",
+        name: goatShed.name,
+        location: goatShed.location,
+        total: goatShed.total,
+        ownerId: goatShed.ownerId,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now()
       );
       final result = await goatShedDataSource.createGoatShed(goatShed: goatShedModel);
       return ok(result);
@@ -26,6 +28,16 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
       return err(mapFirestoreError(e));
     } catch (e) {
       rethrow;
+    }
+  }
+
+  @override
+  Stream<List<GoatShedEntity>> getGoatShedList ({required String ownerId}) {
+    try {
+      final result = goatShedDataSource.getGoatShedList(ownerId: ownerId);
+      return result;
+    } on FirebaseException catch (e) {
+      return Stream.error(mapFirestoreError(e));
     }
   }
 }

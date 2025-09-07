@@ -4,6 +4,8 @@ class GoatShedEntity {
   final int total;
   final String location;
   final String ownerId;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   // final String image;
   // final bool isStressed;
@@ -17,5 +19,7 @@ class GoatShedEntity {
     required this.location,
     required this.total,
     required this.ownerId,
+    this.createdAt,
+    this.updatedAt
   });
 }
