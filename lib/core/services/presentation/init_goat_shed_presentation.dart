@@ -4,7 +4,7 @@ import 'package:mbelys/features/goat_shed/presentation/viewmodel/add_viewmodel.d
 import 'package:mbelys/features/user/presentation/viewmodels/profile_viewmodel.dart';
 
 Future<void> initGoatShedPresentation () async {
-  sl.registerFactory<AddViewModel>(() => AddViewModel(
+  sl.registerLazySingleton<AddViewModel>(() => AddViewModel(
       createGoatShed: sl<CreateGoatShedUseCase>(),
       profileViewModel: sl<ProfileViewModel>()
   ));
