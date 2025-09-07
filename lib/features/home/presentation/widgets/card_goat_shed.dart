@@ -1,10 +1,16 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
+import "package:mbelys/features/goat_shed/domain/entities/goat_shed_entity.dart";
 import "package:mbelys/features/home/presentation/widgets/label_card_kandang.dart";
 import "package:mbelys/presentation/widgets/custom_next_button.dart";
 
-class CardKandang extends StatelessWidget {
-  const CardKandang({super.key});
+class CardGoatShed extends StatelessWidget {
+  final GoatShedEntity shed;
+
+  const CardGoatShed({
+    super.key,
+    required this.shed
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +58,7 @@ class CardKandang extends StatelessWidget {
                        ),
                        const SizedBox(height: 8,),
                        Text(
-                         "Kandang Aaaaaaaaay...",
+                         shed.name,
                          style: TextStyle(
                            fontSize: 24,
                            fontFamily: "Poppins",
