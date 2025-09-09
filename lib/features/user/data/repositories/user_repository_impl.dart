@@ -27,7 +27,7 @@ class UserRepositoryImpl implements UserRepository {
     } on FirebaseException catch (e) {
       return err(mapFirestoreError(e));
     } catch (e) {
-      return err(AuthFailure("Gagal membuat akun di Firestore"));
+      return err(UserFailure("Gagal membuat akun di Firestore"));
     }
   }
 
@@ -39,7 +39,7 @@ class UserRepositoryImpl implements UserRepository {
     } on FirebaseException catch (e) {
       return err(mapFirestoreError(e));
     } catch (e) {
-      return err(AuthFailure("Gagal mengambil data pengguna dari Firestore"));
+      return err(UserFailure("Gagal mengambil data pengguna dari Firestore"));
     }
   }
 
@@ -51,7 +51,7 @@ class UserRepositoryImpl implements UserRepository {
     } on FirebaseException catch (e) {
       return Stream.error(mapFirestoreError(e));
     } catch (e) {
-      return Stream.error(AuthFailure("Gagal mengambil data pengguna dari Firestore"));
+      return Stream.error(UserFailure("Gagal mengambil data pengguna dari Firestore"));
     }
   }
 
@@ -63,7 +63,7 @@ class UserRepositoryImpl implements UserRepository {
     } on FirebaseException catch (e) {
       return err(mapFirestoreError(e));
     } catch (e) {
-      return err(AuthFailure("Gagal melakukan perubahan nama"));
+      return err(UserFailure("Gagal melakukan perubahan nama"));
     }
   }
 
@@ -75,7 +75,7 @@ class UserRepositoryImpl implements UserRepository {
     } on FirebaseException catch (e) {
       return err(mapFirestoreError(e));
     } catch (e) {
-      return err(AuthFailure("Gagal melakukan perubahan nomor telepon"));
+      return err(UserFailure("Gagal melakukan perubahan nomor telepon"));
     }
   }
 }
