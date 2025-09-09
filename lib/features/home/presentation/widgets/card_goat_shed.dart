@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/features/goat_shed/domain/entities/goat_shed_entity.dart";
 import "package:mbelys/features/home/presentation/widgets/label_card_kandang.dart";
-import "package:mbelys/presentation/widgets/custom_next_button.dart";
+import "package:mbelys/features/home/presentation/widgets/card_next_button.dart";
 
 class CardGoatShed extends StatelessWidget {
   final GoatShedEntity shed;
@@ -70,7 +70,9 @@ class CardGoatShed extends StatelessWidget {
                      ],
                    ),
                  ),
-                 const CustomNextButton()
+                 CardNextButton(
+                   shedId: shed.id,
+                 )
                ],
              ),
            )
