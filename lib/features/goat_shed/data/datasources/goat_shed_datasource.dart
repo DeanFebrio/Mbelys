@@ -4,6 +4,7 @@ import 'package:mbelys/features/goat_shed/data/models/goat_shed_model.dart';
 abstract class GoatShedDataSource {
   Future<void> createGoatShed ({required GoatShedModel goatShed });
   Stream<List<GoatShedModel>> getGoatShedList ({ required String ownerId });
+  Stream<GoatShedModel> getGoatShedDetail ({required String shedId});
 }
 
 class FirestoreGoatShedDataSource implements GoatShedDataSource {
@@ -28,11 +29,30 @@ class FirestoreGoatShedDataSource implements GoatShedDataSource {
       final snapshot = firestore
           .collection("goat_shed")
           .where("ownerId", isEqualTo: ownerId)
+          .orderBy("createdAt", descending: true)
           .snapshots();
       return snapshot.map((snapshot) {
         return snapshot.docs
             .map((doc) => GoatShedModel.fromFirebase(doc))
             .toList();
+      });
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Stream<GoatShedModel> getGoatShedDetail ({ required String shedId }) {
+    try {
+      final snapshot = firestore
+          .collection("goat_shed")
+          .doc(shedId)
+          .snapshots();
+      return snapshot.map((snap) {
+        if (!snap.exists) {
+          throw Exception("Kandang tidak ditemukan!");
+        }
+        return GoatShedModel.fromFirebase(snap);
       });
     } catch (e) {
       throw Exception(e);

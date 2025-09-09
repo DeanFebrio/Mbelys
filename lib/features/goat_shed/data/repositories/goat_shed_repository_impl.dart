@@ -40,4 +40,14 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
       return Stream.error(mapFirestoreError(e));
     }
   }
+
+  @override
+  Stream<GoatShedEntity> getGoatShedDetail ({required String shedId}) {
+    try {
+      final result = goatShedDataSource.getGoatShedDetail(shedId: shedId);
+      return result;
+    } on FirebaseException catch (e) {
+      return Stream.error(mapFirestoreError(e));
+    }
+  }
 }

@@ -3,7 +3,7 @@ import 'package:mbelys/features/goat_shed/domain/entities/goat_shed_entity.dart'
 
 class GoatShedModel extends GoatShedEntity {
   GoatShedModel({
-    super.id,
+    required super.id,
     required super.name,
     required super.location,
     required super.total,
