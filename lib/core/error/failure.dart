@@ -35,6 +35,11 @@ class AuthFailure extends Failure {
       : super (message, code: code, cause: cause, stackTrace: stackTrace);
 }
 
+class UserFailure extends Failure {
+  const UserFailure(String message, {String? code, Object? cause, StackTrace? stackTrace})
+      : super (message, code: code, cause: cause, stackTrace: stackTrace);
+}
+
 class ValidationFailure extends Failure {
   const ValidationFailure(String message, {String? code})
       : super (message, code: code);
