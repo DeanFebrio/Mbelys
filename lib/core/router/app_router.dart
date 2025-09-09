@@ -85,9 +85,12 @@ class AppRouter {
                         builder: (context, state) => const HomePage(),
                         routes: [
                           GoRoute(
-                              path: 'detail',
+                              path: 'detail/:shedId',
                               name: RouterName.detail,
-                              builder: (context, state) => const DetailPage()
+                              builder: (context, state) {
+                                final shedId = state.pathParameters['shedId'];
+                                return DetailPage(shedId: shedId!);
+                              }
                           ),
                         ]
                     ),
@@ -136,7 +139,8 @@ class AppRouter {
         RouterPath.welcome,
         RouterPath.login,
         RouterPath.register,
-        RouterPath.splash
+        RouterPath.splash,
+        RouterPath.forgot
       ];
 
       final isPublic = publicRoutes.contains(location);
@@ -154,8 +158,12 @@ class AppRouter {
         return RouterPath.welcome;
       }
 
-      if (isLoggedIn && isPublic) {
-        return RouterPath.home;
+      if (isLoggedIn) {
+        final isGoingInitialPage = location == RouterPath.welcome || location == RouterPath.login || location == RouterPath.register;
+        if (isGoingInitialPage) {
+          return RouterPath.home;
+        }
+        return null;
       }
 
       return null;
