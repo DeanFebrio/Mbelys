@@ -66,6 +66,10 @@ class HomeViewModel extends ChangeNotifier {
     );
   }
 
+  Future<void> refresh () async {
+    _listenToGoatSheds();
+  }
+
   @override
   void dispose() {
     _profileViewModel.removeListener(_onProfileChanged);
