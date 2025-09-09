@@ -1,8 +1,13 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
+import "package:mbelys/features/goat_shed/domain/entities/goat_shed_entity.dart";
 
-class InformasiKandang extends StatelessWidget {
-  const InformasiKandang({super.key});
+class DetailGoatShed extends StatelessWidget {
+  final GoatShedEntity shed;
+  const DetailGoatShed({
+    super.key,
+    required this.shed
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +27,7 @@ class InformasiKandang extends StatelessWidget {
               ),
             ),
             Text(
-              "20",
+              shed.total.toString(),
               style: TextStyle(
                   fontSize: 16,
                   fontFamily: "Montserrat",
@@ -52,7 +57,7 @@ class InformasiKandang extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Sekolah Santo Yakobus, Kelapa Gading, Jakarta Utara",
+                    shed.location,
                     style: TextStyle(
                         fontSize: 14,
                         fontFamily: "Montserrat",

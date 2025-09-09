@@ -4,14 +4,21 @@ import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
 
-class CustomNextButton extends StatelessWidget {
-  const CustomNextButton({super.key});
+class CardNextButton extends StatelessWidget {
+  final String shedId;
+  const CardNextButton({
+    super.key,
+    required this.shedId
+  });
 
   @override
   Widget build(BuildContext context) {
     return IconButton(
         onPressed: (){
-          context.push(RouterPath.detail);
+          context.pushNamed(
+            RouterName.detail,
+            pathParameters: {'shedId': shedId}
+          );
         },
         style: IconButton.styleFrom(
           backgroundColor: AppColors.color7,

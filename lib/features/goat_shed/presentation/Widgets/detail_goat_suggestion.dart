@@ -2,14 +2,14 @@ import "package:flutter/material.dart";
 import "package:icons_plus/icons_plus.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
-class SaranPenanganan extends StatefulWidget {
-  const SaranPenanganan({super.key});
+class DetailGoatSuggestion extends StatefulWidget {
+  const DetailGoatSuggestion({super.key});
 
   @override
-  State<SaranPenanganan> createState() => _SaranPenangananState();
+  State<DetailGoatSuggestion> createState() => _DetailGoatSuggestion();
 }
 
-class _SaranPenangananState extends State<SaranPenanganan> with
+class _DetailGoatSuggestion extends State<DetailGoatSuggestion> with
 SingleTickerProviderStateMixin {
 
   bool isExpanded = false;

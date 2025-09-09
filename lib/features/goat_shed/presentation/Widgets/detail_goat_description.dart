@@ -1,8 +1,8 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
-class KeteranganKambing extends StatelessWidget {
-  const KeteranganKambing({super.key});
+class DetailGoatDescription extends StatelessWidget {
+  const DetailGoatDescription({super.key});
 
   @override
   Widget build(BuildContext context) {
