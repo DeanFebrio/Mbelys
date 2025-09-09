@@ -50,5 +50,9 @@
       <string>https</string>
       <string>whatsapp</string>
     </array>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>App membutuhkan akses galeri untuk memilih foto profil.</string>
+    <key>NSCameraUsageDescription</key>
+    <string>App membutuhkan akses kamera untuk mengambil foto profil.</string>
 </dict>
 </plist>
