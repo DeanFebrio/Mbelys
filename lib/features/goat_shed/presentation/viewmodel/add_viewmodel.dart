@@ -56,6 +56,7 @@ class AddViewModel extends ChangeNotifier {
     try {
       final user = _profileViewModel.user;
       final goatShed = GoatShedEntity(
+          id: "",
           name: nameController.text.trim(),
           location: locationController.text.trim(),
           total: int.parse(totalController.text.trim()),
