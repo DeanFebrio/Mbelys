@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mbelys/core/services/service_locator.dart';
 import 'package:mbelys/features/goat_shed/data/datasources/goat_shed_datasource.dart';
 import 'package:mbelys/features/goat_shed/data/repositories/goat_shed_repository_impl.dart';
@@ -6,7 +7,8 @@ import 'package:mbelys/features/goat_shed/domain/repositories/goat_shed_reposito
 
 Future<void> initGoatShedData () async {
   sl.registerLazySingleton<GoatShedDataSource>(() => FirestoreGoatShedDataSource(
-      firestore: sl<FirebaseFirestore>()
+      firestore: sl<FirebaseFirestore>(),
+      storage: sl<FirebaseStorage>()
   ));
 
   sl.registerLazySingleton<GoatShedRepository>(() => GoatShedRepositoryImpl(
