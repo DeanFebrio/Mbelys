@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mbelys/core/error/failure.dart';
 import 'package:mbelys/core/error/firestore_error_mapper.dart';
@@ -15,7 +17,7 @@ class UserRepositoryImpl implements UserRepository {
   AsyncResult<void> createUser({required UserEntity user}) async {
     try {
       final userModel = UserModel(
-        uid: user.uid,
+        id: user.id,
         email: user.email,
         name: user.name,
         phone: user.phone,
@@ -76,6 +78,18 @@ class UserRepositoryImpl implements UserRepository {
       return err(mapFirestoreError(e));
     } catch (e) {
       return err(UserFailure("Gagal melakukan perubahan nomor telepon"));
+    }
+  }
+
+  @override
+  AsyncVoidResult changePhoto ({ required File file, required String uid }) async {
+    try {
+      await userDataSource.changePhoto(uid: uid, file: file);
+      return okUnit();
+    } on FirebaseException catch (e) {
+      return err(mapFirestoreError(e));
+    } catch (e) {
+      return err(UserFailure("Gagal melakukan perubahan foto profil"));
     }
   }
 }

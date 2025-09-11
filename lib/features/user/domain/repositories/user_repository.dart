@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:mbelys/core/utils/result.dart';
 import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
@@ -9,4 +11,5 @@ abstract class UserRepository {
 
   AsyncVoidResult changeName ({required String name, required String uid});
   AsyncVoidResult changePhone ({required String phone, required String uid});
+  AsyncVoidResult changePhoto ({ required File file, required String uid });
 }
