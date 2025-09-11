@@ -54,7 +54,7 @@ class GoatShedModel extends GoatShedEntity {
       'shedId': shedId,
       'shedName': shedName,
       'shedLocation': shedLocation,
-      'goatTotal': totalGoats,
+      'totalGoats': totalGoats,
       'ownerId': ownerId,
       'shedImageUrl': shedImageUrl,
       'createdAt': createdAt,
