@@ -25,14 +25,7 @@ class CardGoatShed extends StatelessWidget {
         width: 320,
         child: Column(
          children: [
-           Image.asset(
-               "assets/images/goat_shed.png",
-             height: 150,
-             width: 320,
-             cacheWidth: 320,
-             filterQuality: FilterQuality.low,
-             fit: BoxFit.cover,
-           ),
+           _buildShedImage(),
            Padding(
                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
              child: Row(
@@ -58,7 +51,7 @@ class CardGoatShed extends StatelessWidget {
                        ),
                        const SizedBox(height: 8,),
                        Text(
-                         shed.name,
+                         shed.shedName,
                          style: TextStyle(
                            fontSize: 24,
                            fontFamily: "Poppins",
@@ -71,7 +64,7 @@ class CardGoatShed extends StatelessWidget {
                    ),
                  ),
                  CardNextButton(
-                   shedId: shed.id,
+                   shedId: shed.shedId,
                  )
                ],
              ),
@@ -79,6 +72,46 @@ class CardGoatShed extends StatelessWidget {
          ],
         ),
       )
+    );
+  }
+
+  Widget _buildShedImage () {
+    if (shed.shedImageUrl != null && shed.shedImageUrl!.isNotEmpty) {
+      return Image.network(
+        shed.shedImageUrl!,
+        height: 150,
+        width: 320,
+        cacheWidth: 320,
+        filterQuality: FilterQuality.low,
+        fit: BoxFit.cover,
+        loadingBuilder: (context, child, progress) {
+          if (progress == null) return child;
+          return Container(
+            height: 150,
+            width: 320,
+            color: Colors.grey[200],
+            child: const Center(child: CircularProgressIndicator(),),
+          );
+        },
+        errorBuilder: (context, error, stackTrace) {
+          return _buildPlaceHolderImage();
+        },
+      );
+    } else {
+      return _buildPlaceHolderImage();
+    }
+  }
+
+  Widget _buildPlaceHolderImage() {
+    return Container(
+      height: 150,
+      width: 320,
+      color: Colors.grey[200],
+      child: Icon(
+        Icons.image_not_supported,
+        color: Colors.grey[600],
+        size: 50,
+      ),
     );
   }
 }
