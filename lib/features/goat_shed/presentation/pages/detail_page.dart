@@ -99,7 +99,7 @@ class SuccessContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                shed.name,
+                shed.shedName,
                 style: TextStyle(
                     fontSize: 32,
                     fontFamily: "Poppins",

@@ -27,7 +27,7 @@ class DetailGoatShed extends StatelessWidget {
               ),
             ),
             Text(
-              shed.total.toString(),
+              shed.totalGoats.toString(),
               style: TextStyle(
                   fontSize: 16,
                   fontFamily: "Montserrat",
@@ -57,7 +57,7 @@ class DetailGoatShed extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    shed.location,
+                    shed.shedLocation,
                     style: TextStyle(
                         fontSize: 14,
                         fontFamily: "Montserrat",
