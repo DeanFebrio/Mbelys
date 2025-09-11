@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:mbelys/core/services/service_locator.dart";
 import "package:mbelys/features/user/presentation/viewmodels/profile_viewmodel.dart";
-import "package:mbelys/features/user/presentation/widgets/profile_card.dart";
+import "package:mbelys/features/user/presentation/widgets/card_profile.dart";
 import "package:mbelys/features/user/presentation/widgets/card_profile_skeleton.dart";
 import "package:mbelys/features/user/presentation/widgets/contact_container.dart";
 import "package:mbelys/features/user/presentation/widgets/logout_button.dart";
@@ -37,9 +37,7 @@ class ProfileView extends StatelessWidget {
               const CardProfileSkeleton()
             else
               CardProfile(
-                name: user.name,
-                email: user.email,
-                phone: user.phone,
+                user: user,
               ),
             const SizedBox(height: 30,),
             ContactContainer(
