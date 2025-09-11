@@ -53,7 +53,7 @@ class FeedbackViewModel extends ChangeNotifier {
     notifyListeners();
 
     EmailEntity email = EmailEntity(
-        uid: user!.uid,
+        uid: user!.id,
         email: user!.email,
         name: user!.name,
         message: message
