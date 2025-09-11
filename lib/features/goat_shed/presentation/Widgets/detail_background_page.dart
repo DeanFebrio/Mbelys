@@ -4,10 +4,12 @@ import "package:mbelys/presentation/widgets/custom_back_button.dart";
 
 class DetailBackgroundPage extends StatelessWidget {
   final Widget child;
+  final String shedImageUrl;
 
   const DetailBackgroundPage({
     super.key,
-    required this.child
+    required this.child,
+    required this.shedImageUrl
   });
 
   @override
@@ -20,10 +22,10 @@ class DetailBackgroundPage extends StatelessWidget {
           Container(
             height: screenSize.height * 0.3,
             width: screenSize.width,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage(
-                    "assets/images/goat_shed.png",
+                  image: NetworkImage(
+                    shedImageUrl
                   ),
                 fit: BoxFit.cover
               )
