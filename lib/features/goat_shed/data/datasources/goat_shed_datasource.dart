@@ -1,22 +1,43 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mbelys/features/goat_shed/data/models/goat_shed_model.dart';
 
 abstract class GoatShedDataSource {
-  Future<void> createGoatShed ({required GoatShedModel goatShed });
+  Future<void> createGoatShed ({required GoatShedModel goatShed, required File imageFile });
   Stream<List<GoatShedModel>> getGoatShedList ({ required String ownerId });
   Stream<GoatShedModel> getGoatShedDetail ({required String shedId});
 }
 
 class FirestoreGoatShedDataSource implements GoatShedDataSource {
   final FirebaseFirestore firestore;
-  FirestoreGoatShedDataSource({ required this.firestore });
+  final FirebaseStorage storage;
+  FirestoreGoatShedDataSource({
+    required this.firestore,
+    required this.storage
+  });
 
   @override
-  Future<void> createGoatShed ({ required GoatShedModel goatShed }) async {
+  Future<void> createGoatShed ({ required GoatShedModel goatShed, required File imageFile }) async {
     try {
+      final newDocRef = firestore.collection("goat_shed").doc();
+
+      String imageUrl = '';
+      final storagePath = 'goat_shed_picture/${goatShed.ownerId}/${newDocRef.id}';
+      final storageRef = storage.ref(storagePath);
+      await storageRef.putFile(
+          imageFile,
+          SettableMetadata(
+              contentType: 'image/jpg',
+              cacheControl: 'public, max-age=3600'
+          )
+      );
+      imageUrl = await storageRef.getDownloadURL();
+
       final newDoc = firestore.collection("goat_shed").doc();
       final newId = newDoc.id;
-      final newShed = goatShed.copyWith(id: newId);
+      final newShed = goatShed.copyWith(shedId: newId, shedImageUrl: imageUrl);
       return await newDoc.set(newShed.toJson());
     } catch (e) {
       throw Exception(e);
@@ -29,7 +50,6 @@ class FirestoreGoatShedDataSource implements GoatShedDataSource {
       final snapshot = firestore
           .collection("goat_shed")
           .where("ownerId", isEqualTo: ownerId)
-          .orderBy("createdAt", descending: true)
           .snapshots();
       return snapshot.map((snapshot) {
         return snapshot.docs

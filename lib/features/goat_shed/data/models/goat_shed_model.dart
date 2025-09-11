@@ -3,30 +3,33 @@ import 'package:mbelys/features/goat_shed/domain/entities/goat_shed_entity.dart'
 
 class GoatShedModel extends GoatShedEntity {
   GoatShedModel({
-    required super.id,
-    required super.name,
-    required super.location,
-    required super.total,
+    required super.shedId,
+    required super.shedName,
+    required super.shedLocation,
+    required super.totalGoats,
     required super.ownerId,
+    super.shedImageUrl,
     super.createdAt,
     super.updatedAt,
   });
 
   GoatShedModel copyWith ({
-    String? id,
-    String? name,
-    String? location,
-    int? total,
+    String? shedId,
+    String? shedName,
+    String? shedLocation,
+    int? totalGoats,
     String? ownerId,
+    String? shedImageUrl,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
     return GoatShedModel(
-      id: id ?? this.id,
-      name: name ?? this.name,
-      location: location ?? this.location,
-      total: total ?? this.total,
+      shedId: shedId ?? this.shedId,
+      shedName: shedName ?? this.shedName,
+      shedLocation: shedLocation ?? this.shedLocation,
+      totalGoats: totalGoats ?? this.totalGoats,
       ownerId: ownerId ?? this.ownerId,
+      shedImageUrl: shedImageUrl ?? this.shedImageUrl,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
@@ -35,11 +38,12 @@ class GoatShedModel extends GoatShedEntity {
   factory GoatShedModel.fromFirebase(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
     return GoatShedModel(
-      id: snap.id,
-      name: data['name'],
-      location: data['location'],
-      total: data['total'],
+      shedId: snap.id,
+      shedName: data['shedName'],
+      shedLocation: data['shedLocation'],
+      totalGoats: data['totalGoats'],
       ownerId: data['ownerId'],
+      shedImageUrl: data['shedImageUrl'],
       createdAt: (data['createdAt'] as Timestamp).toDate(),
       updatedAt: (data['updatedAt'] as Timestamp).toDate(),
     );
@@ -47,11 +51,12 @@ class GoatShedModel extends GoatShedEntity {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'name': name,
-      'location': location,
-      'total': total,
+      'shedId': shedId,
+      'shedName': shedName,
+      'shedLocation': shedLocation,
+      'goatTotal': totalGoats,
       'ownerId': ownerId,
+      'shedImageUrl': shedImageUrl,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };

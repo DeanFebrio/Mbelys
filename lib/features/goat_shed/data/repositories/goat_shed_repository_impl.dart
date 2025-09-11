@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mbelys/core/error/firestore_error_mapper.dart';
 import 'package:mbelys/core/utils/result.dart';
@@ -11,18 +13,18 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
   const GoatShedRepositoryImpl({required this.goatShedDataSource});
 
   @override
-  AsyncResult<void> createGoatShed ({required GoatShedEntity goatShed}) async {
+  AsyncResult<void> createGoatShed ({required GoatShedEntity goatShed, required File imageFile }) async {
     try {
       final goatShedModel = GoatShedModel(
-        id: "",
-        name: goatShed.name,
-        location: goatShed.location,
-        total: goatShed.total,
+        shedId: "",
+        shedName: goatShed.shedName,
+        shedLocation: goatShed.shedLocation,
+        totalGoats: goatShed.totalGoats,
         ownerId: goatShed.ownerId,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now()
       );
-      final result = await goatShedDataSource.createGoatShed(goatShed: goatShedModel);
+      final result = await goatShedDataSource.createGoatShed(goatShed: goatShedModel, imageFile: imageFile);
       return ok(result);
     } on FirebaseException catch (e) {
       return err(mapFirestoreError(e));
