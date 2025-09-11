@@ -38,8 +38,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return ok(_mapUserToEntity(user));
     } on FirebaseAuthException catch (e) {
       return err(mapFirebaseAuthError(e));
-    } catch (e) {
-      rethrow;
     }
   }
 
@@ -50,8 +48,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return ok(_mapUserToEntity(user));
     } on FirebaseAuthException catch (e) {
       return err(mapFirebaseAuthError(e));
-    } catch (e) {
-      rethrow;
     }
   }
 
@@ -62,8 +58,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return okUnit();
     } on FirebaseAuthException catch (e) {
       return err(mapFirebaseAuthError(e));
-    }  catch (e) {
-      rethrow;
     }
   }
 
@@ -74,8 +68,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return okUnit();
     } on FirebaseAuthException catch (e) {
       return err(mapFirebaseAuthError(e));
-    } catch (e) {
-      rethrow;
     }
   }
 
@@ -86,8 +78,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return okUnit();
     } on FirebaseAuthException catch (e) {
       return err(mapFirebaseAuthError(e));
-    } catch (e) {
-      rethrow;
     }
   }
 
@@ -108,8 +98,6 @@ class AuthRepositoryImpl implements AuthRepository {
       return okUnit();
     } on FirebaseAuthException catch (e) {
       return err(mapFirebaseAuthError(e));
-    } catch (e) {
-      rethrow;
     }
   }
 

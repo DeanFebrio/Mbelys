@@ -28,73 +28,101 @@ class FirebaseAuthDataSource implements AuthDataSource {
 
   @override
   Future<User> signIn(String email, String password) async {
-    final cred = await firebaseAuth.signInWithEmailAndPassword(
-        email: email,
-        password: password
-    );
-    if (cred.user == null) {
-      throw FirebaseAuthException(code: 'user-not-found', message: 'Pengguna tidak ditemukan!');
+    try {
+      final cred = await firebaseAuth.signInWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      if (cred.user == null) {
+        throw FirebaseAuthException(code: 'user-not-found', message: 'Pengguna tidak ditemukan!');
+      }
+      return cred.user!;
+    } on FirebaseAuthException {
+      rethrow;
     }
-    return cred.user!;
   }
 
   @override
   Future<User> signUp(String email, String password, String name) async {
-    final account = await firebaseAuth.createUserWithEmailAndPassword(
-        email: email,
-        password: password
-    );
-    final user = account.user;
-    if (user == null) {
-      throw FirebaseAuthException(code: 'user-not-found', message: 'Gagal membuat akun!');
+    try {
+      final account = await firebaseAuth.createUserWithEmailAndPassword(
+          email: email,
+          password: password
+      );
+      final user = account.user;
+      if (user == null) {
+        throw FirebaseAuthException(code: 'user-not-found', message: 'Gagal membuat akun!');
+      }
+      await user.updateDisplayName(name);
+      return user;
+    } on FirebaseAuthException {
+      rethrow;
     }
-    await user.updateDisplayName(name);
-    return user;
   }
 
   @override
   Future<void> signOut() {
-    return firebaseAuth.signOut();
+    try {
+      return firebaseAuth.signOut();
+    } on FirebaseAuthException {
+      rethrow;
+    }
   }
 
   @override
   Future<void> changePassword(String oldPassword, String newPassword) async {
-    final user = firebaseAuth.currentUser;
-    if (user == null) {
-      throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+    try {
+      final user = firebaseAuth.currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+      }
+      final email = user.email;
+      if (email == null) {
+        throw FirebaseAuthException(code: 'no-email', message: 'Akun tidak memiliki email');
+      }
+      final cred = EmailAuthProvider.credential(email: email, password: oldPassword);
+      await user.reauthenticateWithCredential(cred);
+      await user.updatePassword(newPassword);
+      return;
+    } on FirebaseAuthException {
+      rethrow;
     }
-    final email = user.email;
-    if (email == null) {
-      throw FirebaseAuthException(code: 'no-email', message: 'Akun tidak memiliki email');
-    }
-    final cred = EmailAuthProvider.credential(email: email, password: oldPassword);
-    await user.reauthenticateWithCredential(cred);
-    await user.updatePassword(newPassword);
-    return;
   }
 
   @override
   Future<void> forgotPassword(String email) async {
-    return await firebaseAuth.sendPasswordResetEmail(email: email);
+    try {
+      return await firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException {
+      rethrow;
+    }
   }
 
   @override
   Future<void> updateName ({ required String name }) async {
-    final user = currentUser;
-    if (user == null) {
-      throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+    try {
+      final user = currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+      }
+      await user.updateDisplayName(name);
+      return;
+    } on FirebaseAuthException {
+      rethrow;
     }
-    await user.updateDisplayName(name);
-    return;
   }
 
   @override
   Future<void> reloadUser() async {
-    final user = currentUser;
-    if (user == null) {
-      throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+    try {
+      final user = currentUser;
+      if (user == null) {
+        throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
+      }
+      await user.reload();
+      return;
+    } on FirebaseAuthException {
+      rethrow;
     }
-    await user.reload();
-    return;
   }
 }
