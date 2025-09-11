@@ -32,7 +32,7 @@ class CustomShortButton extends StatelessWidget {
           height: 10,
           width: 10,
           child: CircularProgressIndicator(
-            color: AppColors.color2,
+            color: isOnTop ? AppColors.color2.withValues(alpha: 0.8) : AppColors.color2,
             backgroundColor: Colors.transparent,
           ),
         )
