@@ -38,7 +38,7 @@ class HomeView extends StatelessWidget {
             SliverPersistentHeader(
               pinned: false,
               delegate: _HomeHeaderDelegate(
-                child: HomeAppBar(name: user?.name,),
+                child: HomeAppBar(name: user?.name, imageUrl: user?.photoUrl,),
                 minHeight: 220,
                 maxHeight: 220
               ),

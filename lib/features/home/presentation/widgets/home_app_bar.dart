@@ -8,10 +8,12 @@ import 'package:mbelys/presentation/widgets/custom_avatar.dart';
 class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
     super.key,
-    this.name
+    this.name,
+    this.imageUrl
   });
 
   final String? name;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -62,7 +64,7 @@ class HomeAppBar extends StatelessWidget {
               onTap: (){
                 context.go(RouterPath.profile);
               },
-              child: const CustomAvatar()
+              child: CustomAvatar(photoUrl: imageUrl,)
             )
           ],
         ),
