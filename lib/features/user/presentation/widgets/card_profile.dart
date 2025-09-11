@@ -2,20 +2,16 @@ import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
+import "package:mbelys/features/user/domain/entities/user_entity.dart";
 import "package:mbelys/features/user/presentation/widgets/custom_change_button.dart";
 import "package:mbelys/presentation/widgets/custom_avatar.dart";
 
 class CardProfile extends StatelessWidget {
+  final UserEntity user;
   const CardProfile({
     super.key,
-    this.name,
-    this.email,
-    this.phone,
+    required this.user,
   });
-
-  final String? name;
-  final String? email;
-  final String? phone;
 
   @override
   Widget build(BuildContext context) {
@@ -48,25 +44,28 @@ class CardProfile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           spacing: 18,
           children: [
-            const CustomAvatar(radius: 48,),
+            CustomAvatar(
+              radius: 48,
+              photoUrl: user.photoUrl,
+            ),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    name ?? "Mbelys",
+                    user.name,
                     style: nameStyle,
                     softWrap: true,
                   ),
                   const SizedBox(height: 5,),
                   Text(
-                    email ?? "mbelys123@gmail.com",
+                    user.email,
                     style: informationStyle,
                     softWrap: true,
                   ),
                   const SizedBox(height: 3,),
                   Text(
-                    phone ?? "1234",
+                    user.phone,
                     style: informationStyle,
                   ),
                   const SizedBox(height: 10,),
