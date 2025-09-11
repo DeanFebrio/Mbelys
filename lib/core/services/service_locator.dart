@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mbelys/core/services/data/init_auth_data.dart';
 import 'package:mbelys/core/services/data/init_feedback_data.dart';
@@ -35,6 +36,7 @@ Future<void> setupLocator () async {
   sl.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
   sl.registerLazySingleton<FirebaseFirestore>(() => FirebaseFirestore.instance);
   sl.registerLazySingleton<FirebaseRemoteConfig>(() => FirebaseRemoteConfig.instance);
+  sl.registerLazySingleton<FirebaseStorage>(() => FirebaseStorage.instance);
 
   // data layer
   await initAuthData();
