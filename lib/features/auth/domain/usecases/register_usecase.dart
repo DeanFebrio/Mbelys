@@ -24,7 +24,7 @@ class RegisterUseCase {
       final authEntity = authResult.getOrNull();
 
       final userProfile = UserEntity(
-          uid: authEntity!.uid,
+          id: authEntity!.uid,
           email: email,
           name: name,
           phone: phone,
