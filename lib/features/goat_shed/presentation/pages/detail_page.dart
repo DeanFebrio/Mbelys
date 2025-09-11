@@ -38,13 +38,15 @@ class DetailView extends StatelessWidget {
         switch (vm.state) {
           case DetailState.initial :
           case DetailState.loading :
-            return const DetailBackgroundPage(
+            return DetailBackgroundPage(
+                shedImageUrl: vm.goatShed!.shedImageUrl!,
                 child: Center(
                   child: CircularProgressIndicator(),
                 )
             );
           case DetailState.error :
             return DetailBackgroundPage(
+                shedImageUrl: vm.goatShed!.shedImageUrl!,
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -71,7 +73,8 @@ class DetailView extends StatelessWidget {
             final shed = vm.goatShed;
 
             if (shed == null) {
-              return const DetailBackgroundPage(
+              return DetailBackgroundPage(
+                  shedImageUrl: shed!.shedImageUrl!,
                   child: CircularProgressIndicator()
               );
             }
@@ -92,6 +95,7 @@ class SuccessContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DetailBackgroundPage(
+      shedImageUrl: shed.shedImageUrl!,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
