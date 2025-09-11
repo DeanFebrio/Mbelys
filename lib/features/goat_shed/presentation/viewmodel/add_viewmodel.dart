@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mbelys/core/error/failure.dart';
@@ -28,6 +30,9 @@ class AddViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
+  File? _localPhoto;
+  File? get localPhoto => _localPhoto;
+
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final locationController = TextEditingController();
@@ -38,7 +43,13 @@ class AddViewModel extends ChangeNotifier {
     nameController.dispose();
     locationController.dispose();
     totalController.dispose();
+    _profileViewModel.removeListener(_onProfileChanged);
     super.dispose();
+  }
+
+  void setImage (File image){
+    _localPhoto = image;
+    notifyListeners();
   }
 
   AsyncResult<void> addGoatShed () async {
@@ -56,14 +67,14 @@ class AddViewModel extends ChangeNotifier {
     try {
       final user = _profileViewModel.user;
       final goatShed = GoatShedEntity(
-          id: "",
-          name: nameController.text.trim(),
-          location: locationController.text.trim(),
-          total: int.parse(totalController.text.trim()),
-          ownerId: user!.uid
+          shedId: "",
+          shedName: nameController.text.trim(),
+          shedLocation: locationController.text.trim(),
+          totalGoats: int.parse(totalController.text.trim()),
+          ownerId: user!.id
       );
 
-      final result = await createGoatShed.call(goatShed: goatShed);
+      final result = await createGoatShed.call(goatShed: goatShed, imageFile: _localPhoto!);
 
       result.fold(
               (failure) {
