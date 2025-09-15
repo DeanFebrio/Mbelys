@@ -1,5 +1,4 @@
 import "package:flutter/material.dart";
-import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
 void customDialog(
@@ -7,7 +6,7 @@ void customDialog(
     String titleText,
     String contentText,
     String buttonText,
-    String path
+    VoidCallback onPressed
     ){
   showDialog(
       context: context,
@@ -37,9 +36,7 @@ void customDialog(
           ),
           actions: [
             TextButton(
-                onPressed: (){
-                  context.go(path);
-                },
+                onPressed: onPressed,
                 style: TextButton.styleFrom(
                     backgroundColor: AppColors.color9
                 ),
