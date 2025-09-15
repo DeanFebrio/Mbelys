@@ -161,7 +161,7 @@ class ErrorSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              "assets/images/not_found.png",
+              "assets/images/error.png",
               height: 180,
               width: 180,
             ),
