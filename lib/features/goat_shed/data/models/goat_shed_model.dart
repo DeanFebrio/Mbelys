@@ -61,4 +61,17 @@ class GoatShedModel extends GoatShedEntity {
       'updatedAt': updatedAt,
     };
   }
+
+  GoatShedEntity toEntity () {
+    return GoatShedEntity(
+        shedId: shedId,
+        shedName: shedName,
+        shedLocation: shedLocation,
+        totalGoats: totalGoats,
+        ownerId: ownerId,
+        shedImageUrl: shedImageUrl,
+        createdAt: createdAt,
+        updatedAt: updatedAt
+    );
+  }
 }
