@@ -71,10 +71,10 @@ class FirestoreUserDataSource implements UserDataSource {
 
   @override
   Future<void> changePhoto ({ required String uid, required File file }) async {
-    final userRef = firestore.collection("users").doc(uid);
-    String? oldPath;
-
     try {
+      final userRef = firestore.collection("users").doc(uid);
+      String? oldPath;
+
       final snap = await userRef.get();
       oldPath = snap.data()?['photoUrl'] as String?;
 
