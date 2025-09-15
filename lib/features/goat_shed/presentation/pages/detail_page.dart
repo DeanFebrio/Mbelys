@@ -1,5 +1,7 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
+import "package:mbelys/core/router/router.dart";
 import "package:mbelys/core/services/service_locator.dart";
 import "package:mbelys/features/goat_shed/domain/entities/goat_shed_entity.dart";
 import "package:mbelys/features/goat_shed/presentation/Widgets/custom_edit_button.dart";
@@ -39,14 +41,14 @@ class DetailView extends StatelessWidget {
           case DetailState.initial :
           case DetailState.loading :
             return DetailBackgroundPage(
-                shedImageUrl: vm.goatShed!.shedImageUrl!,
+                shedImageUrl: null,
                 child: Center(
                   child: CircularProgressIndicator(),
                 )
             );
           case DetailState.error :
             return DetailBackgroundPage(
-                shedImageUrl: vm.goatShed!.shedImageUrl!,
+                shedImageUrl: null,
                 child: Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -111,7 +113,12 @@ class SuccessContent extends StatelessWidget {
                     color: AppColors.color9
                 ),
               ),
-              const CustomEditButton()
+              CustomEditButton(
+                onPressed: () => context.goNamed(
+                    RouterName.edit,
+                    pathParameters: {"shedId" : shed.shedId}
+                ),
+              )
             ],
           ),
           const SizedBox(height: 10,),

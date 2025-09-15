@@ -1,16 +1,28 @@
+import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/presentation/widgets/custom_back_button.dart";
+import "package:shimmer/shimmer.dart";
 
 class DetailBackgroundPage extends StatelessWidget {
   final Widget child;
-  final String shedImageUrl;
+  final String? shedImageUrl;
 
   const DetailBackgroundPage({
     super.key,
     required this.child,
-    required this.shedImageUrl
+    this.shedImageUrl
   });
+
+  Widget buildPlaceHolder () {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[300]!,
+      highlightColor: Colors.grey[100]!,
+      child: Container(
+        color: Colors.white,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +31,22 @@ class DetailBackgroundPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
+          SizedBox(
             height: screenSize.height * 0.3,
             width: screenSize.width,
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: NetworkImage(
-                    shedImageUrl
-                  ),
-                fit: BoxFit.cover
-              )
-            ),
+            child: (shedImageUrl != null && shedImageUrl!.isNotEmpty)
+                ? CachedNetworkImage(
+                    imageUrl: shedImageUrl!,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey[300]!,
+                      highlightColor: Colors.grey[100]!,
+                      child: Container(
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : buildPlaceHolder()
           ),
           Positioned(
             top: 50,
