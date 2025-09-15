@@ -19,28 +19,35 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => sl<RegisterViewModel>(),
-      child: Consumer<RegisterViewModel>(
-        builder: (context, vm, child) {
-          return Stack(
-            children: [
-              RegisterView(),
-              if (vm.state == RegisterState.loading)
-                Container(
-                  color: Colors.black12,
-                  child: const Center(
-                    child: CircularProgressIndicator(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-            ],
-          );
-        }
-      )
+      create: (_) => sl<RegisterViewModel>(),
+      child: const _RegisterContent(),
     );
   }
 }
+
+class _RegisterContent extends StatelessWidget {
+  const _RegisterContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final vm = context.watch<RegisterViewModel>();
+    return Stack(
+      children: [
+        RegisterView(),
+        if (vm.state == RegisterState.loading)
+          Container(
+            color: Colors.black12,
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 
 class RegisterView extends StatelessWidget {
   const RegisterView({super.key});

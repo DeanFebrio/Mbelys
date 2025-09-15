@@ -8,6 +8,9 @@ enum RegisterState { initial, loading, success, error }
 
 class RegisterViewModel extends ChangeNotifier {
   final RegisterUseCase registerUseCase;
+  RegisterViewModel ({ required this.registerUseCase});
+
+  bool isDisposed = false;
 
   RegisterState _state = RegisterState.initial;
   RegisterState get state => _state;
@@ -15,26 +18,12 @@ class RegisterViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
-  RegisterViewModel ({ required this.registerUseCase});
-
   final formKey = GlobalKey<FormState>();
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
-
-  bool isDisposed = false;
-
-  @override
-  void dispose() {
-    isDisposed = true;
-    emailController.dispose();
-    passwordController.dispose();
-    nameController.dispose();
-    phoneController.dispose();
-    super.dispose();
-  }
 
   AsyncResult<UserEntity> register () async {
     if (!formKey.currentState!.validate()) return err(AuthFailure("Pendaftaran gagal!"));
@@ -89,5 +78,15 @@ class RegisterViewModel extends ChangeNotifier {
     if (!RegExp(r'^[0-9]+$').hasMatch(value)) return "Nomor telepon harus angka";
     if (value.length < 10 || value.length > 13) return "Nomor telepon harus 10-13 angka";
     return null;
+  }
+
+  @override
+  void dispose() {
+    isDisposed = true;
+    emailController.dispose();
+    passwordController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
+    super.dispose();
   }
 }
