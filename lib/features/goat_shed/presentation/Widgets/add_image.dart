@@ -1,18 +1,23 @@
 import 'dart:io';
-import "package:flutter/material.dart";
-import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/features/goat_shed/presentation/viewmodel/add_viewmodel.dart";
-import "package:mbelys/presentation/widgets/custom_pick_image.dart";
-import "package:mbelys/presentation/widgets/custom_short_button.dart";
-import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:mbelys/core/constant/app_colors.dart';
+import 'package:mbelys/presentation/widgets/custom_short_button.dart';
 
 class AddImage extends StatelessWidget {
-  const AddImage({super.key});
+  final File? localPhoto;
+  final Future<File?> Function() pickImage;
+  final void Function(File file) onPicked;
+
+  const AddImage({
+    super.key,
+    required this.pickImage,
+    required this.onPicked,
+    this.localPhoto,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<AddViewModel>();
-    final File? selectedImage = vm.localPhoto;
+    final hasLocal = localPhoto != null;
 
     return Container(
       width: 330,
@@ -20,31 +25,22 @@ class AddImage extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.color6,
         borderRadius: BorderRadius.circular(10),
-        border: selectedImage != null ? Border.all(color: AppColors.color9, width: 2) : null,
+        border: hasLocal ? Border.all(color: AppColors.color9, width: 2) : null,
       ),
+      clipBehavior: Clip.antiAlias,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          if (selectedImage != null)
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.file(
-                selectedImage,
-                fit: BoxFit.cover,
-                width: 330,
-                height: 150,
-              ),
-            ),
+          if (hasLocal)
+            Image.file(localPhoto!, fit: BoxFit.cover),
           Center(
             child: CustomShortButton(
               onTap: () async {
-                final File? imageFile = await CustomPickImage.showImagePickerOptions(context);
-                if (imageFile != null) {
-                  vm.setImage(imageFile);
-                }
+                final file = await pickImage();
+                if (file != null) onPicked(file);
               },
-              buttonText: selectedImage != null ? "Ganti Gambar" : "Tambah Gambar",
-              isOnTop:  selectedImage != null ? true : false,
+              buttonText: hasLocal ? "Ganti Gambar" : "Tambah Gambar",
+              isOnTop: hasLocal,
             ),
           ),
         ],
