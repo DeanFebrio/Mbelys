@@ -1,8 +1,10 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
 import "package:mbelys/core/services/service_locator.dart";
 import "package:mbelys/features/goat_shed/presentation/Widgets/add_image.dart";
+import "package:mbelys/features/goat_shed/presentation/Widgets/custom_pick_image.dart";
 import "package:mbelys/features/goat_shed/presentation/viewmodel/add_viewmodel.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
@@ -64,7 +66,11 @@ class AddView extends StatelessWidget {
                       style: formTextStyle,
                     ),
                     const SizedBox(height: 5,),
-                    AddImage(),
+                    AddImage(
+                      localPhoto: vm.localPhoto,
+                      onPicked: vm.setImage,
+                      pickImage: () => CustomPickImage.showImagePickerOptions(context),
+                    ),
                     const SizedBox(height: 15,),
                     Text(
                       "Lokasi Kandang",
@@ -102,7 +108,7 @@ class AddView extends StatelessWidget {
                           "Kandang baru Anda kini terintegrasi dengan perangkat IoT. "
                               "Pemantauan suara akan segera dimulai.",
                           "Baik",
-                          RouterPath.home
+                          () => context.goNamed(RouterName.home)
                       );
                     }
                   },
