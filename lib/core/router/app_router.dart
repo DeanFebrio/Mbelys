@@ -9,6 +9,7 @@ import 'package:mbelys/features/auth/presentation/pages/register_page.dart';
 import 'package:mbelys/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:mbelys/features/goat_shed/presentation/pages/add_page.dart';
 import 'package:mbelys/features/goat_shed/presentation/pages/detail_page.dart';
+import 'package:mbelys/features/goat_shed/presentation/pages/edit_page.dart';
 import 'package:mbelys/features/home/presentation/pages/home_page.dart';
 import 'package:mbelys/features/user/presentation/pages/edit_profile_page.dart';
 import 'package:mbelys/features/feedback/presentation/pages/feedback_page.dart';
@@ -90,7 +91,18 @@ class AppRouter {
                               builder: (context, state) {
                                 final shedId = state.pathParameters['shedId'];
                                 return DetailPage(shedId: shedId!);
-                              }
+                              },
+                              routes: [
+                                GoRoute(
+                                    path: 'edit',
+                                    name: RouterName.edit,
+                                    parentNavigatorKey: _rootNavigatorKey,
+                                    builder: (context, state) {
+                                      final shedId = state.pathParameters['shedId'];
+                                      return EditPage(shedId: shedId!);
+                                    }
+                                )
+                              ]
                           ),
                         ]
                     ),

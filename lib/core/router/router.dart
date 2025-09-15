@@ -11,6 +11,7 @@ class RouterPath {
   // goat_shed feature
   static const detail = '/home/detail';
   static const add = '/add';
+  static const edit = '/edit';
 
   // user feature
   static const profile = '/profile';
@@ -36,6 +37,7 @@ class RouterName {
   // goat_shed feature
   static const detail = 'detail';
   static const add = 'add';
+  static const edit = 'edit';
 
   // user feature
   static const profile = 'profile';
