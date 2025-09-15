@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mbelys/core/error/failure.dart';
 import 'package:mbelys/core/utils/result.dart';
 import 'package:mbelys/features/auth/domain/usecases/update_name_usecase.dart';
@@ -11,7 +10,7 @@ import 'package:mbelys/features/user/domain/usecases/change_phone_usecase.dart';
 import 'package:mbelys/features/user/domain/usecases/change_photo_usecase.dart';
 import 'package:mbelys/features/user/presentation/viewmodels/profile_viewmodel.dart';
 
-enum EditState {initial, loading, success, error}
+enum EditProfileState {initial, loading, success, error}
 
 class EditProfileViewModel extends ChangeNotifier {
   final ChangeNameUseCase changeNameUseCase;
@@ -41,13 +40,11 @@ class EditProfileViewModel extends ChangeNotifier {
 
   UserEntity? get user => _profileViewModel.user;
 
-  EditState _state = EditState.initial;
-  EditState get state => _state;
+  EditProfileState _state = EditProfileState.initial;
+  EditProfileState get state => _state;
 
   String? _error;
   String? get error => _error;
-
-  final _picker = ImagePicker();
 
   File? _localPhoto;
   File? get localPhoto => _localPhoto;
@@ -77,9 +74,9 @@ class EditProfileViewModel extends ChangeNotifier {
   }
 
   AsyncVoidResult saveChanges () async {
-    if (_state == EditState.loading) return okUnit();
+    if (_state == EditProfileState.loading) return okUnit();
 
-    _state = EditState.loading;
+    _state = EditProfileState.loading;
     _error = null;
     notifyListeners();
 
@@ -92,7 +89,7 @@ class EditProfileViewModel extends ChangeNotifier {
       final phone = phoneController.text.trim();
 
       if (!(formKey.currentState?.validate() ?? true)) {
-        _state = EditState.error;
+        _state = EditProfileState.error;
         _error = "Periksa kembali input";
         notifyListeners();
         return err(ValidationFailure("Periksa kembali input"));
@@ -115,7 +112,7 @@ class EditProfileViewModel extends ChangeNotifier {
         final didFail = res.fold(
           (failure) {
             _error = failure.message;
-            _state = EditState.error;
+            _state = EditProfileState.error;
             notifyListeners();
             return true;
           },
@@ -129,34 +126,15 @@ class EditProfileViewModel extends ChangeNotifier {
         await Future.wait(futures);
       }
 
-      _state = EditState.success;
+      _state = EditProfileState.success;
       _localPhoto = null;
       notifyListeners();
       return okUnit();
     } catch (e) {
-      _state = EditState.error;
+      _state = EditProfileState.error;
       _error = "Gagal melakukan perubahan!";
       notifyListeners();
       return err(ValidationFailure(e.toString()));
-    }
-  }
-
-  Future<void> pickPhoto (ImageSource source) async {
-    try {
-      final XFile? picked = await _picker.pickImage(
-          source: source,
-        imageQuality: 85,
-        maxWidth: 1024
-      );
-
-      if (picked == null) return;
-
-      _localPhoto = File(picked.path);
-      notifyListeners();
-    } catch (e) {
-      _error = "Gagal memilih foto";
-      _state = EditState.error;
-      notifyListeners();
     }
   }
 

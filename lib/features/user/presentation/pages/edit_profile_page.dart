@@ -10,7 +10,7 @@ import "package:mbelys/features/user/presentation/widgets/custom_change_button.d
 import "package:mbelys/features/user/presentation/widgets/edit_profile_background_page.dart";
 import "package:mbelys/features/user/presentation/widgets/edit_custom_button.dart";
 import "package:mbelys/presentation/widgets/custom_avatar.dart";
-import "package:mbelys/presentation/widgets/custom_pick_image.dart";
+import "package:mbelys/features/goat_shed/presentation/Widgets/custom_pick_image.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
 import "package:mbelys/presentation/widgets/custom_snackbar.dart";
 import "package:mbelys/presentation/widgets/custom_text_input.dart";
@@ -103,17 +103,17 @@ class EditProfileView extends StatelessWidget {
               ),
               const SizedBox(height: 30,),
               CustomShortButton(
-                  onTap: state == EditState.loading ? null : () async {
+                  onTap: state == EditProfileState.loading ? null : () async {
                     await vm.saveChanges();
                     if (!context.mounted) return;
-                    if (vm.state == EditState.error) {
+                    if (vm.state == EditProfileState.error) {
                       showErrorSnackBar(context, vm.error);
-                    } else if (vm.state == EditState.success) {
+                    } else if (vm.state == EditProfileState.success) {
                       context.go(RouterPath.profile);
                     }
                   },
                   buttonText: "Simpan",
-                isLoading: state == EditState.loading,
+                isLoading: state == EditProfileState.loading,
               )
             ],
           ),
