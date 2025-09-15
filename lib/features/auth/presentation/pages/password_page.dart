@@ -96,7 +96,7 @@ class PasswordView extends StatelessWidget {
                         "Password berhasil diubah",
                         "Anda dapat menggunakan password baru untuk masuk aplikasi",
                         "Baik",
-                        RouterPath.home
+                        () => context.pop()
                     );
                   }
                 },

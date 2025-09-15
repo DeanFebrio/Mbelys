@@ -7,7 +7,6 @@ enum PasswordState { initial, loading, success, error }
 
 class PasswordViewModel extends ChangeNotifier {
   final ChangePasswordUseCase changePasswordUseCase;
-
   PasswordViewModel({
     required this.changePasswordUseCase
   });
@@ -23,14 +22,6 @@ class PasswordViewModel extends ChangeNotifier {
   final oldPasswordController = TextEditingController();
   final newPasswordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
-
-  @override
-  void dispose() {
-    oldPasswordController.dispose();
-    newPasswordController.dispose();
-    confirmPasswordController.dispose();
-    super.dispose();
-  }
 
   String? validatePassword (String? value) {
     if (value == null || value.isEmpty) return "Password Baru Wajib diisi";
@@ -74,4 +65,11 @@ class PasswordViewModel extends ChangeNotifier {
     return okUnit();
   }
 
+  @override
+  void dispose() {
+    oldPasswordController.dispose();
+    newPasswordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 }
