@@ -1,6 +1,6 @@
 import "package:flutter/material.dart";
+import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
-import "package:mbelys/core/router/router.dart";
 import "package:mbelys/core/services/service_locator.dart";
 import "package:mbelys/features/feedback/presentation/viewmodels/feedback_viewmodel.dart";
 import "package:mbelys/features/feedback/presentation/widgets/feedback_text_input.dart";
@@ -65,7 +65,7 @@ class FeedbackView extends StatelessWidget {
                           "Kritik & Saran terkirim",
                           "Terima kasih atas kritik dan saran yang berguna untuk membangun aplikasi",
                           "Baik",
-                          RouterPath.profile
+                            () => context.pop()
                         );
                       }
                     },
