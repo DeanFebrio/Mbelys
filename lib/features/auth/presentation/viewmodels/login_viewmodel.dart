@@ -8,11 +8,10 @@ enum LoginState { initial, loading, success, error }
 
 class LoginViewModel extends ChangeNotifier{
   final LoginUseCase _loginUseCase;
+  LoginViewModel({required LoginUseCase loginUseCase}) : _loginUseCase = loginUseCase;
 
   String? _error;
   String? get error => _error;
-
-  LoginViewModel({required LoginUseCase loginUseCase}) : _loginUseCase = loginUseCase;
 
   LoginState _state = LoginState.initial;
   LoginState get state => _state;
@@ -20,13 +19,6 @@ class LoginViewModel extends ChangeNotifier{
   final formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
 
   AsyncResult<AuthEntity> login () async {
     if (!formKey.currentState!.validate()) return err(AuthFailure("Masuk gagal!"));
@@ -66,5 +58,12 @@ class LoginViewModel extends ChangeNotifier{
     if (!value.contains(RegExp(r'[A-Z]'))) return "Password harus memiliki 1 huruf kapital";
     if (!value.contains(RegExp(r'[0-9]'))) return "Password harus memiliki 1 angka";
     return null;
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 }

@@ -20,28 +20,36 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-        create: (_) => sl<LoginViewModel>(),
-      child: Consumer<LoginViewModel>(
-          builder: (context, vm, child) {
-            return Stack(
-              children: [
-                LoginView(),
-                if (vm.state == LoginState.loading)
-                  Container(
-                    color: Colors.black12,
-                    child: const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-              ],
-            );
-          }
-      ),
+      create: (_) => sl<LoginViewModel>(),
+      child: const _LoginContent()
     );
   }
 }
+
+class _LoginContent extends StatelessWidget {
+  const _LoginContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final vm = context.watch<LoginViewModel>();
+
+    return Stack(
+      children: [
+        LoginView(),
+        if (vm.state == LoginState.loading)
+          Container(
+            color: Colors.black12,
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
