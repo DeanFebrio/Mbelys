@@ -11,7 +11,7 @@ class CustomAvatar extends StatelessWidget {
 
   const CustomAvatar({
     super.key,
-    this.radius = 37,
+    this.radius = 34,
     this.localImageFile,
     this.photoUrl,
     this.defaultAvatar = "assets/images/mbeky_avatar.png",

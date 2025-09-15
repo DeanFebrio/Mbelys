@@ -9,11 +9,11 @@ class HomeAppBar extends StatelessWidget {
   const HomeAppBar({
     super.key,
     this.name,
-    this.imageUrl
+    this.profileUrl
   });
 
   final String? name;
-  final String? imageUrl;
+  final String? profileUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -21,52 +21,53 @@ class HomeAppBar extends StatelessWidget {
     return ClipPath(
       clipper: CurvedClipper(),
       child: Container(
-        padding: const EdgeInsets.only(right: 30, left: 30, bottom: 20, top: 15),
-        height: 220,
+        padding: const EdgeInsets.only(right: 30, left: 30),
         width: screenWidth,
         color: AppColors.color9,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          spacing: 15,
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Selamat Datang",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontFamily: "Poppins",
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.color11,
+        child: Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 30,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Selamat Datang",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.color11,
+                      ),
                     ),
-                  ),
-                  AutoSizeText(
-                    name ?? "Peternak",
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontFamily: "Poppins",
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.color2
-                    ),
-                    maxLines: 2,
-                    softWrap: true,
-                    minFontSize: 26,
-                    overflow: TextOverflow.ellipsis,
-                  )
-                ],
+                    AutoSizeText(
+                      name ?? "Peternak",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.color2
+                      ),
+                      maxLines: 1,
+                      softWrap: true,
+                      minFontSize: 24,
+                      overflow: TextOverflow.ellipsis,
+                    )
+                  ],
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: (){
-                context.go(RouterPath.profile);
-              },
-              child: CustomAvatar(photoUrl: imageUrl,)
-            )
-          ],
+              GestureDetector(
+                onTap: (){
+                  context.go(RouterPath.profile);
+                },
+                child: CustomAvatar(photoUrl: profileUrl,)
+              )
+            ],
+          ),
         ),
       ),
     );

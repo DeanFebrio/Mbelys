@@ -4,6 +4,7 @@ import "package:mbelys/core/services/service_locator.dart";
 import "package:mbelys/features/home/presentation/viewmodel/home_viewmodel.dart";
 import "package:mbelys/features/home/presentation/widgets/card_goat_shed.dart";
 import "package:mbelys/features/home/presentation/widgets/home_app_bar.dart";
+import "package:mbelys/presentation/widgets/custom_short_button.dart";
 import "package:provider/provider.dart";
 
 class HomePage extends StatelessWidget {
@@ -27,94 +28,62 @@ class HomeView extends StatelessWidget {
     final user = vm.user;
 
     return RefreshIndicator(
+      color: AppColors.color10,
+      backgroundColor: AppColors.color3,
       onRefresh: () => vm.refresh(),
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(
-          maxWidth: 500
-        ),
-        child: CustomScrollView(
-          physics: const BouncingScrollPhysics(),
-          slivers: [
-            SliverPersistentHeader(
-              pinned: false,
-              delegate: _HomeHeaderDelegate(
-                child: HomeAppBar(name: user?.name, imageUrl: user?.photoUrl,),
-                minHeight: 220,
-                maxHeight: 220
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              SliverPersistentHeader(
+                pinned: false,
+                delegate: _HomeHeaderDelegate(
+                  child: HomeAppBar(name: user?.name, profileUrl: user?.photoUrl,),
+                  minHeight: 180,
+                  maxHeight: 180
+                ),
               ),
-            ),
-            ..._buildContent(vm)
-          ]
+              ...buildContent(vm),
+              const SliverToBoxAdapter(child: SizedBox(height: 24,))
+            ]
+          ),
         ),
       ),
     );
   }
 
-  List<Widget> _buildContent (HomeViewModel vm) {
-    switch (vm.state) {
-      case HomeState.initial:
-      case HomeState.loading:
-        return const [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Center(
-              child: CircularProgressIndicator(),
-            ),
-          )
-        ];
-      case HomeState.error:
-        return const [
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: ErrorSection(),
-          )
-        ];
-      case HomeState.success:
-        if (vm.sheds.isEmpty) {
-          return const [
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: NoGoatShed(),
-            )
-          ];
-        }
-        return [
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 25),
-            sliver: SliverList(
-                delegate: SliverChildListDelegate.fixed([
-                  Text(
-                    "Daftar Kandang",
-                    style: TextStyle(
-                        fontSize: 32,
-                        fontFamily: "Poppins",
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.color9
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                ])
-            ),
+  List<Widget> buildContent (HomeViewModel vm) {
+    return switch (vm.state) {
+      HomeState.initial || HomeState.loading => [
+        const SliverToBoxAdapter(child: LoadingSection(key: ValueKey('loading'),),)
+      ],
+      HomeState.error => [
+        const SliverToBoxAdapter(child: ErrorSection(key: ValueKey('error'),),)
+      ],
+      HomeState.success when vm.sheds.isEmpty => [
+        const SliverToBoxAdapter(child: NoGoatShed(key: ValueKey('empty'),),)
+      ],
+      HomeState.success => [
+        const TitleSection(text: "Daftar Kandang"),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 0),
+          sliver: SliverList.separated(
+            itemCount: vm.sheds.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 25),
+            itemBuilder: (context, index) {
+              final shed = vm.sheds[index];
+              final isLast = index == vm.sheds.length - 1;
+              return Padding(
+                padding: EdgeInsets.only(bottom: isLast ? 50 : 0),
+                child: Center(child: CardGoatShed(shed: shed),),
+              );
+            },
           ),
-          SliverPadding(
-            padding: const EdgeInsets.all(0),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  final shed = vm.sheds[index];
-                  return Padding(
-                    padding: EdgeInsets.only(
-                      bottom: index == vm.sheds.length - 1 ? 50 : 25,
-                    ),
-                      child: Center(child: CardGoatShed(shed: shed),),
-                  );
-                },
-                childCount: vm.sheds.length,
-              ),
-            ),
-          )
-        ];
-    }
+        )
+      ]
+    };
   }
 }
 
@@ -148,6 +117,51 @@ class _HomeHeaderDelegate extends SliverPersistentHeaderDelegate {
   }
 }
 
+class TitleSection extends StatelessWidget {
+  final String text;
+  const TitleSection({
+    super.key,
+    required this.text
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+      sliver: SliverToBoxAdapter(
+        child: Text(
+          text,
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 32,
+            fontFamily: "Poppins",
+            fontWeight: FontWeight.w700,
+            color: AppColors.color9
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+class LoadingSection extends StatelessWidget {
+  const LoadingSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
+      child: Center(
+        child: CircularProgressIndicator(
+          color: AppColors.color12,
+        ),
+      ),
+    );
+  }
+}
+
+
 class ErrorSection extends StatelessWidget {
   const ErrorSection({
     super.key,
@@ -156,7 +170,7 @@ class ErrorSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 40),
       child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -175,9 +189,9 @@ class ErrorSection extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 5,),
+            const SizedBox(height: 8,),
             Text(
-              "Tolong hubungi admin Mbelys untuk informasi lebih lanjut",
+              "Silahkan coba lagi atau hubungi admin Mbelys.",
               style: TextStyle(
                   fontSize: 18,
                   fontFamily: "Mulish",
@@ -185,6 +199,11 @@ class ErrorSection extends StatelessWidget {
                   color: AppColors.color9
               ),
               textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 15,),
+            CustomShortButton(
+              buttonText: "Coba Lagi",
+              onTap: () => context.read<HomeViewModel>().refresh(),
             )
           ]
       ),
