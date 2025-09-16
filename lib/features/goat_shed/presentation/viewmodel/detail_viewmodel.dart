@@ -13,7 +13,7 @@ class DetailViewModel extends ChangeNotifier {
     required this.getGoatShedDetail,
     required this.shedId,
   }) {
-    fetchShedDetail();
+    subscribe(initial: true);
   }
 
   GoatShedEntity? _goatShed;
@@ -25,28 +25,50 @@ class DetailViewModel extends ChangeNotifier {
   DetailState _state = DetailState.initial;
   DetailState get state => _state;
 
+  bool _isRefreshing = false;
+  bool get isRefreshing => _isRefreshing;
+
   StreamSubscription<GoatShedEntity>? _shedSubs;
   bool _disposed = false;
 
-  void fetchShedDetail() {
-    _setState(DetailState.loading);
-    _errorMessage = null;
-
+  void subscribe({ bool initial = false }) {
     _shedSubs?.cancel();
+    if (initial) _setState(DetailState.loading);
+    _errorMessage = null;
 
     _shedSubs = getGoatShedDetail.call(shedId: shedId).listen(
           (shed) {
         _goatShed = shed;
         _setState(DetailState.success);
+        if (_isRefreshing) {
+          _isRefreshing = false;
+          notifyListeners();
+        }
       },
       onError: (_) {
         _errorMessage = "Gagal mengambil data kandang kambing!";
-        _setState(DetailState.error);
+        if (_goatShed == null) {
+          _setState(DetailState.error);
+        } else {
+          _isRefreshing = false;
+          notifyListeners();
+        }
       },
     );
   }
 
-  void retry() => fetchShedDetail();
+  Future<void> refresh() async {
+    if (_disposed) return;
+    if (_goatShed == null) {
+      subscribe(initial: true);
+    } else {
+      _isRefreshing = true;
+      notifyListeners();
+      subscribe(initial: false);
+    }
+  }
+
+  void retry() => subscribe(initial: true);
 
   void _setState(DetailState s) {
     if (_disposed) return;

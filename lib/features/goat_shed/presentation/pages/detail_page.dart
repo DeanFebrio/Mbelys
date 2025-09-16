@@ -11,6 +11,7 @@ import "package:mbelys/features/goat_shed/presentation/Widgets/detail_goat_descr
 import "package:mbelys/features/goat_shed/presentation/Widgets/detail_goat_suggestion.dart";
 import "package:mbelys/features/goat_shed/presentation/Widgets/detail_goat_status.dart";
 import "package:mbelys/features/goat_shed/presentation/viewmodel/detail_viewmodel.dart";
+import "package:mbelys/presentation/widgets/custom_loading.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
 import "package:provider/provider.dart";
 
@@ -41,13 +42,15 @@ class DetailView extends StatelessWidget {
           case DetailState.initial :
           case DetailState.loading :
             return DetailBackgroundPage(
-                shedImageUrl: null,
-                child: Center(
-                  child: CircularProgressIndicator(),
-                )
+              onRefresh: null,
+              shedImageUrl: null,
+              child: Center(
+                child: CustomLoading(),
+              )
             );
           case DetailState.error :
             return DetailBackgroundPage(
+                onRefresh: null,
                 shedImageUrl: null,
                 child: Center(
                   child: Column(
@@ -76,11 +79,17 @@ class DetailView extends StatelessWidget {
 
             if (shed == null) {
               return DetailBackgroundPage(
-                  shedImageUrl: shed!.shedImageUrl!,
-                  child: CircularProgressIndicator()
+                  onRefresh: null,
+                  shedImageUrl: null,
+                  child: Center(
+                    child: CustomLoading(),
+                  )
               );
             }
-            return SuccessContent(shed: shed,);
+            return SuccessContent(
+              onRefresh: vm.refresh,
+              shed: shed,
+            );
         }
       },
     );
@@ -89,14 +98,17 @@ class DetailView extends StatelessWidget {
 
 class SuccessContent extends StatelessWidget {
   final GoatShedEntity shed;
+  final Future<void> Function()? onRefresh;
   const SuccessContent({
     super.key,
-    required this.shed
+    required this.shed,
+    this.onRefresh
   });
 
   @override
   Widget build(BuildContext context) {
     return DetailBackgroundPage(
+      onRefresh: onRefresh,
       shedImageUrl: shed.shedImageUrl!,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
