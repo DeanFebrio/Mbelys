@@ -21,14 +21,13 @@ class HomeAppBar extends StatelessWidget {
     return ClipPath(
       clipper: CurvedClipper(),
       child: Container(
-        padding: const EdgeInsets.only(right: 30, left: 30),
+        padding: const EdgeInsets.only(right: 30, left: 30, bottom: 10),
         width: screenWidth,
         color: AppColors.color9,
         child: Center(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 30,
             children: [
               Expanded(
                 child: Column(
@@ -60,6 +59,7 @@ class HomeAppBar extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(width: 20,),
               GestureDetector(
                 onTap: (){
                   context.go(RouterPath.profile);
