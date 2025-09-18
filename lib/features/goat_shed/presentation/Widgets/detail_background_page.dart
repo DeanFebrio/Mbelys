@@ -81,7 +81,7 @@ class DetailBackgroundPage extends StatelessWidget {
     final screenSize = MediaQuery.of(context).size;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
+      value: SystemUiOverlayStyle.dark,
       child: Scaffold(
         body: RefreshIndicator(
           onRefresh: onRefresh ?? () async {},
