@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mbelys/core/constant/app_colors.dart';
 import 'package:mbelys/core/services/service_locator.dart';
-import 'package:mbelys/features/goat_shed/presentation/Widgets/add_image.dart';
+import 'package:mbelys/features/goat_shed/presentation/Widgets/custom_add_image.dart';
 import 'package:mbelys/features/goat_shed/presentation/viewmodel/edit_viewmodel.dart';
 import 'package:mbelys/presentation/widgets/custom_background_page.dart';
 import 'package:mbelys/presentation/widgets/custom_dialog.dart';
@@ -42,6 +42,7 @@ class EditView extends StatelessWidget {
 
     final vm = context.watch<EditViewModel>();
     final state = vm.state;
+    final shed = vm.shed;
 
     return CustomBackgroundPage(
         title: "Edit Kandang",
@@ -62,6 +63,7 @@ class EditView extends StatelessWidget {
                     CustomTextInput(
                       textEditingController: vm.nameController,
                       validator: vm.validateName,
+                      hintText: shed?.shedName,
                     ),
                     const SizedBox(height: 15,),
                     Text(
@@ -69,7 +71,7 @@ class EditView extends StatelessWidget {
                       style: formTextStyle,
                     ),
                     const SizedBox(height: 5,),
-                    AddImage(
+                    CustomAddImage(
                       localPhoto: vm.localPhoto,
                       onPicked: vm.setImage,
                       pickImage: () => CustomPickImage.showImagePickerOptions(context),
@@ -82,6 +84,9 @@ class EditView extends StatelessWidget {
                     const SizedBox(height: 5,),
                     CustomTextInput(
                       textEditingController: vm.locationController,
+                      validator: vm.validateLocation,
+                      hintText: shed?.shedLocation,
+                      maxLines: 3,
                     ),
                     const SizedBox(height: 10,),
                     Text(
@@ -92,6 +97,8 @@ class EditView extends StatelessWidget {
                     CustomTextInput(
                       textEditingController: vm.totalController,
                       validator: vm.validateTotal,
+                      isNumber: true,
+                      hintText: shed?.totalGoats.toString(),
                     ),
                   ],
                 ),
@@ -109,7 +116,10 @@ class EditView extends StatelessWidget {
                         "Berhasil diubah",
                         "Perubahan pada kandang berhasil disimpan",
                         "Baik",
-                        () => context.pop()
+                        () {
+                          context.pop();
+                          context.pop();
+                        }
                     );
                   }
                 },

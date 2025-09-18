@@ -55,27 +55,6 @@ class EditViewModel extends ChangeNotifier {
   final locationController = TextEditingController();
   final totalController = TextEditingController();
 
-  String? validateName (String? value) {
-    if (value != null && value.isNotEmpty) {
-      if (value.length < 3 || value.length > 20) return "Panjang nama kandang 3-20 karakter";
-    }
-    return null;
-  }
-
-  // String? validateLocation (String? value) {
-  //   if (value == null || value.isEmpty) return "Lokasi kandang wajib diisi";
-  //   return null;
-  // }
-
-  String? validateTotal (String? value) {
-    if (value != null && value.isNotEmpty) {
-      if (!RegExp(r'^[0-9]+$').hasMatch(value)) return "Jumlah kambing harus angka";
-      final n = int.tryParse(value);
-      if (n == null || n < 0) return "Jumlah kambing tidak boleh negatif";
-    }
-    return null;
-  }
-
   void setImage (File image) {
     _localPhoto = image;
     notifyListeners();
@@ -83,9 +62,29 @@ class EditViewModel extends ChangeNotifier {
 
   AsyncVoidResult saveChanges () async {
     if (_state == EditState.loading) return okUnit();
+
+    if (!(formKey.currentState?.validate() ?? false)) {
+      _state = EditState.error;
+      _errorMessage = "Periksa kembali input";
+      notifyListeners();
+      return errAsync(ValidationFailure("Periksa kembali input"));
+    }
+
     if (shed == null) {
-      _handleFailure(ValidationFailure("Kandang tidak ditemukan!"));
-      return err(ValidationFailure("Kandang tidak ditemukan!"));
+      _handleFailure(DatabaseFailure("Kandang tidak ditemukan!"));
+      return err(DatabaseFailure("Kandang tidak ditemukan!"));
+    }
+
+    final shedName = nameController.text.trim();
+    final shedLocation = locationController.text.trim();
+    final totalGoats = totalController.text.trim();
+    final imageFile = _localPhoto;
+
+    if (shedName.isEmpty && shedLocation.isEmpty && totalGoats.isEmpty && imageFile == null) {
+      _state = EditState.error;
+      _errorMessage = "Periksa kembali input";
+      notifyListeners();
+      return err(ValidationFailure("Periksa kembali input"));
     }
 
     _state = EditState.loading;
@@ -93,18 +92,6 @@ class EditViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      if (!(formKey.currentState?.validate() ?? false)) {
-        _state = EditState.error;
-        _errorMessage = "Periksa kembali input";
-        notifyListeners();
-        return errAsync(ValidationFailure("Periksa kembali input"));
-      }
-
-      final shedName = nameController.text.trim();
-      final shedLocation = locationController.text.trim();
-      final totalGoats = totalController.text.trim();
-      final imageFile = _localPhoto;
-
       if (shedName.isNotEmpty && shedName != shed!.shedName) {
         final result = await changeShedNameUseCase.call(shedId: shed!.shedId, newName: shedName);
         if (result.isLeft()) return _handleFailure(result.failureOrNull()!);
@@ -148,6 +135,30 @@ class EditViewModel extends ChangeNotifier {
     return errVoidAsync(failure);
   }
 
+  String? validateName (String? name) {
+    final value = (name ?? "").trim();
+    if (value.isEmpty) return null;
+    if (value == shed?.shedName) return "Nama kandang tidak berubah";
+    if (value.length < 3 || value.length > 20) return "Panjang nama kandang 3-20 karakter";
+    return null;
+  }
+
+  String? validateLocation (String? location) {
+    final value = (location ?? "").trim();
+    if (value.isEmpty) return null;
+    if (value.length > 250) return "Panjang lokasi kandang maksimal 250 karakter";
+    return null;
+  }
+
+  String? validateTotal(String? total) {
+    final value = (total ?? "").trim();
+    if (value.isEmpty) return null;
+    final n = int.tryParse(value);
+    if (n == shed?.totalGoats) return "Jumlah kambing tidak berubah";
+    if (n == null) return "Jumlah kambing harus angka";
+    if (n < 1) return "Jumlah kambing minimal 1";
+    return null;
+  }
 
   @override
   void dispose() {
