@@ -53,25 +53,39 @@ class AddViewModel extends ChangeNotifier {
   }
 
   AsyncResult<void> addGoatShed () async {
-    if(!formKey.currentState!.validate()) {
+    if(!(formKey.currentState?.validate() ?? false)) {
       _state = AddState.error;
       _errorMessage = "Input tidak valid!";
       notifyListeners();
       return err(NetworkFailure("Input tidak valid!"));
     }
 
+    if (localPhoto == null) {
+      _state = AddState.error;
+      _errorMessage = "Foto tidak boleh kosong!";
+      notifyListeners();
+      return err(StorageFailure("Foto tidak boleh kosong!"));
+    }
+
     _state = AddState.loading;
     _errorMessage = null;
     notifyListeners();
 
+    final user = _profileViewModel.user;
+    if (user == null) {
+      _state = AddState.error;
+      _errorMessage = "Pengguna tidak ditemukan!";
+      notifyListeners();
+      return err(DatabaseFailure("Pengguna tidak ditemukan!"));
+    }
+
     try {
-      final user = _profileViewModel.user;
       final goatShed = GoatShedEntity(
           shedId: "",
           shedName: nameController.text.trim(),
           shedLocation: locationController.text.trim(),
           totalGoats: int.parse(totalController.text.trim()),
-          ownerId: user!.id
+          ownerId: user.id
       );
 
       final result = await createGoatShed.call(goatShed: goatShed, imageFile: _localPhoto!);
@@ -99,20 +113,26 @@ class AddViewModel extends ChangeNotifier {
     }
   }
 
-  String? validateName (String? value) {
-    if (value == null || value.isEmpty) return "Nama kandang wajib diisi";
+  String? validateName (String? name) {
+    final value = (name ?? "").trim();
+    if (value.isEmpty) return "Nama kandang wajib diisi!";
     if (value.length < 3 || value.length > 20) return "Panjang nama kandang 3-20 karakter";
     return null;
   }
 
-  String? validateLocation (String? value) {
-    if (value == null || value.isEmpty) return "Lokasi kandang wajib diisi";
+  String? validateLocation (String? location) {
+    final value = (location ?? "").trim();
+    if (value.isEmpty) return "Lokasi kandang wajib diisi";
+    if (value.length > 250) return "Panjang lokasi kandang maksimal 250 karakter";
     return null;
   }
 
-  String? validateTotal (String? value) {
-    if (value == null || value.isEmpty) return "Jumlah kambing wajib diisi";
-    if (!RegExp(r'^[0-9]+$').hasMatch(value)) return "Jumlah kambing harus angka";
+  String? validateTotal(String? total) {
+    final value = (total ?? "").trim();
+    if (value.isEmpty) return "Jumlah kambing wajib diisi";
+    final n = int.tryParse(value);
+    if (n == null) return "Jumlah kambing harus angka";
+    if (n < 1) return "Jumlah kambing minimal 1";
     return null;
   }
 }

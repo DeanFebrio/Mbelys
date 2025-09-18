@@ -3,7 +3,7 @@ import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
 import "package:mbelys/core/services/service_locator.dart";
-import "package:mbelys/features/goat_shed/presentation/Widgets/add_image.dart";
+import "package:mbelys/features/goat_shed/presentation/Widgets/custom_add_image.dart";
 import "package:mbelys/features/goat_shed/presentation/Widgets/custom_pick_image.dart";
 import "package:mbelys/features/goat_shed/presentation/viewmodel/add_viewmodel.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
@@ -66,7 +66,7 @@ class AddView extends StatelessWidget {
                       style: formTextStyle,
                     ),
                     const SizedBox(height: 5,),
-                    AddImage(
+                    CustomAddImage(
                       localPhoto: vm.localPhoto,
                       onPicked: vm.setImage,
                       pickImage: () => CustomPickImage.showImagePickerOptions(context),
@@ -80,6 +80,7 @@ class AddView extends StatelessWidget {
                     CustomTextInput(
                       textEditingController: vm.locationController,
                       validator: vm.validateLocation,
+                      maxLines: 3,
                     ),
                     const SizedBox(height: 10,),
                     Text(
@@ -90,6 +91,7 @@ class AddView extends StatelessWidget {
                     CustomTextInput(
                       textEditingController: vm.totalController,
                       validator: vm.validateTotal,
+                      isNumber: true,
                     ),
                   ],
                 ),
