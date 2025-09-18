@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mbelys/features/feedback/data/models/email_model.dart';
-import 'package:emailjs/emailjs.dart' as emailJs;
+import 'package:emailjs/emailjs.dart' as email_js;
 
 class EmailDataSource {
   Future<void> sendEmail ({required EmailModel emailModel}) async {
@@ -10,21 +10,20 @@ class EmailDataSource {
     final privateKey = dotenv.env['EMAILJS_PRIVATE_KEY'];
 
     try {
-      await emailJs.send(
+      await email_js.send(
         serviceId!,
         templateId!,
         emailModel.toJson(),
-        emailJs.Options(
+        email_js.Options(
           privateKey: privateKey,
           publicKey: publicKey
         )
       );
       return;
     } catch (e) {
-      if (e is emailJs.EmailJSResponseStatus) {
+      if (e is email_js.EmailJSResponseStatus) {
         print('ERROR... ${e.status}: ${e.text}');
       }
-      print(e.toString());
       throw Exception("Gagal mengirim email: ${e.toString()}");
     }
   }
