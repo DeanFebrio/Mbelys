@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:mbelys/core/constant/app_colors.dart';
 import 'package:mbelys/presentation/widgets/custom_short_button.dart';
 
-class AddImage extends StatelessWidget {
+class CustomAddImage extends StatelessWidget {
   final File? localPhoto;
   final Future<File?> Function() pickImage;
   final void Function(File file) onPicked;
 
-  const AddImage({
+  const CustomAddImage({
     super.key,
     required this.pickImage,
     required this.onPicked,
