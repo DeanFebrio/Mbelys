@@ -1,4 +1,5 @@
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/services/service_locator.dart";
 import "package:mbelys/features/home/presentation/viewmodel/home_viewmodel.dart";
@@ -27,27 +28,30 @@ class HomeView extends StatelessWidget {
     final vm = context.watch<HomeViewModel>();
     final user = vm.user;
 
-    return RefreshIndicator(
-      color: AppColors.color10,
-      backgroundColor: AppColors.color3,
-      onRefresh: () => vm.refresh(),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 500),
-          child: CustomScrollView(
-            physics: const ClampingScrollPhysics(),
-            slivers: [
-              SliverPersistentHeader(
-                pinned: false,
-                delegate: _HomeHeaderDelegate(
-                  child: HomeAppBar(name: user?.name, profileUrl: user?.photoUrl,),
-                  minHeight: 180,
-                  maxHeight: 180
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle.dark,
+      child: RefreshIndicator(
+        color: AppColors.color10,
+        backgroundColor: AppColors.color3,
+        onRefresh: () => vm.refresh(),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: CustomScrollView(
+              physics: const ClampingScrollPhysics(),
+              slivers: [
+                SliverPersistentHeader(
+                  pinned: false,
+                  delegate: _HomeHeaderDelegate(
+                    child: HomeAppBar(name: user?.name, profileUrl: user?.photoUrl,),
+                    minHeight: 180,
+                    maxHeight: 180
+                  ),
                 ),
-              ),
-              ...buildContent(vm),
-              const SliverToBoxAdapter(child: SizedBox(height: 24,))
-            ]
+                ...buildContent(vm),
+                const SliverToBoxAdapter(child: SizedBox(height: 24,))
+              ]
+            ),
           ),
         ),
       ),
@@ -71,7 +75,7 @@ class HomeView extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 0),
           sliver: SliverList.separated(
             itemCount: vm.sheds.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 25),
+            separatorBuilder: (builder, separator) => const SizedBox(height: 25),
             itemBuilder: (context, index) {
               final shed = vm.sheds[index];
               final isLast = index == vm.sheds.length - 1;
