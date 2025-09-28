@@ -3,9 +3,7 @@ import 'package:mbelys/features/user/domain/repositories/user_repository.dart';
 
 class WatchUserDataUseCase {
   final UserRepository userRepository;
-  WatchUserDataUseCase({
-    required this.userRepository,
-  });
+  WatchUserDataUseCase ({ required this.userRepository });
 
   Stream<UserEntity> call ({ required String userId }) {
     return userRepository.watchUserData(userId: userId);
