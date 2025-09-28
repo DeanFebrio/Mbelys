@@ -6,25 +6,15 @@ abstract class AuthRepository {
   Stream<AuthEntity?> get authStatusChanges;
   AuthEntity? get currentUser;
 
-  AsyncResult<AuthEntity> register ({
-    required String email,
-    required String password,
-    required String name,
-  });
+  AsyncResult<AuthEntity> register ({ required String email, required String password, required String name });
 
-  AsyncResult<AuthEntity> login ({
-    required String email,
-    required String password
-  });
+  AsyncResult<AuthEntity> login ({ required String email, required String password });
 
   AsyncVoidResult logout ();
 
-  AsyncVoidResult changePassword({
-    required String oldPassword,
-    required String newPassword,
-  });
+  AsyncVoidResult changePassword ({ required String oldPassword, required String newPassword });
 
-  AsyncVoidResult forgotPassword({required String email});
+  AsyncVoidResult forgotPassword ({ required String email });
 
   AsyncVoidResult updateName ({ required String name });
 

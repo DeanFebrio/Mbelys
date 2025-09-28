@@ -1,9 +1,9 @@
 class AuthEntity {
-  final String uid;
+  final String userId;
   final String email;
 
   const AuthEntity({
-    required this.uid,
+    required this.userId,
     required this.email,
   });
 }

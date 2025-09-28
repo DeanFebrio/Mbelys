@@ -4,21 +4,21 @@ abstract class AuthDataSource {
   Stream<User?> get authStateChanges;
   User? get currentUser;
 
-  Future<User> signIn (String email, String password);
-  Future<User> signUp (String email, String password, String name);
+  Future<User> signIn ({ required String email, required String password });
+  Future<User> signUp ({ required String email, required String password, required String name });
   Future<void> signOut ();
 
-  Future<void> forgotPassword (String email);
-  Future<void> changePassword (String oldPassword, String newPassword);
+  Future<void> forgotPassword ({ required String email });
+  Future<void> changePassword ({ required String oldPassword, required String newPassword });
 
   Future<void> updateName ({ required String name });
 
-  Future<void> reloadUser();
+  Future<void> reloadUser ();
 }
 
 class FirebaseAuthDataSource implements AuthDataSource {
   final FirebaseAuth firebaseAuth;
-  FirebaseAuthDataSource({required this.firebaseAuth});
+  FirebaseAuthDataSource ({ required this.firebaseAuth });
 
   @override
   Stream<User?> get authStateChanges => firebaseAuth.authStateChanges();
@@ -27,7 +27,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
   User? get currentUser => firebaseAuth.currentUser;
 
   @override
-  Future<User> signIn(String email, String password) async {
+  Future<User> signIn ({ required String email, required String password }) async {
     try {
       final cred = await firebaseAuth.signInWithEmailAndPassword(
           email: email,
@@ -43,7 +43,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
   }
 
   @override
-  Future<User> signUp(String email, String password, String name) async {
+  Future<User> signUp ({ required String email, required String password, required String name }) async {
     try {
       final account = await firebaseAuth.createUserWithEmailAndPassword(
           email: email,
@@ -61,7 +61,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
   }
 
   @override
-  Future<void> signOut() {
+  Future<void> signOut () {
     try {
       return firebaseAuth.signOut();
     } on FirebaseAuthException {
@@ -70,7 +70,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
   }
 
   @override
-  Future<void> changePassword(String oldPassword, String newPassword) async {
+  Future<void> changePassword ({ required String oldPassword, required String newPassword }) async {
     try {
       final user = firebaseAuth.currentUser;
       if (user == null) {
@@ -90,7 +90,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
   }
 
   @override
-  Future<void> forgotPassword(String email) async {
+  Future<void> forgotPassword ({ required String email }) async {
     try {
       return await firebaseAuth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException {
@@ -106,6 +106,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
         throw FirebaseAuthException(code: 'no-user', message: 'Pengguna belum masuk');
       }
       await user.updateDisplayName(name);
+      await user.reload();
       return;
     } on FirebaseAuthException {
       rethrow;
@@ -113,7 +114,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
   }
 
   @override
-  Future<void> reloadUser() async {
+  Future<void> reloadUser () async {
     try {
       final user = currentUser;
       if (user == null) {

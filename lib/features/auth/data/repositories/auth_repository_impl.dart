@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mbelys/core/error/auth_error_mapper.dart';
+import 'package:mbelys/core/error/failure.dart';
+import 'package:mbelys/core/utils/logger.dart';
 import 'package:mbelys/core/utils/result.dart';
 import 'package:mbelys/features/auth/data/datasources/auth_datasource.dart';
 import 'package:mbelys/features/auth/domain/entities/auth_entity.dart';
@@ -11,9 +13,9 @@ class AuthRepositoryImpl implements AuthRepository {
 
   const AuthRepositoryImpl ({ required this.authDataSource });
 
-  AuthEntity _mapUserToEntity(User user) {
+  AuthEntity mapUserToEntity ({ required User user }) {
     return AuthEntity(
-        uid: user.uid,
+        userId: user.uid,
         email: user.email ?? ""
     );
   }
@@ -21,33 +23,43 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Stream<AuthEntity?> get authStatusChanges {
     return authDataSource.authStateChanges.map((user) {
-      return user != null ? _mapUserToEntity(user) : null;
+      return user != null ? mapUserToEntity(user: user) : null;
     });
   }
 
   @override
   AuthEntity? get currentUser {
     final user = authDataSource.currentUser;
-    return user != null ? _mapUserToEntity(user) : null;
+    return user != null ? mapUserToEntity(user: user) : null;
   }
 
   @override
-  AsyncResult<AuthEntity> register ({required String email, required String password, required String name}) async {
+  AsyncResult<AuthEntity> register ({ required String email, required String password, required String name }) async {
     try {
-      final user = await authDataSource.signUp(email, password, name);
-      return ok(_mapUserToEntity(user));
-    } on FirebaseAuthException catch (e) {
+      final user = await authDataSource.signUp(email: email, password: password, name: name);
+      logInfoLazy(() => "✅ Successfully created user in auth: ${user.uid}");
+      return ok(mapUserToEntity(user: user));
+    } on FirebaseAuthException catch (e, stackTrace) {
+      logger.w("❌ Firebase Error in register", error: e, stackTrace: stackTrace);
       return err(mapFirebaseAuthError(e));
+    } catch (e, stackTrace) {
+      logger.e("💥 Error in register", error: e, stackTrace: stackTrace);
+      return err(UserFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 
   @override
-  AsyncResult<AuthEntity> login ({required String email, required String password}) async {
+  AsyncResult<AuthEntity> login ({ required String email, required String password }) async {
     try {
-      final user = await authDataSource.signIn(email, password);
-      return ok(_mapUserToEntity(user));
-    } on FirebaseAuthException catch (e) {
+      final user = await authDataSource.signIn(email: email, password: password);
+      logInfoLazy(() => "✅ Successfully logged in user in auth: ${user.uid}");
+      return ok(mapUserToEntity(user: user));
+    } on FirebaseAuthException catch (e, stackTrace) {
+      logger.w("❌ Firebase Error in login", error: e, stackTrace: stackTrace);
       return err(mapFirebaseAuthError(e));
+    } catch (e, stackTrace) {
+      logger.e("💥 Error in login", error: e, stackTrace: stackTrace);
+      return err(UserFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 
@@ -55,29 +67,44 @@ class AuthRepositoryImpl implements AuthRepository {
   AsyncVoidResult logout () async {
     try {
       await authDataSource.signOut();
-      return okUnit();
-    } on FirebaseAuthException catch (e) {
-      return err(mapFirebaseAuthError(e));
+      logInfoLazy(() => "✅ Successfully logged out user in auth: ${authDataSource.currentUser?.uid}");
+      return okVoidAsync();
+    } on FirebaseAuthException catch (e, stackTrace) {
+      logger.w("❌ Firebase Error in logout", error: e, stackTrace: stackTrace);
+      return errVoidAsync(mapFirebaseAuthError(e));
+    } catch (e, stackTrace) {
+      logger.e("💥 Error in logout", error: e, stackTrace: stackTrace);
+      return errVoidAsync(UserFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 
   @override
-  AsyncVoidResult changePassword({required String oldPassword, required String newPassword}) async {
+  AsyncVoidResult changePassword ({ required String oldPassword, required String newPassword }) async {
     try {
-      await authDataSource.changePassword(oldPassword, newPassword);
-      return okUnit();
-    } on FirebaseAuthException catch (e) {
-      return err(mapFirebaseAuthError(e));
+      await authDataSource.changePassword(oldPassword: oldPassword, newPassword: newPassword);
+      logInfoLazy(() => "✅ Successfully changed password");
+      return okVoidAsync();
+    } on FirebaseAuthException catch (e, stackTrace) {
+      logger.w("❌ Firebase Error in changePassword", error: e, stackTrace: stackTrace);
+      return errVoidAsync(mapFirebaseAuthError(e));
+    } catch (e, stackTrace) {
+      logger.e("💥 Error in changePassword", error: e, stackTrace: stackTrace);
+      return errVoidAsync(UserFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 
   @override
-  AsyncVoidResult forgotPassword({required String email}) async {
+  AsyncVoidResult forgotPassword ({ required String email }) async {
     try {
-      await authDataSource.forgotPassword(email);
-      return okUnit();
-    } on FirebaseAuthException catch (e) {
-      return err(mapFirebaseAuthError(e));
+      await authDataSource.forgotPassword(email: email);
+      logInfoLazy(() => "✅ Successfully sent password reset email: $email");
+      return okVoidAsync();
+    } on FirebaseAuthException catch (e, stackTrace) {
+      logger.w("❌ Firebase Error in forgotPassword", error: e, stackTrace: stackTrace);
+      return errVoidAsync(mapFirebaseAuthError(e));
+    } catch (e, stackTrace) {
+      logger.e("💥 Error in forgotPassword", error: e, stackTrace: stackTrace);
+      return errVoidAsync(UserFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 
@@ -85,30 +112,40 @@ class AuthRepositoryImpl implements AuthRepository {
   AsyncVoidResult updateName ({ required String name }) async {
     try {
       await authDataSource.updateName(name: name);
-      return okUnit();
-    } on FirebaseAuthException catch (e) {
-      return err(mapFirebaseAuthError(e));
+      logInfoLazy(() => "✅ Successfully updated name: $name");
+      return okVoidAsync();
+    } on FirebaseAuthException catch (e, stackTrace) {
+      logger.w("❌ Firebase Error in updateName", error: e, stackTrace: stackTrace);
+      return errVoidAsync(mapFirebaseAuthError(e));
+    } catch (e, stackTrace) {
+      logger.e("💥 Error in updateName", error: e, stackTrace: stackTrace);
+      return errVoidAsync(UserFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 
   @override
-  AsyncVoidResult reloadUser() async {
+  AsyncVoidResult reloadUser () async {
     try {
       await authDataSource.reloadUser();
-      return okUnit();
-    } on FirebaseAuthException catch (e) {
-      return err(mapFirebaseAuthError(e));
+      logInfoLazy(() => "✅ Successfully reloaded user: ${authDataSource.currentUser?.uid}");
+      return okVoidAsync();
+    } on FirebaseAuthException catch (e, stackTrace) {
+      logger.w("❌ Firebase Error in reloadUser", error: e, stackTrace: stackTrace);
+      return errVoidAsync(mapFirebaseAuthError(e));
+    } catch (e, stackTrace) {
+      logger.e("💥 Error in reloadUser", error: e, stackTrace: stackTrace);
+      return errVoidAsync(UserFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 
   @override
-  AsyncResult<UserEntity> signInWithFacebook() {
+  AsyncResult<UserEntity> signInWithFacebook () {
     // TODO: implement signInWithFacebook
     throw UnimplementedError();
   }
 
   @override
-  AsyncResult<UserEntity> signInWithGoogle() {
+  AsyncResult<UserEntity> signInWithGoogle () {
     // TODO: implement signInWithGoogle
     throw UnimplementedError();
   }

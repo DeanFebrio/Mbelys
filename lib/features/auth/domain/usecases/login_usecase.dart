@@ -4,9 +4,9 @@ import 'package:mbelys/features/auth/domain/repositories/auth_repository.dart';
 
 class LoginUseCase {
   final AuthRepository authRepository;
-  LoginUseCase({required this.authRepository});
+  LoginUseCase ({ required this.authRepository });
 
-  AsyncResult<AuthEntity> call(String email, String password) {
+  AsyncResult<AuthEntity> call ({ required String email, required String password }) {
     return authRepository.login(email: email, password: password);
   }
 }
