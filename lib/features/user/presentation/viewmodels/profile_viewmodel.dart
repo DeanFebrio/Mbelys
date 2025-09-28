@@ -12,12 +12,6 @@ class ProfileViewModel extends ChangeNotifier {
   final OpenWhatsappUseCase openWhatsappUseCase;
   StreamSubscription? _userSub;
 
-  UserEntity? _user;
-  UserEntity? get user => _user;
-
-  bool _isLoading = true;
-  bool get isLoading => _isLoading;
-
   ProfileViewModel({
     required AuthViewModel authViewmodel,
     required WatchUserDataUseCase watchUserDataUseCase,
@@ -26,28 +20,41 @@ class ProfileViewModel extends ChangeNotifier {
       _authViewmodel = authViewmodel,
       _watchUserDataUseCase = watchUserDataUseCase
   {
-    _authViewmodel.addListener(_onAuthChanged);
-    _onAuthChanged();
+    _authViewmodel.addListener(onAuthChanged);
+    onAuthChanged();
   }
 
-  void _onAuthChanged () {
-    final auth = _authViewmodel.auth;
+  UserEntity? _user;
+  UserEntity? get user => _user;
+
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
+
+  bool disposed = false;
+
+  void onAuthChanged () {
     _userSub?.cancel();
+    _errorMessage = null;
 
-    if (auth != null) {
-      _isLoading = true;
-      notifyListeners();
-
-      _userSub = _watchUserDataUseCase.call(uid: auth.uid).listen((result) {
-        _user = result;
-        _isLoading = false;
-        notifyListeners();
-      });
-    } else {
+    final auth = _authViewmodel.auth;
+    if (auth == null) {
       _user = null;
       _isLoading = false;
-      notifyListeners();
+      safeNotify();
+      return;
     }
+
+    _isLoading = true;
+    safeNotify();
+    _userSub = _watchUserDataUseCase.call(uid: auth.uid).listen((result) {
+      _user = result;
+      _isLoading = false;
+      notifyListeners();
+    });
+
   }
 
   AsyncVoidResult openWhatsapp() async {
@@ -58,9 +65,13 @@ class ProfileViewModel extends ChangeNotifier {
     return await _authViewmodel.logout();
   }
 
+  void safeNotify() {
+    if (!disposed) notifyListeners();
+  }
+
   @override
   void dispose() {
-    _authViewmodel.removeListener(_onAuthChanged);
+    _authViewmodel.removeListener(onAuthChanged);
     _userSub?.cancel();
     super.dispose();
   }

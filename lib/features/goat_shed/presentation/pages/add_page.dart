@@ -5,6 +5,7 @@ import "package:mbelys/core/router/router.dart";
 import "package:mbelys/core/services/service_locator.dart";
 import "package:mbelys/features/goat_shed/presentation/Widgets/custom_add_image.dart";
 import "package:mbelys/features/goat_shed/presentation/Widgets/custom_pick_image.dart";
+import "package:mbelys/features/goat_shed/presentation/Widgets/provision_card.dart";
 import "package:mbelys/features/goat_shed/presentation/viewmodel/add_viewmodel.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
@@ -97,6 +98,8 @@ class AddView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 25,),
+              ProvisionCard(),
+              const SizedBox(height: 40,),
               CustomShortButton(
                   onTap: state == AddState.loading ? null : () async {
                     await vm.addGoatShed();
@@ -116,7 +119,8 @@ class AddView extends StatelessWidget {
                   },
                   buttonText: "Simpan",
                   isLoading: state == AddState.loading,
-              )
+              ),
+              const SizedBox(height: 50),
             ],
           ),
         )
