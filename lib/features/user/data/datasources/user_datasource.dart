@@ -3,15 +3,16 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mbelys/features/user/data/models/user_model.dart';
+import 'package:mime/mime.dart';
+import 'package:path/path.dart' as p;
 
 abstract class UserDataSource {
   Future<void> createUser ({ required UserModel user });
-  Future<UserModel> getUserData ({ required String uid });
-  Stream<UserModel> watchUserData ({required String uid});
+  Future<UserModel> getUserData ({ required String userId });
+  Stream<UserModel> watchUserData ({ required String userId });
 
-  Future<void> changeName ({ required String name, required String uid });
-  Future<void> changePhone ({ required String phone, required String uid });
-  Future<void> changePhoto ({ required String uid, required File file});
+  Future<void> updateUserData ({ required String userId, required Map<String, dynamic> updates });
+  Future<void> changeUserPhoto ({ required String userId, required File imageFile });
 }
 
 class FirestoreUserDataSource implements UserDataSource {
@@ -22,29 +23,31 @@ class FirestoreUserDataSource implements UserDataSource {
     required this.storage
   });
 
+  CollectionReference<Map<String, dynamic>> get collection => firestore.collection("MsUser");
+
   @override
   Future<void> createUser({ required UserModel user }) async {
-    return await firestore.collection("users").doc(user.id).set(
+    return await collection.doc(user.userId).set(
         user.toJson(), SetOptions(merge: true)
     );
   }
 
   @override
-  Future<UserModel> getUserData ({ required String uid }) async {
+  Future<UserModel> getUserData ({ required String userId }) async {
     try {
-      final snap = await firestore.collection("users").doc(uid).get();
+      final snap = await collection.doc(userId).get();
       if (!snap.exists ||  snap.data() == null) {
         throw Exception("Pengguna tidak ditemukan!");
       }
       return UserModel.fromFirebase(snap);
     } catch (e) {
-      throw Exception(e);
+      rethrow;
     }
   }
 
   @override
-  Stream<UserModel> watchUserData ({ required String uid }) {
-    final docRef = firestore.collection("users").doc(uid);
+  Stream<UserModel> watchUserData ({ required String userId }) {
+    final docRef = collection.doc(userId);
     return docRef.snapshots().map((snap) {
       if (!snap.exists) {
         throw Exception("Pengguna tidak ditemukan!");
@@ -54,54 +57,54 @@ class FirestoreUserDataSource implements UserDataSource {
   }
 
   @override
-  Future<void> changeName ({ required String name, required String uid }) async {
-    return firestore.collection("users").doc(uid).update({
-      "name": name,
-      "updatedAt": FieldValue.serverTimestamp()
-    });
+  Future<void> updateUserData ({ required String userId, required Map<String, dynamic> updates }) async {
+    updates['updatedAt'] = FieldValue.serverTimestamp();
+    return await collection.doc(userId).update(updates);
   }
 
   @override
-  Future<void> changePhone ({ required String phone, required String uid }) async {
-   return firestore.collection("users").doc(uid).update({
-     "phone": phone,
-     "updatedAt": FieldValue.serverTimestamp()
-   });
-  }
-
-  @override
-  Future<void> changePhoto ({ required String uid, required File file }) async {
+  Future<void> changeUserPhoto ({ required String userId, required File imageFile }) async {
     try {
-      final userRef = firestore.collection("users").doc(uid);
+      final userRef = collection.doc(userId);
       String? oldPath;
 
       final snap = await userRef.get();
-      oldPath = snap.data()?['photoUrl'] as String?;
+      oldPath = snap.data()?['userPhotoUrl'] as String?;
 
-      final fileName = 'profile_${DateTime.now().microsecondsSinceEpoch}.jpg';
-      final path = 'user_photo_profile/$uid/$fileName';
-      final ref = storage.ref(path);
+      final url = await uploadUserPhoto(userId: userId, imageFile: imageFile);
 
-      await ref.putFile(
-        file,
-        SettableMetadata(
-          contentType: 'image/jpg',
-          cacheControl: 'public, max-age=3600'
-        )
-      );
-
-      final url = await ref.getDownloadURL();
       await userRef.set({
-        'photoUrl': url,
-        'updatedAt': DateTime.now()
+        'userPhotoUrl': url,
+        'updatedAt': FieldValue.serverTimestamp()
       }, SetOptions(merge: true));
 
       if (oldPath != null) {
-        await storage.ref(oldPath).delete().catchError((_) {});
+        try {
+          await storage.refFromURL(oldPath).delete();
+        } catch (_) { }
       }
     } catch (e) {
       throw Exception("Gagal mengubah foto profil");
     }
+  }
 
+  Future<String> uploadUserPhoto ({ required String userId, required File imageFile }) async {
+    final fileExtension = p.extension(imageFile.path);
+    final mimeType = lookupMimeType(imageFile.path) ?? "image/jpeg";
+
+    if (!mimeType.startsWith("image/")) throw Exception("File bukan gambar yang valid!");
+
+    final fileName = "userPhoto_${DateTime.now().microsecondsSinceEpoch}$fileExtension";
+    final storagePath = 'user_photo/$userId/$fileName';
+    final storageRef = storage.ref(storagePath);
+
+    await storageRef.putFile(
+      imageFile,
+      SettableMetadata(
+        contentType: mimeType,
+        cacheControl: 'public, max-age=3600'
+      )
+    );
+    return await storageRef.getDownloadURL();
   }
 }

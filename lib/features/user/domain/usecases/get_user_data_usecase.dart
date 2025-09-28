@@ -8,7 +8,7 @@ class GetUserDataUseCase {
     required this.userRepository,
   });
 
-  AsyncResult<UserEntity> call (String uid) async {
-    return await userRepository.getUserData(uid: uid);
+  AsyncResult<UserEntity> call ({ required String userId }) async {
+    return await userRepository.getUserData(userId: userId);
   }
 }

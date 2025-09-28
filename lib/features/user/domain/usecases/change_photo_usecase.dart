@@ -7,7 +7,7 @@ class ChangePhotoUseCase {
   final UserRepository repository;
   ChangePhotoUseCase({required this.repository});
 
-  AsyncVoidResult call ({ required File file, required String uid }) async {
-    return await repository.changePhoto(file: file, uid: uid);
+  AsyncVoidResult call ({ required String userId, required File imageFile }) async {
+    return await repository.changeUserPhoto(userId: userId, imageFile: imageFile);
   }
 }

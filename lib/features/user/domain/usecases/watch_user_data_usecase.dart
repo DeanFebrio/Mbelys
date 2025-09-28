@@ -7,7 +7,7 @@ class WatchUserDataUseCase {
     required this.userRepository,
   });
 
-  Stream<UserEntity> call ({required String uid}) {
-    return userRepository.watchUserData(uid: uid);
+  Stream<UserEntity> call ({ required String userId }) {
+    return userRepository.watchUserData(userId: userId);
   }
 }

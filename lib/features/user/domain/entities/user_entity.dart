@@ -1,23 +1,19 @@
 class UserEntity {
-  final String id;
+  final String userId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
   final String email;
   final String name;
-  final String phone;
-  final String? photoUrl;
-  final String? pendingEmail;
-  final String? emailChangeStatus;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
+  final String phoneNumber;
+  final String? userPhotoUrl;
 
   UserEntity({
-    required this.id,
+    required this.userId,
+    required this.createdAt,
+    required this.updatedAt,
     required this.email,
     required this.name,
-    required this.phone,
-    this.photoUrl,
-    this.pendingEmail,
-    this.emailChangeStatus,
-    this.createdAt,
-    this.updatedAt,
+    required this.phoneNumber,
+    this.userPhotoUrl,
   });
 }

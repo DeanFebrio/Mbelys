@@ -4,43 +4,44 @@ import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
   UserModel ({
-    required super.id,
+    required super.userId,
+    required super.createdAt,
+    required super.updatedAt,
     required super.email,
     required super.name,
-    required super.phone,
-    super.photoUrl,
-    super.pendingEmail,
-    super.emailChangeStatus,
-    super.createdAt,
-    super.updatedAt,
+    required super.phoneNumber,
+    super.userPhotoUrl
   });
 
   factory UserModel.fromFirebase(DocumentSnapshot snap) {
     final data = snap.data() as Map<String, dynamic>;
+
+    DateTime toDate (dynamic value) {
+      if (value is Timestamp) return value.toDate();
+      if (value is DateTime) return value;
+      return DateTime.now();
+    }
+
     return UserModel(
-      id: snap.id,
+      userId: snap.id,
       email: (data['email'] as String?) ?? "",
+      createdAt: toDate(data['createdAt']),
+      updatedAt: toDate(data['updatedAt']),
       name: (data['name'] as String?) ?? "",
-      phone: (data['phone'] as String?) ?? "",
-      photoUrl: data['photoUrl'] as String?,
-      pendingEmail: data['pendingEmail'] as String?,
-      emailChangeStatus: data['emailChangeStatus'] as String?,
-      createdAt: (data['createdAt'] as Timestamp?)?.toDate(),
-      updatedAt: (data['updatedAt'] as Timestamp?)?.toDate(),
+      phoneNumber: (data['phoneNumber'] as String?) ?? "",
+      userPhotoUrl: (data['userPhotoUrl'] as String?) ?? "",
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+      'userId': userId,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'updatedAt': Timestamp.fromDate(updatedAt),
       'email': email,
       'name': name,
-      'phone': phone,
-      'photoUrl': photoUrl,
-      'pendingEmail': pendingEmail,
-      'emailChangeStatus': emailChangeStatus,
-      'createdAt': createdAt ?? DateTime.now(),
-      'updatedAt': updatedAt ?? DateTime.now(),
+      'phoneNumber': phoneNumber,
+      'userPhotoUrl': userPhotoUrl,
     };
   }
 }

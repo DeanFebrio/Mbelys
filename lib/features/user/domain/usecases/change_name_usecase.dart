@@ -8,7 +8,7 @@ class ChangeNameUseCase {
     required this.userRepository,
   });
 
-  AsyncVoidResult call ({required String name, required String uid}) async {
-    return await userRepository.changeName(name: name, uid: uid);
+  AsyncVoidResult call ({ required String userId, required String name }) async {
+    return await userRepository.changeUserName(userId: userId, name: name);
   }
 }

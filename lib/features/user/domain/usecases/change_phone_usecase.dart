@@ -8,7 +8,7 @@ class ChangePhoneUseCase {
     required this.userRepository,
   });
 
-  AsyncVoidResult call ({required String phone, required String uid}) async {
-    return await userRepository.changePhone(phone: phone, uid: uid);
+  AsyncVoidResult call ({ required String userId, required String phoneNumber }) async {
+    return await userRepository.changeUserPhoneNumber(userId: userId, phoneNumber: phoneNumber);
   }
 }
