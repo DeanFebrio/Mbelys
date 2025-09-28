@@ -88,6 +88,7 @@ class AppRouter {
                           GoRoute(
                               path: 'detail/:shedId',
                               name: RouterName.detail,
+                              parentNavigatorKey: _rootNavigatorKey,
                               builder: (context, state) {
                                 final shedId = state.pathParameters['shedId'];
                                 return DetailPage(shedId: shedId!);
