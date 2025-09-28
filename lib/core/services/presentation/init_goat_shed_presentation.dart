@@ -13,7 +13,7 @@ import 'package:mbelys/features/user/presentation/viewmodels/profile_viewmodel.d
 Future<void> initGoatShedPresentation () async {
   sl.registerFactory<AddViewModel>(() => AddViewModel(
       createGoatShed: sl<CreateGoatShedUseCase>(),
-      profileViewModel: sl<ProfileViewModel>()
+      profileViewModel: sl<ProfileViewModel>(),
   ));
 
   sl.registerFactoryParam<DetailViewModel, String, void>(
