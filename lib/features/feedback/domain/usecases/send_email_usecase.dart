@@ -4,9 +4,7 @@ import 'package:mbelys/features/feedback/domain/repositories/email_repostory.dar
 
 class SendEmailUseCase {
   final EmailRepository emailRepository;
-  SendEmailUseCase({
-    required this.emailRepository
-  });
+  SendEmailUseCase ({ required this.emailRepository });
 
   AsyncVoidResult call ({ required EmailEntity email }) async {
     return await emailRepository.sendEmail(email: email);

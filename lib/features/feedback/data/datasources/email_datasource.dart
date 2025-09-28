@@ -3,7 +3,7 @@ import 'package:mbelys/features/feedback/data/models/email_model.dart';
 import 'package:emailjs/emailjs.dart' as email_js;
 
 class EmailDataSource {
-  Future<void> sendEmail ({required EmailModel emailModel}) async {
+  Future<void> sendEmail ({ required EmailModel emailModel }) async {
     final serviceId = dotenv.env['EMAILJS_SERVICEID'];
     final templateId = dotenv.env['EMAILJS_TEMPLATEID'];
     final publicKey = dotenv.env['EMAILJS_PUBLIC_KEY'];

@@ -7,21 +7,21 @@ import 'package:mbelys/features/feedback/domain/repositories/email_repostory.dar
 
 class EmailRepositoryImpl implements EmailRepository {
   final EmailDataSource emailDataSource;
-  const EmailRepositoryImpl({required this.emailDataSource});
+  const EmailRepositoryImpl ({ required this.emailDataSource });
 
   @override
   AsyncVoidResult sendEmail ({required EmailEntity email}) async {
     try {
       final emailModel = EmailModel(
-          uid: email.uid,
+          userId: email.userId,
           email: email.email,
           name: email.name,
           message: email.message
       );
       await emailDataSource.sendEmail(emailModel: emailModel);
-      return okUnit();
+      return okVoidAsync();
     } catch (e) {
-      return err(NetworkFailure(e.toString()));
+      return errVoidAsync(NetworkFailure(e.toString()));
     }
   }
 }
