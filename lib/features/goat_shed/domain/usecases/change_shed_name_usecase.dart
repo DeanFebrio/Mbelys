@@ -3,7 +3,7 @@ import 'package:mbelys/features/goat_shed/domain/repositories/goat_shed_reposito
 
 class ChangeShedNameUseCase {
   final GoatShedRepository repository;
-  ChangeShedNameUseCase({required this.repository});
+  ChangeShedNameUseCase ({ required this.repository });
 
   AsyncVoidResult call ({ required String shedId, required String newName }) async {
     return await repository.changeGoatShedName(shedId: shedId, newName: newName);

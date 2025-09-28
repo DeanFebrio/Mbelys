@@ -3,9 +3,9 @@ import 'package:mbelys/features/goat_shed/domain/repositories/goat_shed_reposito
 
 class GetGoatShedDetailUseCase {
   final GoatShedRepository goatShedRepository;
-  const GetGoatShedDetailUseCase({required this.goatShedRepository});
+  const GetGoatShedDetailUseCase ({ required this.goatShedRepository });
 
-  Stream<GoatShedEntity> call ({required String shedId}) {
+  Stream<GoatShedEntity> call ({ required String shedId }) {
     return goatShedRepository.getGoatShedDetail(shedId: shedId);
   }
 }

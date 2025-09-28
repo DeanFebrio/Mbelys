@@ -5,7 +5,7 @@ import 'package:mbelys/features/goat_shed/domain/entities/goat_shed_entity.dart'
 
 abstract class GoatShedRepository {
   AsyncVoidResult createGoatShed ({ required GoatShedEntity goatShed, required File imageFile });
-  Stream<List<GoatShedEntity>> getGoatShedList ({ required String ownerId });
+  Stream<List<GoatShedEntity>> getGoatShedList ({ required String userId });
   Stream<GoatShedEntity> getGoatShedDetail ({ required String shedId });
 
   AsyncVoidResult changeGoatShedName ({ required String shedId, required String newName });

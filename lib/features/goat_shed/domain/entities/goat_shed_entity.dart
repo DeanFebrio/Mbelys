@@ -1,25 +1,35 @@
 class GoatShedEntity {
   final String shedId;
+  final String userId;
+  final String deviceId;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  final String shedStatus;
   final String shedName;
-  final int totalGoats;
+  final String shedImageUrl;
   final String shedLocation;
-  final String ownerId;
-  final String? shedImageUrl;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  // final bool isStressed;
-  // final bool isFertile;
-  // final String description;
-  // final String suggestion;
+  final int totalGoats;
+  final String? stressStatus;
+  final String? reproductiveStatus;
+  final String? recommendation;
+  final String? explanation;
+  final DateTime? analyzedAt;
 
   GoatShedEntity({
     required this.shedId,
+    required this.userId,
+    required this.deviceId,
+    required this.createdAt,
+    required this.updatedAt,
+    required this.shedStatus,
     required this.shedName,
+    required this.shedImageUrl,
     required this.shedLocation,
     required this.totalGoats,
-    required this.ownerId,
-    this.shedImageUrl,
-    this.createdAt,
-    this.updatedAt
+    this.stressStatus,
+    this.reproductiveStatus,
+    this.recommendation,
+    this.explanation,
+    this.analyzedAt
   });
 }

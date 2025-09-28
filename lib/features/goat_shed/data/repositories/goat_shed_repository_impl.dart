@@ -19,32 +19,40 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
   AsyncVoidResult createGoatShed ({required GoatShedEntity goatShed, required File imageFile }) async {
     try {
       final goatShedModel = GoatShedModel(
-        shedId: "",
+        shedId: goatShed.shedId,
+        createdAt: goatShed.createdAt,
+        updatedAt: goatShed.updatedAt,
+        userId: goatShed.userId,
+        deviceId: goatShed.deviceId,
+        shedStatus: goatShed.shedStatus,
         shedName: goatShed.shedName,
+        shedImageUrl: goatShed.shedImageUrl,
         shedLocation: goatShed.shedLocation,
         totalGoats: goatShed.totalGoats,
-        ownerId: goatShed.ownerId,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now()
+        stressStatus: null,
+        reproductiveStatus: null,
+        recommendation: null,
+        explanation: null,
+        analyzedAt: null
       );
       await goatShedDataSource.createGoatShed(goatShed: goatShedModel, imageFile: imageFile);
       logInfoLazy(() => "✅ Successfully created goat shed: ${goatShed.shedName}");
-      return okUnit();
+      return okVoidAsync();
     } on FirebaseException catch (e, stackTrace) {
       logger.w("❌ Firebase Error in createGoatShed", error: e, stackTrace: stackTrace);
-      if (e.plugin == "firebase_storage") return err(mapFirebaseStorageError(e));
-      return err(mapFirestoreError(e));
+      if (e.plugin == "firebase_storage") return errVoidAsync(mapFirebaseStorageError(e));
+      return errVoidAsync(mapFirestoreError(e));
     } catch (e, stackTrace) {
       logger.e("💥 Error in createGoatShed", error: e, stackTrace: stackTrace);
-      return err(DatabaseFailure("Terjadi kesalahan saat membuat kandang, coba lagi nanti"));
+      return errVoidAsync(DatabaseFailure("Terjadi kesalahan saat membuat kandang, coba lagi nanti"));
     }
   }
 
   @override
-  Stream<List<GoatShedEntity>> getGoatShedList ({required String ownerId}) {
+  Stream<List<GoatShedEntity>> getGoatShedList ({ required String userId }) {
     try {
       return goatShedDataSource
-          .getGoatShedList(ownerId: ownerId)
+          .getGoatShedList(userId: userId)
           .map((list) => list.map((m) => m.toEntity())
           .toList());
     } on FirebaseException catch (e, stackTrace) {
@@ -57,7 +65,7 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
   }
 
   @override
-  Stream<GoatShedEntity> getGoatShedDetail ({required String shedId}) {
+  Stream<GoatShedEntity> getGoatShedDetail ({ required String shedId }) {
     try {
       return goatShedDataSource
           .getGoatShedDetail(shedId: shedId)
@@ -76,13 +84,13 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
     try {
       await goatShedDataSource.updateGoatShed(shedId: shedId, updates: {"shedName": newName});
       logInfoLazy(() => "✅ Successfully changed goat shed name: $newName");
-      return okUnit();
+      return okVoidAsync();
     } on FirebaseException catch (e, stackTrace) {
       logger.w("❌ Firebase Error in changeGoatShedName", error: e, stackTrace: stackTrace);
-      return err(mapFirestoreError(e));
+      return errVoidAsync(mapFirestoreError(e));
     } catch (e, stackTrace) {
       logger.e("💥 Error in changeGoatShedName", error: e, stackTrace: stackTrace);
-      return err(DatabaseFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
+      return errVoidAsync(DatabaseFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 
@@ -91,13 +99,13 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
     try {
       await goatShedDataSource.updateGoatShed(shedId: shedId, updates: {"shedLocation": newLocation});
       logInfoLazy(() => "✅ Successfully changed goat shed location: $newLocation");
-      return okUnit();
+      return okVoidAsync();
     } on FirebaseException catch (e, stackTrace) {
       logger.w("❌ Firebase Error in changeGoatShedLocation", error: e, stackTrace: stackTrace);
-      return err(mapFirestoreError(e));
+      return errVoidAsync(mapFirestoreError(e));
     } catch (e, stackTrace) {
       logger.e("💥 Error in changeGoatShedLocation", error: e, stackTrace: stackTrace);
-      return err(DatabaseFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
+      return errVoidAsync(DatabaseFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 
@@ -106,29 +114,29 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
     try {
       await goatShedDataSource.updateGoatShed(shedId: shedId, updates: {"totalGoats": newTotal});
       logInfoLazy(() => "✅ Successfully changed total goats: $newTotal");
-      return okUnit();
+      return okVoidAsync();
     } on FirebaseException catch (e, stackTrace) {
       logger.w("❌ Firebase Error in changeTotalGoats", error: e, stackTrace: stackTrace);
-      return err(mapFirestoreError(e));
+      return errVoidAsync(mapFirestoreError(e));
     } catch (e, stackTrace) {
       logger.e("💥 Error in changeTotalGoats", error: e, stackTrace: stackTrace);
-      return err(DatabaseFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
+      return errVoidAsync(DatabaseFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 
   @override
   AsyncVoidResult changeGoatShedImage ({ required String shedId, required File newImageFile }) async {
     try {
-      await goatShedDataSource.changeGoatShedImage(shedId: shedId, newImageFile: newImageFile);
+      await goatShedDataSource.changeGoatShedImage(shedId: shedId, imageFile: newImageFile);
       logInfoLazy(() => "✅ Successfully changed goat shed image: ${newImageFile.path}");
-      return okUnit();
+      return okVoidAsync();
     } on FirebaseException catch (e, stackTrace) {
       logger.w("❌ Firebase Error in changeGoatShedImage", error: e, stackTrace: stackTrace);
-      if (e.plugin == "firebase_storage") return err(mapFirebaseStorageError(e));
-      return err(mapFirebaseStorageError(e));
+      if (e.plugin == "firebase_storage") return errVoidAsync(mapFirebaseStorageError(e));
+      return errVoidAsync(mapFirebaseStorageError(e));
     } catch (e, stackTrace) {
       logger.e("💥 Error in changeGoatShedImage", error: e, stackTrace: stackTrace);
-      return err(StorageFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
+      return errVoidAsync(StorageFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
 }

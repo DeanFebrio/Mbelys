@@ -3,9 +3,9 @@ import 'package:mbelys/features/goat_shed/domain/repositories/goat_shed_reposito
 
 class GetGoatShedListUseCase {
   final GoatShedRepository repository;
-  const GetGoatShedListUseCase({required this.repository});
+  const GetGoatShedListUseCase ({ required this.repository });
 
-  Stream<List<GoatShedEntity>> call ({required String ownerId}) {
-    return repository.getGoatShedList(ownerId: ownerId);
+  Stream<List<GoatShedEntity>> call ({ required String ownerId }) {
+    return repository.getGoatShedList(userId: ownerId);
   }
 }

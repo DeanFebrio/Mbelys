@@ -5,7 +5,7 @@ import 'package:mbelys/features/goat_shed/domain/repositories/goat_shed_reposito
 
 class ChangeShedImageUseCase {
   final GoatShedRepository repository;
-  ChangeShedImageUseCase({required this.repository});
+  ChangeShedImageUseCase ({ required this.repository });
 
   AsyncVoidResult call ({ required String shedId, required File newImageFile }) async {
     return await repository.changeGoatShedImage(shedId: shedId, newImageFile: newImageFile);

@@ -6,9 +6,9 @@ import 'package:mbelys/features/goat_shed/domain/repositories/goat_shed_reposito
 
 class CreateGoatShedUseCase {
   final GoatShedRepository goatShedRepository;
-  const CreateGoatShedUseCase({required this.goatShedRepository});
+  const CreateGoatShedUseCase ({ required this.goatShedRepository });
 
-  AsyncResult<void> call ({required GoatShedEntity goatShed, required File imageFile}) async {
+  AsyncResult<void> call ({ required GoatShedEntity goatShed, required File imageFile }) async {
     return await goatShedRepository.createGoatShed(goatShed: goatShed, imageFile: imageFile);
   }
 }

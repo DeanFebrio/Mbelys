@@ -3,7 +3,7 @@ import 'package:mbelys/features/goat_shed/domain/repositories/goat_shed_reposito
 
 class ChangeTotalGoatsUseCase {
   final GoatShedRepository repository;
-  ChangeTotalGoatsUseCase({required this.repository});
+  ChangeTotalGoatsUseCase ({ required this.repository });
 
   AsyncVoidResult call ({ required String shedId, required int newTotal }) async {
     return await repository.changeTotalGoats(shedId: shedId, newTotal: newTotal);
