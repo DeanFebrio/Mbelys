@@ -11,7 +11,8 @@ class CustomTextInput extends StatefulWidget {
     this.validator,
     this.isPassword = false,
     this.isNumber = false,
-    this.maxLines = 1
+    this.maxLines = 1,
+    this.isEnabled = true
   });
 
   final String? hintText;
@@ -20,6 +21,7 @@ class CustomTextInput extends StatefulWidget {
   final bool isPassword;
   final bool isNumber;
   final int maxLines;
+  final bool isEnabled;
 
   @override
   State<CustomTextInput> createState() => _CustomTextInputState();
