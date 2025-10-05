@@ -33,10 +33,10 @@ class RegisterViewModel extends ChangeNotifier {
     notifyListeners();
 
     final result = await registerUseCase.call(
-        emailController.text.trim(),
-        passwordController.text.trim(),
-        nameController.text.trim(),
-        phoneController.text.trim()
+        email:  emailController.text.trim(),
+        password: passwordController.text.trim(),
+        name: nameController.text.trim(),
+        phone: phoneController.text.trim()
     );
     if (isDisposed) return result;
     result.fold(

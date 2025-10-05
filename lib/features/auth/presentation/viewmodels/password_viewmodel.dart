@@ -62,7 +62,7 @@ class PasswordViewModel extends ChangeNotifier {
         }
     );
     notifyListeners();
-    return okUnit();
+    return okVoidAsync();
   }
 
   @override
