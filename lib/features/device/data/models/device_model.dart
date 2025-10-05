@@ -6,6 +6,7 @@ class DeviceModel extends DeviceEntity {
     required super.deviceId,
     required super.createdAt,
     required super.provisionedAt,
+    required super.provisionCount,
     required super.configVersion
   });
 
@@ -22,6 +23,7 @@ class DeviceModel extends DeviceEntity {
       deviceId: snapshot.id,
       createdAt: toDate(data['createdAt']),
       provisionedAt: toDate(data['provisionedAt']),
+      provisionCount: data['provisionCount'] as int,
       configVersion: data['configVersion'] as int
     );
   }
@@ -30,12 +32,14 @@ class DeviceModel extends DeviceEntity {
     String? deviceId,
     DateTime? createdAt,
     DateTime? provisionedAt,
+    int? provisionCount,
     int? configVersion,
   }) {
     return DeviceModel(
       deviceId: deviceId ?? this.deviceId,
       createdAt: createdAt ?? this.createdAt,
       provisionedAt: provisionedAt ?? this.provisionedAt,
+      provisionCount: provisionCount ?? this.provisionCount,
       configVersion: configVersion ?? this.configVersion
     );
   }
@@ -45,6 +49,7 @@ class DeviceModel extends DeviceEntity {
       'deviceId': deviceId,
       'createdAt': Timestamp.fromDate(createdAt),
       'provisionedAt': Timestamp.fromDate(provisionedAt),
+      'provisionCount': provisionCount,
       'configVersion': configVersion
     };
   }

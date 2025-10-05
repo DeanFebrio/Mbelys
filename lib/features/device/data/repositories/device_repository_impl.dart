@@ -70,4 +70,19 @@ class DeviceRepositoryImpl implements DeviceRepository {
       return errAsync(DatabaseFailure("Gagal memeriksa perangkat"));
     }
   }
+
+  @override
+  AsyncVoidResult ensureDeviceRegistered ({ required String deviceId }) async {
+    try {
+      await dataSource.ensureDeviceRegistered(deviceId: deviceId);
+      logInfoLazy(() => "✅ Successfully ensureDeviceRegistered: $deviceId");
+      return okVoidAsync();
+    } on FirebaseException catch (e, stackTrace) {
+      logger.w("❌ Firebase Error in ensureDeviceRegistered", error: e, stackTrace: stackTrace);
+      return errVoidAsync(mapFirestoreError(e));
+    } catch (e, stackTrace) {
+      logger.e("💥 Error in ensureDeviceRegistered", error: e, stackTrace: stackTrace);
+      return errVoidAsync(DatabaseFailure("Gagal memastikan perangkat terdaftar"));
+    }
+  }
 }

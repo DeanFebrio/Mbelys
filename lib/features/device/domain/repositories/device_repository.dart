@@ -6,4 +6,5 @@ abstract class DeviceRepository {
   AsyncResult<DeviceEntity> getDevice ({ required String deviceId });
   AsyncVoidResult reprovisionWifi ({ required String deviceId });
   AsyncResult<bool> isDeviceExists ({ required String deviceId });
+  AsyncVoidResult ensureDeviceRegistered ({ required String deviceId });
 }
