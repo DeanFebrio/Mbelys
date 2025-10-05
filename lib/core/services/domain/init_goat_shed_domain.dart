@@ -1,4 +1,5 @@
 import 'package:mbelys/core/services/service_locator.dart';
+import 'package:mbelys/features/device/domain/repositories/device_repository.dart';
 import 'package:mbelys/features/goat_shed/domain/repositories/goat_shed_repository.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_shed_image_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_shed_location_usecase.dart';
@@ -10,7 +11,8 @@ import 'package:mbelys/features/goat_shed/domain/usecases/get_goat_shed_list_use
 
 Future<void> initGoatShedDomain () async {
   sl.registerFactory<CreateGoatShedUseCase>(() => CreateGoatShedUseCase(
-      goatShedRepository: sl<GoatShedRepository>()
+      goatShedRepository: sl<GoatShedRepository>(),
+      deviceRepository: sl<DeviceRepository>()
   ));
 
   sl.registerFactory<GetGoatShedListUseCase>(() => GetGoatShedListUseCase(

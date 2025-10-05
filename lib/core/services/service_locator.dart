@@ -5,14 +5,17 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mbelys/core/services/data/init_auth_data.dart';
+import 'package:mbelys/core/services/data/init_device_data.dart';
 import 'package:mbelys/core/services/data/init_feedback_data.dart';
 import 'package:mbelys/core/services/data/init_goat_shed_data.dart';
 import 'package:mbelys/core/services/data/init_user_data.dart';
 import 'package:mbelys/core/services/domain/init_auth_domain.dart';
+import 'package:mbelys/core/services/domain/init_device_domain.dart';
 import 'package:mbelys/core/services/domain/init_feedback_domain.dart';
 import 'package:mbelys/core/services/domain/init_goat_shed_domain.dart';
 import 'package:mbelys/core/services/domain/init_user_domain.dart';
 import 'package:mbelys/core/services/presentation/init_auth_presentation.dart';
+import 'package:mbelys/core/services/presentation/init_device_presentation.dart';
 import 'package:mbelys/core/services/presentation/init_feedback_presentation.dart';
 import 'package:mbelys/core/services/presentation/init_goat_shed_presentation.dart';
 import 'package:mbelys/core/services/presentation/init_home_presentation.dart';
@@ -43,12 +46,14 @@ Future<void> setupLocator () async {
   await initUserData();
   await initFeedbackData();
   await initGoatShedData();
+  await initDeviceData();
 
   // domain layer
   await initAuthDomain();
   await initUserDomain();
   await initFeedbackDomain();
   await initGoatShedDomain();
+  await initDeviceDomain();
 
   // presentation layer
   await initAuthPresentation();
@@ -56,4 +61,5 @@ Future<void> setupLocator () async {
   await initFeedbackPresentation();
   await initGoatShedPresentation();
   await initHomePresentation();
+  await initDevicePresentation();
 }

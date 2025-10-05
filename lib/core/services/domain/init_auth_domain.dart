@@ -4,6 +4,7 @@ import 'package:mbelys/features/auth/domain/usecases/change_password_usecase.dar
 import 'package:mbelys/features/auth/domain/usecases/forgot_usecase.dart';
 import 'package:mbelys/features/auth/domain/usecases/get_auth_state_usecase.dart';
 import 'package:mbelys/features/auth/domain/usecases/login_usecase.dart';
+import 'package:mbelys/features/auth/domain/usecases/login_with_google_usecase.dart';
 import 'package:mbelys/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:mbelys/features/auth/domain/usecases/register_usecase.dart';
 import 'package:mbelys/features/auth/domain/usecases/update_name_usecase.dart';
@@ -45,5 +46,10 @@ Future<void> initAuthDomain () async {
 
   sl.registerFactory<UpdateNameUseCase>(() => UpdateNameUseCase(
       authRepository: sl<AuthRepository>()
+  ));
+
+  sl.registerFactory<LoginWithGoogleUseCase>(() => LoginWithGoogleUseCase(
+      authRepository: sl<AuthRepository>(),
+      userRepository: sl<UserRepository>()
   ));
 }
