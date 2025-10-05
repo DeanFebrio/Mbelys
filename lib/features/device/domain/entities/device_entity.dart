@@ -3,6 +3,7 @@ class DeviceEntity {
   final DateTime createdAt;
   final DateTime provisionedAt;
   final int provisionCount;
+  final String registerSource;
   final int configVersion;
 
   DeviceEntity({
@@ -10,6 +11,7 @@ class DeviceEntity {
     required this.createdAt,
     required this.provisionedAt,
     required this.provisionCount,
+    required this.registerSource,
     required this.configVersion
   });
 }

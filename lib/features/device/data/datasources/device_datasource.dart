@@ -25,6 +25,7 @@ class FirestoreDeviceDataSource implements DeviceDataSource {
       createdAt: DateTime.now(),
       provisionedAt: DateTime.now(),
       provisionCount: 0,
+      registerSource: "auto",
       configVersion: 0
     );
     await newDocRef.set(newDevice.toJson());
@@ -33,14 +34,15 @@ class FirestoreDeviceDataSource implements DeviceDataSource {
 
   @override
   Future<void> registerDeviceWithId ({ required String deviceId }) async {
-    final docRef = collection.doc(deviceId);
-    final snap = await docRef.get();
-    if (snap.exists) return;
-    await docRef.set({
-      'deviceId': deviceId,
-      'provisionedAt': FieldValue.serverTimestamp(),
-      'provisionCount': FieldValue.increment(1),
-    });
+    final newDevice = DeviceModel(
+      deviceId: deviceId,
+      createdAt: DateTime.now(),
+      provisionedAt: DateTime.now(),
+      provisionCount: 0,
+      registerSource: "manual",
+      configVersion: 0
+    );
+    await collection.doc(deviceId).set(newDevice.toJson(), SetOptions(merge: true));
   }
 
   @override
@@ -75,7 +77,8 @@ class FirestoreDeviceDataSource implements DeviceDataSource {
     final exists = await isDeviceExists(deviceId: deviceId);
     if (!exists) {
       await registerDeviceWithId(deviceId: deviceId);
+    } else {
+      await reprovisionWifi(deviceId: deviceId);
     }
-    await reprovisionWifi(deviceId: deviceId);
   }
 }

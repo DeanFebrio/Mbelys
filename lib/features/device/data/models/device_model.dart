@@ -7,22 +7,20 @@ class DeviceModel extends DeviceEntity {
     required super.createdAt,
     required super.provisionedAt,
     required super.provisionCount,
+    required super.registerSource,
     required super.configVersion
   });
 
   factory DeviceModel.fromFirebase(DocumentSnapshot snapshot) {
     final data = snapshot.data() as Map<String, dynamic>;
 
-    DateTime toDate (dynamic value) {
-      if (value is Timestamp) return value.toDate();
-      if (value is DateTime) return value;
-      return DateTime.now();
-    }
+    DateTime? ts(dynamic v) => v is Timestamp ? v.toDate() : (v is DateTime ? v : null);
 
     return DeviceModel(
       deviceId: snapshot.id,
-      createdAt: toDate(data['createdAt']),
-      provisionedAt: toDate(data['provisionedAt']),
+      createdAt: ts(data['createdAt']) ?? DateTime.now(),
+      provisionedAt: ts(data['provisionedAt']) ?? DateTime.now(),
+      registerSource: data['registerSource'] as String,
       provisionCount: data['provisionCount'] as int,
       configVersion: data['configVersion'] as int
     );
@@ -33,6 +31,7 @@ class DeviceModel extends DeviceEntity {
     DateTime? createdAt,
     DateTime? provisionedAt,
     int? provisionCount,
+    String? registerSource,
     int? configVersion,
   }) {
     return DeviceModel(
@@ -40,6 +39,7 @@ class DeviceModel extends DeviceEntity {
       createdAt: createdAt ?? this.createdAt,
       provisionedAt: provisionedAt ?? this.provisionedAt,
       provisionCount: provisionCount ?? this.provisionCount,
+      registerSource: registerSource ?? this.registerSource,
       configVersion: configVersion ?? this.configVersion
     );
   }
@@ -50,6 +50,7 @@ class DeviceModel extends DeviceEntity {
       'createdAt': Timestamp.fromDate(createdAt),
       'provisionedAt': Timestamp.fromDate(provisionedAt),
       'provisionCount': provisionCount,
+      'registerSource': registerSource,
       'configVersion': configVersion
     };
   }
