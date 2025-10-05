@@ -3,9 +3,10 @@ import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 import "package:mbelys/core/router/router.dart";
 import "package:mbelys/core/services/service_locator.dart";
+import "package:mbelys/features/device/presentation/viewmodels/provision_viewmodel.dart";
 import "package:mbelys/features/goat_shed/presentation/Widgets/custom_add_image.dart";
 import "package:mbelys/features/goat_shed/presentation/Widgets/custom_pick_image.dart";
-import "package:mbelys/features/goat_shed/presentation/Widgets/provision_card.dart";
+import "package:mbelys/features/device/presentation/widgets/provision_card.dart";
 import "package:mbelys/features/goat_shed/presentation/viewmodel/add_viewmodel.dart";
 import "package:mbelys/presentation/widgets/custom_background_page.dart";
 import "package:mbelys/presentation/widgets/custom_short_button.dart";
@@ -19,9 +20,12 @@ class AddPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (_) => sl<AddViewModel>(),
-        child: const AddView(),
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => sl<AddViewModel>()),
+          ChangeNotifierProvider(create: (_) => sl<ProvisionViewModel>())
+        ],
+      child: const AddView(),
     );
   }
 }
@@ -38,8 +42,9 @@ class AddView extends StatelessWidget {
         color: AppColors.color9
     );
 
-    final vm = context.watch<AddViewModel>();
-    final state = vm.state;
+    final addViewModel = context.watch<AddViewModel>();
+    final provisionViewModel = context.read<ProvisionViewModel>();
+    final state = addViewModel.state;
 
     return CustomBackgroundPage(
         title: "Detail Kandang",
@@ -48,7 +53,7 @@ class AddView extends StatelessWidget {
             children: [
               const SizedBox(height: 120,),
               Form(
-                key: vm.formKey,
+                key: addViewModel.formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -58,8 +63,8 @@ class AddView extends StatelessWidget {
                     ),
                     const SizedBox(height: 5,),
                     CustomTextInput(
-                      textEditingController: vm.nameController,
-                      validator: vm.validateName,
+                      textEditingController: addViewModel.nameController,
+                      validator: addViewModel.validateName,
                     ),
                     const SizedBox(height: 15,),
                     Text(
@@ -68,8 +73,8 @@ class AddView extends StatelessWidget {
                     ),
                     const SizedBox(height: 5,),
                     CustomAddImage(
-                      localPhoto: vm.localPhoto,
-                      onPicked: vm.setImage,
+                      localPhoto: addViewModel.localPhoto,
+                      onPicked: addViewModel.setImage,
                       pickImage: () => CustomPickImage.showImagePickerOptions(context),
                     ),
                     const SizedBox(height: 15,),
@@ -79,8 +84,8 @@ class AddView extends StatelessWidget {
                     ),
                     const SizedBox(height: 5,),
                     CustomTextInput(
-                      textEditingController: vm.locationController,
-                      validator: vm.validateLocation,
+                      textEditingController: addViewModel.locationController,
+                      validator: addViewModel.validateLocation,
                       maxLines: 3,
                     ),
                     const SizedBox(height: 10,),
@@ -90,31 +95,46 @@ class AddView extends StatelessWidget {
                     ),
                     const SizedBox(height: 5,),
                     CustomTextInput(
-                      textEditingController: vm.totalController,
-                      validator: vm.validateTotal,
+                      textEditingController: addViewModel.totalController,
+                      validator: addViewModel.validateTotal,
                       isNumber: true,
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 25,),
-              ProvisionCard(),
+              ProvisionCard(
+
+              ),
               const SizedBox(height: 40,),
               CustomShortButton(
                   onTap: state == AddState.loading ? null : () async {
-                    await vm.addGoatShed();
-                    if (!context.mounted) return;
-                    if (vm.state == AddState.error){
-                      showErrorSnackBar(context, vm.errorMessage);
-                    } else if (vm.state == AddState.success) {
-                      customDialog(
-                          context,
-                          "Berhasil ditambahkan",
-                          "Kandang baru Anda kini terintegrasi dengan perangkat IoT. "
-                              "Pemantauan suara akan segera dimulai.",
-                          "Baik",
-                          () => context.goNamed(RouterName.home)
-                      );
+                    try {
+                      if (!provisionViewModel.isConnected) {
+                        showErrorSnackBar(context, "Hubungkan Perangkat Mbelys-IoT terlebih dahulu");
+                        return;
+                      }
+                      String devId = provisionViewModel.currentDeviceId ?? "";
+                      if (devId.isEmpty) {
+                        devId = await provisionViewModel.assignDeviceIdOnSave();
+                      }
+                      addViewModel.deviceId = devId;
+                      await addViewModel.addGoatShed();
+                      if (!context.mounted) return;
+                      if (addViewModel.state == AddState.error){
+                        showErrorSnackBar(context, addViewModel.errorMessage);
+                      } else if (addViewModel.state == AddState.success) {
+                        customDialog(
+                            context,
+                            "Berhasil ditambahkan",
+                            "Kandang baru Anda kini terintegrasi dengan perangkat IoT. "
+                                "Pemantauan suara akan segera dimulai.",
+                            "Baik",
+                                () => context.goNamed(RouterName.home)
+                        );
+                      }
+                    } catch (e) {
+                      showErrorSnackBar(context, e.toString());
                     }
                   },
                   buttonText: "Simpan",

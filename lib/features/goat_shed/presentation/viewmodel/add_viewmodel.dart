@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mbelys/core/error/failure.dart';
 import 'package:mbelys/core/utils/result.dart';
-import 'package:mbelys/features/goat_shed/domain/entities/goat_shed_entity.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/create_goat_shed_usecase.dart';
 import 'package:mbelys/features/user/presentation/viewmodels/profile_viewmodel.dart';
 
@@ -30,6 +29,13 @@ class AddViewModel extends ChangeNotifier {
   String? _errorMessage;
   String? get errorMessage => _errorMessage;
 
+  String? currentDeviceId;
+  String? get deviceId => currentDeviceId;
+  set deviceId (String? id) {
+    currentDeviceId = id;
+    notifyListeners();
+  }
+
   File? _localPhoto;
   File? get localPhoto => _localPhoto;
 
@@ -52,7 +58,7 @@ class AddViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  AsyncResult<void> addGoatShed () async {
+  AsyncVoidResult addGoatShed () async {
     if(!(formKey.currentState?.validate() ?? false)) {
       _state = AddState.error;
       _errorMessage = "Input tidak valid!";
@@ -80,16 +86,27 @@ class AddViewModel extends ChangeNotifier {
     }
 
     try {
-      final goatShed = GoatShedEntity(
-          shedId: "",
-          shedName: nameController.text.trim(),
-          shedLocation: locationController.text.trim(),
-          totalGoats: int.parse(totalController.text.trim()),
-          ownerId: user.id
+      final shedName = nameController.text.trim();
+      final shedLocation = locationController.text.trim();
+      final totalGoats = int.parse(totalController.text.trim());
+
+      if (currentDeviceId == null || currentDeviceId!.isEmpty) {
+        _state = AddState.error;
+        _errorMessage = "Perangkat belum terhubung / deviceId belum disetel.";
+        notifyListeners();
+        return err(DatabaseFailure("Device belum siap."));
+      }
+
+      final result = await createGoatShed.call(
+        params: CreateGoatShedParams(
+          userId: user.userId,
+          deviceId: currentDeviceId,
+          shedName: shedName,
+          shedLocation: shedLocation,
+          totalGoats: totalGoats,
+          imageFile: localPhoto!
+        )
       );
-
-      final result = await createGoatShed.call(goatShed: goatShed, imageFile: _localPhoto!);
-
       result.fold(
               (failure) {
             _errorMessage = failure.message;
@@ -101,7 +118,7 @@ class AddViewModel extends ChangeNotifier {
             notifyListeners();
           }
       );
-      return okUnit();
+      return okVoidAsync();
     } catch (e) {
       final msg = e is FirebaseException
           ? e.message ?? "Gagal menyimpan kandang (Firebase)."
