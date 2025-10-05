@@ -1,3 +1,4 @@
+import "package:auto_size_text/auto_size_text.dart";
 import "package:flutter/material.dart";
 import "package:go_router/go_router.dart";
 import "package:mbelys/core/constant/app_colors.dart";
@@ -109,20 +110,27 @@ class SuccessContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return DetailBackgroundPage(
       onRefresh: onRefresh,
-      shedImageUrl: shed.shedImageUrl!,
+      shedImageUrl: shed.shedImageUrl,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            spacing: 20,
             children: [
-              Text(
-                shed.shedName,
-                style: TextStyle(
-                    fontSize: 32,
-                    fontFamily: "Poppins",
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.color9
+              Expanded(
+                child: AutoSizeText(
+                  shed.shedName,
+                  style: TextStyle(
+                      fontFamily: "Poppins",
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.color9
+                  ),
+                  maxLines: 2,
+                  minFontSize: 28,
+                  maxFontSize: 32,
+                  overflow: TextOverflow.visible,
+                  softWrap: true,
                 ),
               ),
               CustomEditButton(
