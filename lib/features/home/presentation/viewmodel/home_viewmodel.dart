@@ -41,7 +41,7 @@ class HomeViewModel extends ChangeNotifier {
   void _listenToGoatSheds () {
     shedSubs?.cancel();
 
-    final userId = user?.id;
+    final userId = user?.userId;
     if (userId == null) {
       _sheds = [];
       _state = HomeState.success;
