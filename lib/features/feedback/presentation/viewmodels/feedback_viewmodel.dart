@@ -38,14 +38,14 @@ class FeedbackViewModel extends ChangeNotifier {
       _state = FeedbackState.error;
       _errorMessage = "Harap isi kritik dan saran anda!";
       notifyListeners();
-      return okUnit();
+      return okVoidAsync();
     }
 
     if (user == null) {
       _state = FeedbackState.error;
       _errorMessage = "Pengguna tidak ada!";
       notifyListeners();
-      return okUnit();
+      return okVoidAsync();
     }
 
     _state = FeedbackState.loading;
@@ -53,7 +53,7 @@ class FeedbackViewModel extends ChangeNotifier {
     notifyListeners();
 
     EmailEntity email = EmailEntity(
-        uid: user!.id,
+        userId: user!.userId,
         email: user!.email,
         name: user!.name,
         message: message
@@ -72,7 +72,7 @@ class FeedbackViewModel extends ChangeNotifier {
           notifyListeners();
         }
     );
-    return okUnit();
+    return okVoidAsync();
   }
 
   void resetState () {
