@@ -135,4 +135,25 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
       return errVoidAsync(StorageFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
     }
   }
+
+  @override
+  AsyncVoidResult deleteShed ({ required String shedId }) async {
+    try {
+      await goatShedDataSource.updateGoatShed(
+        shedId: shedId,
+        updates: {
+          "shedStatus": "deleted",
+          "updatedAt": FieldValue.serverTimestamp()
+        }
+      );
+      logInfoLazy(() => "✅ Successfully soft-deleted shed: $shedId");
+      return okVoidAsync();
+    } on FirebaseException catch (e, stackTrace) {
+      logger.w("❌ Firebase Error in deleteShed", error: e, stackTrace: stackTrace);
+      return errVoidAsync(mapFirestoreError(e));
+    } catch (e, stackTrace) {
+      logger.e("💥 Error in deleteShed", error: e, stackTrace: stackTrace);
+      return errVoidAsync(DatabaseFailure("Terjadi kesalahan yang tidak diketahui, coba lagi nanti"));
+    }
+  }
 }

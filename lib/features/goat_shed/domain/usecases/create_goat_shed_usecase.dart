@@ -1,7 +1,3 @@
-// features/goat_shed/domain/usecases/create_goat_shed_usecase.dart
-// Use case pembuatan kandang. Jika deviceId kosong, fallback registerDevice().
-// Penting: unwrap Either<Failure, String> → String dengan fold.
-
 import 'dart:io';
 
 import 'package:mbelys/core/utils/result.dart';
@@ -11,7 +7,7 @@ import 'package:mbelys/features/goat_shed/domain/repositories/goat_shed_reposito
 
 class CreateGoatShedParams {
   final String userId;
-  final String? deviceId;
+  final String deviceId;
   final String shedName;
   final String shedLocation;
   final int totalGoats;
@@ -19,7 +15,7 @@ class CreateGoatShedParams {
 
   const CreateGoatShedParams({
     required this.userId,
-    this.deviceId,
+    required this.deviceId,
     required this.shedName,
     required this.shedLocation,
     required this.totalGoats,
@@ -36,18 +32,10 @@ class CreateGoatShedUseCase {
   });
 
   AsyncVoidResult call({ required CreateGoatShedParams params }) async {
-    String deviceId = (params.deviceId ?? '').trim();
-    if (deviceId.isEmpty) {
-      final either = await deviceRepository.registerDevice();
-      deviceId = either.fold(
-            (f) => throw Exception('Register device gagal: ${f.message}'),
-            (v) => v,
-      );
-    }
     final goatShed = GoatShedEntity(
       shedId: "",
       userId: params.userId,
-      deviceId: deviceId,
+      deviceId: params.deviceId,
       shedStatus: "active",
       shedName: params.shedName,
       shedLocation: params.shedLocation,

@@ -3,7 +3,12 @@ import "package:icons_plus/icons_plus.dart";
 import "package:mbelys/core/constant/app_colors.dart";
 
 class GoogleButton extends StatelessWidget {
-  const GoogleButton({super.key});
+  const GoogleButton({
+    super.key,
+    this.onTap
+  });
+
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +19,7 @@ class GoogleButton extends StatelessWidget {
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.color3
         ),
-          onPressed: (){},
+          onPressed: onTap,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

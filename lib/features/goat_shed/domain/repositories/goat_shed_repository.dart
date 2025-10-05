@@ -12,4 +12,6 @@ abstract class GoatShedRepository {
   AsyncVoidResult changeGoatShedLocation ({ required String shedId, required String newLocation });
   AsyncVoidResult changeTotalGoats ({ required String shedId, required int newTotal });
   AsyncVoidResult changeGoatShedImage ({ required String shedId, required File newImageFile });
+
+  AsyncVoidResult deleteShed ({ required String shedId });
 }
