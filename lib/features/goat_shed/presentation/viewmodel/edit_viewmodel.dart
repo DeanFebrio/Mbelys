@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:mbelys/core/error/failure.dart';
 import 'package:mbelys/core/utils/failure_extensions.dart';
 import 'package:mbelys/core/utils/result.dart';
+import 'package:mbelys/features/device/domain/usecases/reprovision_wifi_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/entities/goat_shed_entity.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_shed_image_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_shed_location_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_shed_name_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_total_goats_usecase.dart';
+import 'package:mbelys/features/goat_shed/domain/usecases/delete_shed_usecase.dart';
 import 'package:mbelys/features/goat_shed/presentation/viewmodel/detail_viewmodel.dart';
 
 enum EditState { initial, loading, success, error }
@@ -18,6 +20,8 @@ class EditViewModel extends ChangeNotifier {
   final ChangeShedLocationUseCase changeShedLocationUseCase;
   final ChangeShedImageUseCase changeShedImageUseCase;
   final ChangeTotalGoatsUseCase changeTotalGoatsUseCase;
+  final DeleteShedUseCase deleteShedUseCase;
+  final ReprovisionWifiUseCase reprovisionWifiUseCase;
   final DetailViewModel _detailViewModel;
 
   EditViewModel({
@@ -25,6 +29,8 @@ class EditViewModel extends ChangeNotifier {
     required this.changeShedLocationUseCase,
     required this.changeShedImageUseCase,
     required this.changeTotalGoatsUseCase,
+    required this.deleteShedUseCase,
+    required this.reprovisionWifiUseCase,
     required DetailViewModel detailViewModel
   }) : _detailViewModel = detailViewModel {
     _detailViewModel.addListener(_onDetailChanged);
@@ -50,6 +56,20 @@ class EditViewModel extends ChangeNotifier {
   File? _localPhoto;
   File? get localPhoto => _localPhoto;
 
+  bool? _connectWifi;
+  bool? get connectWifi => _connectWifi;
+  set connectWifi (bool? value) {
+    _connectWifi = value;
+    notifyListeners();
+  }
+
+  String? _deviceId;
+  String? get deviceId => _deviceId;
+  set deviceId (String? value) {
+    _deviceId = value;
+    notifyListeners();
+  }
+
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final locationController = TextEditingController();
@@ -71,7 +91,7 @@ class EditViewModel extends ChangeNotifier {
     }
 
     if (shed == null) {
-      _handleFailure(DatabaseFailure("Kandang tidak ditemukan!"));
+      handleFailure(DatabaseFailure("Kandang tidak ditemukan!"));
       return err(DatabaseFailure("Kandang tidak ditemukan!"));
     }
 
@@ -80,7 +100,7 @@ class EditViewModel extends ChangeNotifier {
     final totalGoats = totalController.text.trim();
     final imageFile = _localPhoto;
 
-    if (shedName.isEmpty && shedLocation.isEmpty && totalGoats.isEmpty && imageFile == null) {
+    if (shedName.isEmpty && shedLocation.isEmpty && totalGoats.isEmpty && imageFile == null && (!_connectWifi! && _deviceId!.isEmpty)) {
       _state = EditState.error;
       _errorMessage = "Periksa kembali input";
       notifyListeners();
@@ -94,25 +114,30 @@ class EditViewModel extends ChangeNotifier {
     try {
       if (shedName.isNotEmpty && shedName != shed!.shedName) {
         final result = await changeShedNameUseCase.call(shedId: shed!.shedId, newName: shedName);
-        if (result.isLeft()) return _handleFailure(result.failureOrNull()!);
+        if (result.isLeft()) return handleFailure(result.failureOrNull()!);
       }
 
       if (shedLocation.isNotEmpty && shedLocation != shed!.shedLocation) {
         final result = await changeShedLocationUseCase.call(shedId: shed!.shedId, newLocation: shedLocation);
-        if (result.isLeft()) return _handleFailure(result.failureOrNull()!);
+        if (result.isLeft()) return handleFailure(result.failureOrNull()!);
       }
 
       if (totalGoats.isNotEmpty) {
         final newTotal = int.parse(totalGoats);
         if (newTotal != shed!.totalGoats) {
           final result = await changeTotalGoatsUseCase.call(shedId: shed!.shedId, newTotal: newTotal);
-          if (result.isLeft()) return _handleFailure(result.failureOrNull()!);
+          if (result.isLeft()) return handleFailure(result.failureOrNull()!);
         }
       }
 
       if (imageFile != null) {
         final result = await changeShedImageUseCase.call(shedId: shed!.shedId, newImageFile: imageFile);
-        if (result.isLeft()) return _handleFailure(result.failureOrNull()!);
+        if (result.isLeft()) return handleFailure(result.failureOrNull()!);
+      }
+
+      if (_connectWifi == true && shed!.deviceId == _deviceId) {
+        final result = await reprovisionWifiUseCase.call(deviceId: shed!.deviceId);
+        if (result.isLeft()) return handleFailure(result.failureOrNull()!);
       }
 
       _state = EditState.success;
@@ -128,7 +153,42 @@ class EditViewModel extends ChangeNotifier {
     }
   }
 
-  AsyncVoidResult _handleFailure(Failure failure) async {
+  AsyncVoidResult deleteShed () async {
+    if (_state == EditState.loading) return okVoidAsync();
+
+    if (shed == null) {
+      return handleFailure(DatabaseFailure("Kandang tidak ditemukan!"));
+    }
+
+    _state = EditState.loading;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final res = await deleteShedUseCase.call(shedId: shed!.shedId);
+      return res.fold(
+            (failure) {
+          _state = EditState.error;
+          _errorMessage = failure.toUserMessage();
+          notifyListeners();
+          return errVoidAsync(failure);
+        },
+            (_) {
+          _state = EditState.success;
+          notifyListeners();
+          return okVoidAsync();
+        },
+      );
+    } catch (e) {
+      _state = EditState.error;
+      _errorMessage = "Gagal menghapus kandang.";
+      notifyListeners();
+      return errVoidAsync(ValidationFailure(e.toString()));
+    }
+  }
+
+
+  AsyncVoidResult handleFailure(Failure failure) async {
     _state = EditState.error;
     _errorMessage = failure.toUserMessage();
     notifyListeners();

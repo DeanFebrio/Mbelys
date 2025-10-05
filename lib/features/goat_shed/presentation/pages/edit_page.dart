@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mbelys/core/constant/app_colors.dart';
 import 'package:mbelys/core/services/service_locator.dart';
+import 'package:mbelys/features/device/presentation/viewmodels/provision_viewmodel.dart';
+import 'package:mbelys/features/device/presentation/widgets/provision_card.dart';
 import 'package:mbelys/features/goat_shed/presentation/Widgets/custom_add_image.dart';
 import 'package:mbelys/features/goat_shed/presentation/viewmodel/edit_viewmodel.dart';
 import 'package:mbelys/presentation/widgets/custom_background_page.dart';
@@ -21,9 +23,12 @@ class EditPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-        create: (_) => sl<EditViewModel>(param1: shedId),
-        child: const EditView()
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => sl<EditViewModel>(param1: shedId)),
+        ChangeNotifierProvider(create: (_) => sl<ProvisionViewModel>())
+      ],
+      child: const EditView(),
     );
   }
 }
@@ -40,9 +45,11 @@ class EditView extends StatelessWidget {
         color: AppColors.color9
     );
 
-    final vm = context.watch<EditViewModel>();
-    final state = vm.state;
-    final shed = vm.shed;
+    final editViewModel = context.watch<EditViewModel>();
+    final state = editViewModel.state;
+    final shed = editViewModel.shed;
+    final provisionViewModel = context.watch<ProvisionViewModel>();
+    final provisionState = provisionViewModel.status;
 
     return CustomBackgroundPage(
         title: "Edit Kandang",
@@ -51,7 +58,7 @@ class EditView extends StatelessWidget {
             children: [
               const SizedBox(height: 120,),
               Form(
-                key: vm.formKey,
+                key: editViewModel.formKey,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -61,8 +68,8 @@ class EditView extends StatelessWidget {
                     ),
                     const SizedBox(height: 5,),
                     CustomTextInput(
-                      textEditingController: vm.nameController,
-                      validator: vm.validateName,
+                      textEditingController: editViewModel.nameController,
+                      validator: editViewModel.validateName,
                       hintText: shed?.shedName,
                     ),
                     const SizedBox(height: 15,),
@@ -72,8 +79,8 @@ class EditView extends StatelessWidget {
                     ),
                     const SizedBox(height: 5,),
                     CustomAddImage(
-                      localPhoto: vm.localPhoto,
-                      onPicked: vm.setImage,
+                      localPhoto: editViewModel.localPhoto,
+                      onPicked: editViewModel.setImage,
                       pickImage: () => CustomPickImage.showImagePickerOptions(context),
                     ),
                     const SizedBox(height: 15,),
@@ -83,8 +90,8 @@ class EditView extends StatelessWidget {
                     ),
                     const SizedBox(height: 5,),
                     CustomTextInput(
-                      textEditingController: vm.locationController,
-                      validator: vm.validateLocation,
+                      textEditingController: editViewModel.locationController,
+                      validator: editViewModel.validateLocation,
                       hintText: shed?.shedLocation,
                       maxLines: 3,
                     ),
@@ -95,8 +102,8 @@ class EditView extends StatelessWidget {
                     ),
                     const SizedBox(height: 5,),
                     CustomTextInput(
-                      textEditingController: vm.totalController,
-                      validator: vm.validateTotal,
+                      textEditingController: editViewModel.totalController,
+                      validator: editViewModel.validateTotal,
                       isNumber: true,
                       hintText: shed?.totalGoats.toString(),
                     ),
@@ -104,28 +111,59 @@ class EditView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 25,),
+              ProvisionCard(),
+              const SizedBox(height: 25,),
               CustomShortButton(
                 onTap: state == EditState.loading ? null : () async {
-                  await vm.saveChanges();
+                  editViewModel.connectWifi = provisionState == ProvisionStatus.wifiConnected ? true : false;
+                  editViewModel.deviceId = provisionViewModel.currentDeviceId;
+                  await editViewModel.saveChanges();
                   if (!context.mounted) return;
-                  if (vm.state == EditState.error){
-                    showErrorSnackBar(context, vm.errorMessage);
-                  } else if (vm.state == EditState.success) {
+                  if (editViewModel.state == EditState.error){
+                    showErrorSnackBar(context, editViewModel.errorMessage);
+                  } else if (editViewModel.state == EditState.success) {
                     customDialog(
-                        context,
-                        "Berhasil diubah",
-                        "Perubahan pada kandang berhasil disimpan",
-                        "Baik",
-                        () {
-                          context.pop();
-                          context.pop();
-                        }
+                      context,
+                      "Berhasil diubah",
+                      "Perubahan pada kandang berhasil disimpan",
+                      "Baik",
+                      () {
+                        context.pop();
+                        context.pop();
+                      }
                     );
                   }
                 },
                 buttonText: "Simpan",
                 isLoading: state == EditState.loading,
-              )
+              ),
+              const SizedBox(height: 40,),
+              CustomShortButton(
+                buttonText: "Hapus",
+                buttonColor: AppColors.color5,
+                isLoading: state == EditState.loading,
+                onTap: () async {
+                  customDialog(
+                    context,
+                    "Hapus Kandang",
+                    "Apakah anda yakin ingin menghapus kandang ini?",
+                    "Benar",
+                    () async {
+                      context.pop();
+                      final result = await context.read<EditViewModel>().deleteShed();
+                      if (!context.mounted) return;
+                      result.fold(
+                        (failure) => showErrorSnackBar(context, failure.message),
+                        (_) {
+                          context.pop();
+                          context.pop();
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 50,)
             ],
           ),
         )
