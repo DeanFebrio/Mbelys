@@ -4,8 +4,6 @@ import 'package:mbelys/features/goat_shed/domain/entities/goat_shed_entity.dart'
 class GoatShedModel extends GoatShedEntity {
   GoatShedModel({
     required super.shedId,
-    required super.createdAt,
-    required super.updatedAt,
     required super.userId,
     required super.deviceId,
     required super.shedStatus,
@@ -39,8 +37,6 @@ class GoatShedModel extends GoatShedEntity {
   }) {
     return GoatShedModel(
       shedId: shedId ?? this.shedId,
-      createdAt: createdAt ?? this.createdAt,
-      updatedAt: updatedAt ?? this.updatedAt,
       userId: userId ?? this.userId,
       deviceId: deviceId ?? this.deviceId,
       shedStatus: shedStatus ?? this.shedStatus,
@@ -72,15 +68,13 @@ class GoatShedModel extends GoatShedEntity {
 
     return GoatShedModel(
       shedId: snap.id,
-      createdAt: toDate(data['createdAt']),
-      updatedAt: toDate(data['updatedAt']),
       userId: data['userId'],
       deviceId: data['deviceId'],
       shedStatus: data['shedStatus'],
       shedName: data['shedName'],
       shedImageUrl: data['shedImageUrl'],
       shedLocation: data['shedLocation'],
-      totalGoats: data['totalGoats'],
+      totalGoats: (data['totalGoats'] as num).toInt(),
       stressStatus: data['stressStatus'],
       reproductiveStatus: data['reproductiveStatus'],
       recommendation: data['recommendation'],
@@ -92,8 +86,6 @@ class GoatShedModel extends GoatShedEntity {
   Map<String, dynamic> toJson() {
     return {
       'shedId': shedId,
-      'createdAt': Timestamp.fromDate(createdAt),
-      'updatedAt': Timestamp.fromDate(updatedAt),
       'userId': userId,
       'deviceId': deviceId,
       'shedStatus': shedStatus,
@@ -105,15 +97,13 @@ class GoatShedModel extends GoatShedEntity {
       'reproductiveStatus': reproductiveStatus,
       'recommendation': recommendation,
       'explanation': explanation,
-      'analyzedAt': analyzedAt,
+      'analyzedAt': analyzedAt != null ? Timestamp.fromDate(analyzedAt!) : null,
     };
   }
 
   GoatShedEntity toEntity () {
     return GoatShedEntity(
         shedId: shedId,
-        createdAt: createdAt,
-        updatedAt: updatedAt,
         userId: userId,
         deviceId: deviceId,
         shedStatus: shedStatus,

@@ -20,8 +20,6 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
     try {
       final goatShedModel = GoatShedModel(
         shedId: goatShed.shedId,
-        createdAt: goatShed.createdAt,
-        updatedAt: goatShed.updatedAt,
         userId: goatShed.userId,
         deviceId: goatShed.deviceId,
         shedStatus: goatShed.shedStatus,
@@ -29,18 +27,17 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
         shedImageUrl: goatShed.shedImageUrl,
         shedLocation: goatShed.shedLocation,
         totalGoats: goatShed.totalGoats,
-        stressStatus: null,
-        reproductiveStatus: null,
-        recommendation: null,
-        explanation: null,
-        analyzedAt: null
+        stressStatus: goatShed.stressStatus,
+        reproductiveStatus: goatShed.reproductiveStatus,
+        recommendation: goatShed.recommendation,
+        explanation: goatShed.explanation,
+        analyzedAt: goatShed.analyzedAt
       );
       await goatShedDataSource.createGoatShed(goatShed: goatShedModel, imageFile: imageFile);
       logInfoLazy(() => "✅ Successfully created goat shed: ${goatShed.shedName}");
       return okVoidAsync();
     } on FirebaseException catch (e, stackTrace) {
       logger.w("❌ Firebase Error in createGoatShed", error: e, stackTrace: stackTrace);
-      if (e.plugin == "firebase_storage") return errVoidAsync(mapFirebaseStorageError(e));
       return errVoidAsync(mapFirestoreError(e));
     } catch (e, stackTrace) {
       logger.e("💥 Error in createGoatShed", error: e, stackTrace: stackTrace);
@@ -132,7 +129,6 @@ class GoatShedRepositoryImpl implements GoatShedRepository {
       return okVoidAsync();
     } on FirebaseException catch (e, stackTrace) {
       logger.w("❌ Firebase Error in changeGoatShedImage", error: e, stackTrace: stackTrace);
-      if (e.plugin == "firebase_storage") return errVoidAsync(mapFirebaseStorageError(e));
       return errVoidAsync(mapFirebaseStorageError(e));
     } catch (e, stackTrace) {
       logger.e("💥 Error in changeGoatShedImage", error: e, stackTrace: stackTrace);

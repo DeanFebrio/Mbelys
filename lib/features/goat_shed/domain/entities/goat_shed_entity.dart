@@ -2,8 +2,6 @@ class GoatShedEntity {
   final String shedId;
   final String userId;
   final String deviceId;
-  final DateTime createdAt;
-  final DateTime updatedAt;
   final String shedStatus;
   final String shedName;
   final String shedImageUrl;
@@ -19,8 +17,6 @@ class GoatShedEntity {
     required this.shedId,
     required this.userId,
     required this.deviceId,
-    required this.createdAt,
-    required this.updatedAt,
     required this.shedStatus,
     required this.shedName,
     required this.shedImageUrl,

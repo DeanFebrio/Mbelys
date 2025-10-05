@@ -31,18 +31,26 @@ class FirestoreGoatShedDataSource implements GoatShedDataSource {
     final newId = newDocRef.id;
 
     final imageUrl = await uploadShedImage(
-        shedId: newId,
-        userId: goatShed.userId,
-        imageFile: imageFile
+      shedId: newId,
+      userId: goatShed.userId,
+      imageFile: imageFile,
     );
-    final newShed = goatShed.copyWith(shedId: newId, shedImageUrl: imageUrl);
-    return await newDocRef.set(newShed.toJson());
+    final newShed = goatShed.copyWith(
+      shedId: newId,
+      shedImageUrl: imageUrl,
+    );
+    return await newDocRef.set({
+      ...newShed.toJson(),
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 
   @override
   Stream<List<GoatShedModel>> getGoatShedList ({ required String userId }) {
     final snapshot = collection
         .where("userId", isEqualTo: userId)
+        .where("shedStatus", isEqualTo: "active")
         .snapshots();
     return snapshot.map((snapshot) {
       return snapshot.docs
@@ -66,8 +74,15 @@ class FirestoreGoatShedDataSource implements GoatShedDataSource {
 
   @override
   Future<void> updateGoatShed ({ required String shedId, required Map<String, dynamic> updates }) async {
-    updates['updatedAt'] = FieldValue.serverTimestamp();
-    return await collection.doc(shedId).update(updates);
+    const allowed = {
+      "shedName", "shedLocation", "totalGoats", "shedImageUrl", "shedStatus"
+    };
+    final safe = <String, dynamic>{};
+    updates.forEach((k, v){
+      if (allowed.contains(k)) safe[k] = v;
+    });
+    safe['updatedAt'] = FieldValue.serverTimestamp();
+    return await collection.doc(shedId).update(safe);
   }
 
   @override
@@ -87,13 +102,18 @@ class FirestoreGoatShedDataSource implements GoatShedDataSource {
     await updateGoatShed(shedId: shedId, updates: { "shedImageUrl" : newImageUrl });
 
     if (oldImageUrl != null && oldImageUrl.isNotEmpty) {
-      await deleteImage(imageUrl: oldImageUrl);
+      try {
+        await deleteImage(imageUrl: oldImageUrl);
+      } catch (e) {
+        print("Gagal menghapus gambar lama: $e");
+      }
     }
   }
 
   Future<String> uploadShedImage ({ required String shedId, required String userId, required File imageFile }) async {
+    final header = await imageFile.openRead(0, 64).first;
     final fileExtension = p.extension(imageFile.path);
-    final mimeType = lookupMimeType(imageFile.path) ?? "image/jpeg";
+    final mimeType = lookupMimeType(imageFile.path, headerBytes: header) ?? "image/jpeg";
 
     if (!mimeType.startsWith("image/")) throw Exception("File bukan gambar yang valid!");
 
@@ -102,11 +122,11 @@ class FirestoreGoatShedDataSource implements GoatShedDataSource {
     final storageRef = storage.ref(storagePath);
 
     await storageRef.putFile(
-      imageFile,
-      SettableMetadata(
-        contentType: mimeType,
-        cacheControl: 'public, max-age=3600'
-      )
+        imageFile,
+        SettableMetadata(
+            contentType: mimeType,
+            cacheControl: 'public, max-age=3600'
+        )
     );
     return await storageRef.getDownloadURL();
   }
