@@ -1,5 +1,5 @@
 import 'package:mbelys/core/utils/result.dart';
-import 'package:mbelys/shared/launcher/domain/repositories/launcher_repostitory.dart';
+import 'package:mbelys/features/launcher/domain/repositories/launcher_repostitory.dart';
 
 class OpenWhatsappUseCase {
   final LauncherRepository launcherRepository;
