@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mbelys/core/utils/result.dart';
-import 'package:mbelys/shared/launcher/domain/usecases/open_whatsapp_usecase.dart';
+import 'package:mbelys/features/launcher/domain/usecases/open_whatsapp_usecase.dart';
 import 'package:mbelys/features/auth/presentation/viewmodels/auth_viewmodel.dart';
 import 'package:mbelys/features/user/domain/entities/user_entity.dart';
 import 'package:mbelys/features/user/domain/usecases/watch_user_data_usecase.dart';
@@ -49,7 +49,7 @@ class ProfileViewModel extends ChangeNotifier {
 
     _isLoading = true;
     safeNotify();
-    _userSub = _watchUserDataUseCase.call(uid: auth.uid).listen((result) {
+    _userSub = _watchUserDataUseCase.call(userId: auth.userId).listen((result) {
       _user = result;
       _isLoading = false;
       notifyListeners();

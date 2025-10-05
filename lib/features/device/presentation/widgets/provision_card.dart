@@ -1,44 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:mbelys/core/constant/app_colors.dart';
-import 'package:mbelys/features/goat_shed/presentation/viewmodel/provision_viewmodel.dart';
+import 'package:mbelys/features/device/presentation/viewmodels/provision_viewmodel.dart';
 import 'package:mbelys/presentation/widgets/custom_text_input.dart';
 import 'package:mbelys/presentation/widgets/custom_short_button.dart';
 import 'package:provider/provider.dart';
 
 class ProvisionCard extends StatelessWidget {
-  const ProvisionCard({super.key});
+  const ProvisionCard({ super.key });
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ProvisionViewModel(),
-      child: Consumer<ProvisionViewModel>(
-        builder: (context, vm, _) {
-          final showForm = vm.status != ProvisionStatus.idle &&
-              vm.status != ProvisionStatus.connectingDevice;
+    return Consumer<ProvisionViewModel>(
+      builder: (context, vm, _) {
+        final showForm = vm.status != ProvisionStatus.idle &&
+            vm.status != ProvisionStatus.connectingDevice;
 
-          return AnimatedCrossFade(
-            crossFadeState: showForm
-                ? CrossFadeState.showSecond
-                : CrossFadeState.showFirst,
-            duration: const Duration(milliseconds: 250),
-            firstCurve: Curves.easeOut,
-            secondCurve: Curves.easeIn,
-            sizeCurve: Curves.easeInOut,
-            firstChild: BuildConnectButton(vm: vm),
-            secondChild: AnimatedSize(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn,
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                transitionBuilder: (child, anim) =>
-                    FadeTransition(opacity: anim, child: child),
-                child: BuildProvisionForm(vm: vm),
-              ),
+        return AnimatedCrossFade(
+          crossFadeState: showForm
+              ? CrossFadeState.showSecond
+              : CrossFadeState.showFirst,
+          duration: const Duration(milliseconds: 250),
+          firstCurve: Curves.easeOut,
+          secondCurve: Curves.easeIn,
+          sizeCurve: Curves.easeInOut,
+          firstChild: BuildConnectButton(vm: vm),
+          secondChild: AnimatedSize(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeIn,
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 200),
+              transitionBuilder: (child, anim) =>
+                  FadeTransition(opacity: anim, child: child),
+              child: BuildProvisionForm(vm: vm),
             ),
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
@@ -140,6 +137,16 @@ class BuildProvisionFormState extends State<BuildProvisionForm> {
               backgroundColor: AppColors.color12,
             ),
           ],
+          if (vm.currentDeviceId != null) ...[
+          const SizedBox(height: 8),
+          Text(
+            "Device ID: ${vm.currentDeviceId}",
+            style: const TextStyle(
+            color: AppColors.color9,
+            fontFamily: "Mulish",
+            ),
+          ),
+          ],
           const SizedBox(height: 20),
           AnimatedSize(
             duration: _sizeDur,
@@ -180,6 +187,7 @@ class BuildProvisionFormState extends State<BuildProvisionForm> {
                           hintText: "Password Wi-Fi",
                           isPassword: true,
                         ),
+
                       ],
                     ),
                   ),
@@ -208,7 +216,7 @@ class BuildProvisionFormState extends State<BuildProvisionForm> {
                         buttonText: "Putuskan",
                         buttonColor: AppColors.color10,
                         icon: const Icon(
-                          Icons.wifi_off,
+                          Icons.bluetooth_disabled,
                           color: AppColors.color2,
                           size: 20,
                         ),
