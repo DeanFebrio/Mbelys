@@ -6,6 +6,7 @@ import 'package:mbelys/features/goat_shed/domain/usecases/change_shed_location_u
 import 'package:mbelys/features/goat_shed/domain/usecases/change_shed_name_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_total_goats_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/create_goat_shed_usecase.dart';
+import 'package:mbelys/features/goat_shed/domain/usecases/delete_shed_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/get_goat_shed_detail_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/get_goat_shed_list_usecase.dart';
 
@@ -37,5 +38,9 @@ Future<void> initGoatShedDomain () async {
 
   sl.registerFactory<ChangeShedImageUseCase>(() => ChangeShedImageUseCase(
       repository: sl<GoatShedRepository>()
+  ));
+
+  sl.registerCachedFactory<DeleteShedUseCase>(() => DeleteShedUseCase(
+    repository: sl<GoatShedRepository>()
   ));
 }

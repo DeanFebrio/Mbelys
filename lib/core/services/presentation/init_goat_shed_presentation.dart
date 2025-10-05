@@ -1,9 +1,11 @@
 import 'package:mbelys/core/services/service_locator.dart';
+import 'package:mbelys/features/device/domain/usecases/reprovision_wifi_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_shed_image_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_shed_location_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_shed_name_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/change_total_goats_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/create_goat_shed_usecase.dart';
+import 'package:mbelys/features/goat_shed/domain/usecases/delete_shed_usecase.dart';
 import 'package:mbelys/features/goat_shed/domain/usecases/get_goat_shed_detail_usecase.dart';
 import 'package:mbelys/features/goat_shed/presentation/viewmodel/add_viewmodel.dart';
 import 'package:mbelys/features/goat_shed/presentation/viewmodel/detail_viewmodel.dart';
@@ -29,6 +31,8 @@ Future<void> initGoatShedPresentation () async {
       changeShedLocationUseCase: sl<ChangeShedLocationUseCase>(),
       changeShedImageUseCase: sl<ChangeShedImageUseCase>(),
       changeTotalGoatsUseCase: sl<ChangeTotalGoatsUseCase>(),
+      deleteShedUseCase: sl<DeleteShedUseCase>(),
+      reprovisionWifiUseCase: sl<ReprovisionWifiUseCase>(),
       detailViewModel: sl<DetailViewModel>(param1: shedId),
     );
   });
