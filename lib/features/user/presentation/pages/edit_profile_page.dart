@@ -54,7 +54,7 @@ class EditProfileView extends StatelessWidget {
               SizedBox(height: screenHeight * 0.01),
               CustomAvatar(
                 radius: 70,
-                photoUrl: user?.photoUrl,
+                photoUrl: user?.userPhotoUrl,
                 localImageFile: vm.localPhoto,
               ),
               const SizedBox(height: 6,),
@@ -89,7 +89,7 @@ class EditProfileView extends StatelessWidget {
                     ),
                     const SizedBox(height: 5,),
                     CustomTextInput(
-                      hintText: user?.phone,
+                      hintText: user?.phoneNumber,
                       textEditingController: vm.phoneController,
                       validator: vm.validatePhone,
                     ),

@@ -61,7 +61,7 @@ class EditViewModel extends ChangeNotifier {
   }
 
   AsyncVoidResult saveChanges () async {
-    if (_state == EditState.loading) return okUnit();
+    if (_state == EditState.loading) return okVoidAsync();
 
     if (!(formKey.currentState?.validate() ?? false)) {
       _state = EditState.error;
@@ -119,7 +119,7 @@ class EditViewModel extends ChangeNotifier {
       _localPhoto = null;
       _detailViewModel.getGoatShedDetail(shedId: shed!.shedId);
       notifyListeners();
-      return okUnit();
+      return okVoidAsync();
     } catch (e) {
       _state = EditState.error;
       _errorMessage = "Gagal melakukan perubahan!";

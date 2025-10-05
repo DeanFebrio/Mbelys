@@ -46,7 +46,7 @@ class CardProfile extends StatelessWidget {
           children: [
             CustomAvatar(
               radius: 48,
-              photoUrl: user.photoUrl,
+              photoUrl: user.userPhotoUrl,
             ),
             Expanded(
               child: Column(
@@ -65,7 +65,7 @@ class CardProfile extends StatelessWidget {
                   ),
                   const SizedBox(height: 3,),
                   Text(
-                    user.phone,
+                    user.phoneNumber,
                     style: informationStyle,
                   ),
                   const SizedBox(height: 10,),

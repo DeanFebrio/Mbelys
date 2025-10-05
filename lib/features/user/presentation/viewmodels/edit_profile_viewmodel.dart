@@ -74,7 +74,7 @@ class EditProfileViewModel extends ChangeNotifier {
   }
 
   AsyncVoidResult saveChanges () async {
-    if (_state == EditProfileState.loading) return okUnit();
+    if (_state == EditProfileState.loading) return okVoidAsync();
 
     _state = EditProfileState.loading;
     _error = null;
@@ -82,7 +82,7 @@ class EditProfileViewModel extends ChangeNotifier {
 
     final currentUser = user;
     final oldName = currentUser?.name ?? "";
-    final oldPhone = currentUser?.phone ?? "";
+    final oldPhone = currentUser?.phoneNumber ?? "";
 
     try {
       final name = nameController.text.trim();
@@ -99,15 +99,15 @@ class EditProfileViewModel extends ChangeNotifier {
 
       if (name.isNotEmpty && name != oldName) {
         futures.add(updateNameUseCase.call(name: name));
-        futures.add(changeNameUseCase.call(name: name, uid: currentUser!.id));
+        futures.add(changeNameUseCase.call(name: name, userId: currentUser!.userId));
       }
 
       if (phone.isNotEmpty && phone != oldPhone) {
-        futures.add(changePhoneUseCase.call(phone: phone, uid: currentUser!.id));
+        futures.add(changePhoneUseCase.call(phoneNumber: phone, userId: currentUser!.userId));
       }
 
       if (_localPhoto != null) {
-        final res = await changePhotoUseCase.call(file: _localPhoto!, uid: currentUser!.id);
+        final res = await changePhotoUseCase.call(imageFile: _localPhoto!, userId: currentUser!.userId);
 
         final didFail = res.fold(
           (failure) {
@@ -129,7 +129,7 @@ class EditProfileViewModel extends ChangeNotifier {
       _state = EditProfileState.success;
       _localPhoto = null;
       notifyListeners();
-      return okUnit();
+      return okVoidAsync();
     } catch (e) {
       _state = EditProfileState.error;
       _error = "Gagal melakukan perubahan!";
