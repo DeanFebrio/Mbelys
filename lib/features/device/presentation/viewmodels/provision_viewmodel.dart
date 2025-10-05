@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:mbelys/core/constant/app_colors.dart';
 import 'package:mbelys/features/device/domain/usecases/ensure_device_registered.dart';
+import 'package:mbelys/features/device/domain/usecases/is_device_exists_usecase.dart';
 import 'package:mbelys/features/device/domain/usecases/register_device_usecase.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -23,9 +24,11 @@ enum ProvisionStatus {
 class ProvisionViewModel extends ChangeNotifier {
   final RegisterDeviceUseCase registerDeviceUseCase;
   final EnsureDeviceRegisteredUseCase ensureDeviceRegisteredUseCase;
+  final IsDeviceExistsUseCase isDeviceExistsUseCase;
   ProvisionViewModel({
     required this.registerDeviceUseCase,
     required this.ensureDeviceRegisteredUseCase,
+    required this.isDeviceExistsUseCase,
   });
 
   ProvisionStatus _status = ProvisionStatus.idle;
@@ -58,7 +61,7 @@ class ProvisionViewModel extends ChangeNotifier {
     "WIFI CONNECTED",
     "CONNECTED TO WIFI",
     "CONNECTED",
-    "IP:",
+    "IP ADDRESS",
   ];
   static const _failMarkers = [
     "WIFI_FAIL",
@@ -86,7 +89,7 @@ class ProvisionViewModel extends ChangeNotifier {
         return;
       }
 
-      _setMessage('Menghubungkan ke ${device.name ?? device.address} …');
+      setMessage('Menghubungkan ke ${device.name ?? device.address} …');
       final conn = await BluetoothConnection.toAddress(device.address);
       _connection = conn;
 
@@ -112,6 +115,8 @@ class ProvisionViewModel extends ChangeNotifier {
 
   Future<void> disconnect() async {
     _wifiWaitTimer?.cancel();
+    _pendingGetId?.complete(null);
+    _pendingSetId?.complete(false);
     await _inputSub?.cancel();
     _inputSub = null;
     ssidController.clear();
@@ -129,22 +134,21 @@ class ProvisionViewModel extends ChangeNotifier {
     final ssid = ssidController.text.trim();
     final pass = passController.text.trim();
     if (ssid.isEmpty || pass.isEmpty) {
-      _setMessage('Isi SSID dan Password terlebih dahulu.');
+      setMessage('Isi SSID dan Password terlebih dahulu.');
       return;
     }
     if (hasInvalidAngle(ssid) || hasInvalidAngle(pass)) {
-      _setMessage('Hindari karakter < dan > pada SSID/PASS.');
+      setMessage('Hindari karakter < dan > pada SSID/PASS.');
       return;
     }
 
     try {
       await cancelDiscoverySafely();
       set(ProvisionStatus.provisioning, message: 'Mengirim kredensial Wi-Fi…');
-
       await writeLine('ssid:<$ssid>');
       await Future.delayed(const Duration(milliseconds: 120));
       await writeLine('pass:<$pass>');
-      _setMessage('Menunggu status dari perangkat…');
+      setMessage('Menunggu status dari perangkat…');
 
       _wifiWaitTimer?.cancel();
       _wifiWaitTimer = Timer(const Duration(seconds: 20), () {
@@ -162,51 +166,60 @@ class ProvisionViewModel extends ChangeNotifier {
       throw Exception('Belum terhubung ke perangkat via Bluetooth.');
     }
 
-    _setMessage('Memeriksa deviceId di perangkat…');
-    final got = await cmdGetId();
+    setMessage('Memeriksa deviceId di perangkat…');
+    final gotId = await cmdGetId();
 
-    if (got != null && got.isNotEmpty) {
-      _currentDeviceId = got;
+    if (gotId != null && gotId.isNotEmpty) {
+      _currentDeviceId = gotId;
       notifyListeners();
-      _setMessage('deviceId terdeteksi: $got');
-      await ensureDeviceRegisteredUseCase.call(deviceId: got);
-      return got;
+      setMessage('deviceId terdeteksi: $gotId');
+      await ensureDeviceRegisteredUseCase.call(deviceId: gotId);
+      return gotId;
     }
 
-    _setMessage('Mendaftarkan device baru…');
+    setMessage('Mendaftarkan device baru…');
     final resId = await registerDeviceUseCase.call();
     final newId = resId.fold(
-          (f) => throw Exception(f.message),
-          (v) => v,
+      (f) => throw Exception(f.message),
+      (v) => v,
     );
 
-    _setMessage('Menyetel deviceId ke ESP32…');
+    setMessage('Menyetel deviceId ke ESP32…');
     final ok = await cmdSetId(newId);
     if (!ok) {
       throw Exception('Gagal set deviceId ke ESP32 (SET_ID_FAIL).');
     }
 
-    _setMessage('Memverifikasi penyimpanan deviceId…');
-    await _verifyDeviceIdApplied(newId);
+    setMessage('Memverifikasi penyimpanan deviceId…');
+    await verifyDeviceIdApplied(newId);
 
-    await ensureDeviceRegisteredUseCase.call(deviceId: newId);
+    final device = await isDeviceExistsUseCase.call(deviceId: newId);
+    final deviceExists =device.fold(
+      (f) => throw Exception(f.message),
+      (v) => v,
+    );
 
-    _currentDeviceId = newId;
-    notifyListeners();
-    _setMessage('deviceId disetel: $newId');
+    if (deviceExists == true) {
+      _currentDeviceId = newId;
+      notifyListeners();
+      setMessage('deviceId disetel: $newId');
+    } else {
+      setMessage('deviceId tidak tersimpan di ESP32 & Database.');
+      throw Exception('deviceId tidak tersimpan di ESP32 & Database.');
+    }
     return newId;
   }
 
   static const int _getIdMaxRetries = 3;
 
-  Future<void> _sleep(int ms) => Future.delayed(Duration(milliseconds: ms));
+  Future<void> sleep(int ms) => Future.delayed(Duration(milliseconds: ms));
 
-  Future<String> _verifyDeviceIdApplied(String expected) async {
+  Future<String> verifyDeviceIdApplied(String expected) async {
     var delayMs = 200;
     for (var attempt = 1; attempt <= _getIdMaxRetries; attempt++) {
       final got = await cmdGetId();
       if (got == expected) return got!;
-      await _sleep(delayMs);
+      await sleep(delayMs);
       delayMs *= 2;
     }
     throw Exception('Device belum menerapkan ID. Diharapkan: $expected');
@@ -310,7 +323,7 @@ class ProvisionViewModel extends ChangeNotifier {
     });
 
     if (devices.isEmpty) {
-      _setMessage('Tidak ada perangkat ditemukan.');
+      setMessage('Tidak ada perangkat ditemukan.');
       return null;
     }
 
@@ -386,12 +399,12 @@ class ProvisionViewModel extends ChangeNotifier {
   void handleLine(String line) {
     final up = line.toUpperCase();
 
-    if (_okMarkers.any((k) => up.contains(k))) {
+    if (_status == ProvisionStatus.provisioning && _okMarkers.any((k) => up.contains(k))) {
       _wifiWaitTimer?.cancel();
       set(ProvisionStatus.wifiConnected, message: 'Wi-Fi terhubung.');
       return;
     }
-    if (_failMarkers.any((k) => up.contains(k))) {
+    if (_status == ProvisionStatus.provisioning && _failMarkers.any((k) => up.contains(k))) {
       _wifiWaitTimer?.cancel();
       set(ProvisionStatus.wifiFailed, message: 'Wi-Fi gagal. Coba SSID/PASS lain.');
       return;
@@ -416,6 +429,7 @@ class ProvisionViewModel extends ChangeNotifier {
   }
 
   Future<String?> cmdGetId({Duration timeout = const Duration(seconds: 4)}) async {
+    _pendingGetId?.complete(null);
     final c = Completer<String?>();
     _pendingGetId = c;
     await writeLine('getid');
@@ -428,6 +442,7 @@ class ProvisionViewModel extends ChangeNotifier {
   }
 
   Future<bool> cmdSetId(String id, {Duration timeout = const Duration(seconds: 4)}) async {
+    _pendingSetId?.complete(false);
     final c = Completer<bool>();
     _pendingSetId = c;
     await writeLine('setid:$id');
@@ -457,7 +472,7 @@ class ProvisionViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void _setMessage(String message) {
+  void setMessage(String message) {
     _message = message;
     notifyListeners();
   }
