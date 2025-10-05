@@ -100,7 +100,7 @@ class AddViewModel extends ChangeNotifier {
       final result = await createGoatShed.call(
         params: CreateGoatShedParams(
           userId: user.userId,
-          deviceId: currentDeviceId,
+          deviceId: currentDeviceId!,
           shedName: shedName,
           shedLocation: shedLocation,
           totalGoats: totalGoats,
